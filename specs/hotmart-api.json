@@ -1,0 +1,4217 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Hotmart API",
+    "version": "1.0.0",
+    "description": "API da Hotmart para gerenciamento de vendas, assinaturas, área de membros, produtos, cupons, ingressos e negociação de parcelas."
+  },
+  "servers": [
+    {
+      "url": "https://developers.hotmart.com",
+      "description": "Production API"
+    },
+    {
+      "url": "https://api-sec-vlc.hotmart.com",
+      "description": "Authentication server"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Sales",
+      "description": "Endpoints para gerenciamento de vendas"
+    },
+    {
+      "name": "Subscriptions",
+      "description": "Endpoints para gerenciamento de assinaturas"
+    },
+    {
+      "name": "Club",
+      "description": "Endpoints para área de membros"
+    },
+    {
+      "name": "Products",
+      "description": "Endpoints para gerenciamento de produtos"
+    },
+    {
+      "name": "Coupons",
+      "description": "Endpoints para gerenciamento de cupons"
+    },
+    {
+      "name": "Tickets",
+      "description": "Endpoints para gerenciamento de ingressos e eventos"
+    },
+    {
+      "name": "Negotiation",
+      "description": "Endpoints para negociação de parcelas"
+    }
+  ],
+  "paths": {
+    "/payments/api/v1/sales/history": {
+      "get": {
+        "tags": [
+          "Sales"
+        ],
+        "operationId": "getSalesHistory",
+        "summary": "Sales History",
+        "description": "Retorna o histórico de vendas. Sem os filtros transaction ou transaction_status, apenas vendas com status APPROVED e COMPLETE são retornadas.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/MaxResults"
+          },
+          {
+            "$ref": "#/components/parameters/PageToken"
+          },
+          {
+            "$ref": "#/components/parameters/ProductId"
+          },
+          {
+            "$ref": "#/components/parameters/StartDate"
+          },
+          {
+            "$ref": "#/components/parameters/EndDate"
+          },
+          {
+            "$ref": "#/components/parameters/SalesSource"
+          },
+          {
+            "$ref": "#/components/parameters/Transaction"
+          },
+          {
+            "$ref": "#/components/parameters/Select"
+          },
+          {
+            "name": "buyer_name",
+            "in": "query",
+            "description": "Nome do comprador",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "buyer_email",
+            "in": "query",
+            "description": "E-mail do comprador",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offer_code",
+            "in": "query",
+            "description": "Código da oferta",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "commission_as",
+            "in": "query",
+            "description": "Papel de comissão do usuário autenticado",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/CommissionAs"
+            }
+          },
+          {
+            "name": "transaction_status",
+            "in": "query",
+            "description": "Status da transação",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TransactionStatus"
+            }
+          },
+          {
+            "name": "payment_type",
+            "in": "query",
+            "description": "Tipo de pagamento",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/PaymentType"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Histórico de vendas retornado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SaleHistory"
+                      }
+                    },
+                    "page_info": {
+                      "$ref": "#/components/schemas/PageInfo"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/api/v1/sales/summary": {
+      "get": {
+        "tags": [
+          "Sales"
+        ],
+        "operationId": "getSalesSummary",
+        "summary": "Sales Summary",
+        "description": "Retorna o resumo das vendas.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Transaction"
+          },
+          {
+            "name": "transaction_status",
+            "in": "query",
+            "description": "Status da transação",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TransactionStatus"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/MaxResults"
+          },
+          {
+            "$ref": "#/components/parameters/PageToken"
+          },
+          {
+            "$ref": "#/components/parameters/ProductId"
+          },
+          {
+            "$ref": "#/components/parameters/StartDate"
+          },
+          {
+            "$ref": "#/components/parameters/EndDate"
+          },
+          {
+            "$ref": "#/components/parameters/SalesSource"
+          },
+          {
+            "name": "affiliate_name",
+            "in": "query",
+            "description": "Nome do afiliado",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "payment_type",
+            "in": "query",
+            "description": "Tipo de pagamento",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/PaymentType"
+            }
+          },
+          {
+            "name": "offer_code",
+            "in": "query",
+            "description": "Código da oferta",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Select"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resumo de vendas retornado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SaleSummary"
+                      }
+                    },
+                    "page_info": {
+                      "$ref": "#/components/schemas/PageInfo"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/api/v1/sales/users": {
+      "get": {
+        "tags": [
+          "Sales"
+        ],
+        "operationId": "getSalesParticipants",
+        "summary": "Sales Participants",
+        "description": "Retorna os participantes de uma venda (produtor, afiliado, coprodutor).",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Transaction"
+          },
+          {
+            "name": "transaction_status",
+            "in": "query",
+            "description": "Status da transação",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TransactionStatus"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/MaxResults"
+          },
+          {
+            "$ref": "#/components/parameters/PageToken"
+          },
+          {
+            "$ref": "#/components/parameters/ProductId"
+          },
+          {
+            "$ref": "#/components/parameters/StartDate"
+          },
+          {
+            "$ref": "#/components/parameters/EndDate"
+          },
+          {
+            "name": "buyer_email",
+            "in": "query",
+            "description": "E-mail do comprador",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SalesSource"
+          },
+          {
+            "name": "buyer_name",
+            "in": "query",
+            "description": "Nome do comprador",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "affiliate_name",
+            "in": "query",
+            "description": "Nome do afiliado",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "commission_as",
+            "in": "query",
+            "description": "Papel de comissão do usuário autenticado",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/CommissionAs"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Select"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Participantes retornados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SaleParticipant"
+                      }
+                    },
+                    "page_info": {
+                      "$ref": "#/components/schemas/PageInfo"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/api/v1/sales/commissions": {
+      "get": {
+        "tags": [
+          "Sales"
+        ],
+        "operationId": "getSalesCommissions",
+        "summary": "Sales Commissions",
+        "description": "Retorna as comissões de vendas.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/MaxResults"
+          },
+          {
+            "$ref": "#/components/parameters/PageToken"
+          },
+          {
+            "$ref": "#/components/parameters/ProductId"
+          },
+          {
+            "$ref": "#/components/parameters/StartDate"
+          },
+          {
+            "$ref": "#/components/parameters/EndDate"
+          },
+          {
+            "$ref": "#/components/parameters/Transaction"
+          },
+          {
+            "name": "commission_as",
+            "in": "query",
+            "description": "Papel de comissão do usuário autenticado",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/CommissionAs"
+            }
+          },
+          {
+            "name": "transaction_status",
+            "in": "query",
+            "description": "Status da transação",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TransactionStatus"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Select"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comissões retornadas com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SaleCommission"
+                      }
+                    },
+                    "page_info": {
+                      "$ref": "#/components/schemas/PageInfo"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/api/v1/sales/price/details": {
+      "get": {
+        "tags": [
+          "Sales"
+        ],
+        "operationId": "getSalesPriceDetails",
+        "summary": "Sales Price Details",
+        "description": "Retorna os detalhes de preço das vendas. Sem os filtros transaction ou transaction_status, apenas vendas com status APPROVED e COMPLETE são retornadas.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Transaction"
+          },
+          {
+            "name": "transaction_status",
+            "in": "query",
+            "description": "Status da transação",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TransactionStatus"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/MaxResults"
+          },
+          {
+            "$ref": "#/components/parameters/PageToken"
+          },
+          {
+            "$ref": "#/components/parameters/ProductId"
+          },
+          {
+            "$ref": "#/components/parameters/StartDate"
+          },
+          {
+            "$ref": "#/components/parameters/EndDate"
+          },
+          {
+            "name": "payment_type",
+            "in": "query",
+            "description": "Tipo de pagamento",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/PaymentType"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Select"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes de preço retornados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SalePriceDetail"
+                      }
+                    },
+                    "page_info": {
+                      "$ref": "#/components/schemas/PageInfo"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/api/v1/sales/{transaction_code}/refund": {
+      "put": {
+        "tags": [
+          "Sales"
+        ],
+        "operationId": "refundSale",
+        "summary": "Sales Refund",
+        "description": "Realiza o reembolso de uma venda. A venda deve estar com status APPROVED ou COMPLETE. Não disponível para trial, BACS ou SEPA. Janela de reembolso de 7 a 30 dias (máximo 60).",
+        "parameters": [
+          {
+            "name": "transaction_code",
+            "in": "path",
+            "description": "Código da transação",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reembolso realizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/api/v1/subscriptions": {
+      "get": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "operationId": "getSubscriptions",
+        "summary": "Get Subscriptions",
+        "description": "Retorna a lista de assinaturas.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/MaxResults"
+          },
+          {
+            "$ref": "#/components/parameters/PageToken"
+          },
+          {
+            "$ref": "#/components/parameters/ProductId"
+          },
+          {
+            "name": "plan",
+            "in": "query",
+            "description": "Nomes dos planos",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "plan_id",
+            "in": "query",
+            "description": "ID do plano",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "accession_date",
+            "in": "query",
+            "description": "Data de adesão inicial (timestamp em milissegundos)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "end_accession_date",
+            "in": "query",
+            "description": "Data de adesão final (timestamp em milissegundos)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Status da assinatura",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/SubscriptionStatus"
+            }
+          },
+          {
+            "name": "subscriber_code",
+            "in": "query",
+            "description": "Código do assinante",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "subscriber_email",
+            "in": "query",
+            "description": "E-mail do assinante",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Transaction"
+          },
+          {
+            "name": "trial",
+            "in": "query",
+            "description": "Filtrar por trial",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "cancelation_date",
+            "in": "query",
+            "description": "Data de cancelamento inicial (timestamp em milissegundos)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "end_cancelation_date",
+            "in": "query",
+            "description": "Data de cancelamento final (timestamp em milissegundos)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "date_next_charge",
+            "in": "query",
+            "description": "Data da próxima cobrança inicial (timestamp em milissegundos)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "end_date_next_charge",
+            "in": "query",
+            "description": "Data da próxima cobrança final (timestamp em milissegundos)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Select"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Assinaturas retornadas com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Subscription"
+                      }
+                    },
+                    "page_info": {
+                      "$ref": "#/components/schemas/PageInfo"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/api/v1/subscriptions/summary": {
+      "get": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "operationId": "getSubscriptionsSummary",
+        "summary": "Subscription Summary",
+        "description": "Retorna o resumo das assinaturas.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/MaxResults"
+          },
+          {
+            "$ref": "#/components/parameters/PageToken"
+          },
+          {
+            "name": "product_id",
+            "in": "query",
+            "description": "ID do produto",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "subscriber_code",
+            "in": "query",
+            "description": "Código do assinante",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "accession_date",
+            "in": "query",
+            "description": "Data de adesão inicial (timestamp em milissegundos)",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "end_accession_date",
+            "in": "query",
+            "description": "Data de adesão final (timestamp em milissegundos)",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "date_next_charge",
+            "in": "query",
+            "description": "Data da próxima cobrança (timestamp em milissegundos)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Select"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resumo de assinaturas retornado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SubscriptionSummary"
+                      }
+                    },
+                    "page_info": {
+                      "$ref": "#/components/schemas/PageInfo"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/api/v1/subscriptions/transactions": {
+      "get": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "operationId": "getSubscriptionTransactions",
+        "summary": "Subscription Transactions",
+        "description": "Retorna as transações de assinatura. Dados com atraso de 24h. Por padrão retorna os últimos 30 dias.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/MaxResults"
+          },
+          {
+            "$ref": "#/components/parameters/PageToken"
+          },
+          {
+            "$ref": "#/components/parameters/ProductId"
+          },
+          {
+            "$ref": "#/components/parameters/Transaction"
+          },
+          {
+            "name": "subscriber_name",
+            "in": "query",
+            "description": "Nome do assinante",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "subscriber_email",
+            "in": "query",
+            "description": "E-mail do assinante",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "billing_type",
+            "in": "query",
+            "description": "Tipo de cobrança",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/BillingType"
+            }
+          },
+          {
+            "name": "subscription_status",
+            "in": "query",
+            "description": "Status da assinatura",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "STARTED",
+                "INACTIVE",
+                "ACTIVE",
+                "DELAYED",
+                "CANCELLED",
+                "CANCELLED_BY_ADMIN",
+                "CANCELLED_BY_CUSTOMER",
+                "CANCELLED_BY_SELLER",
+                "OVERDUE"
+              ]
+            }
+          },
+          {
+            "name": "recurrency_status",
+            "in": "query",
+            "description": "Status da recorrência",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "PAID",
+                "NOT_PAID",
+                "CLAIMED",
+                "REFUNDED",
+                "CHARGEBACK"
+              ]
+            }
+          },
+          {
+            "name": "purchase_status",
+            "in": "query",
+            "description": "Status da compra",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "transaction_date",
+            "in": "query",
+            "description": "Data da transação inicial (timestamp em milissegundos)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "end_transaction_date",
+            "in": "query",
+            "description": "Data da transação final (timestamp em milissegundos)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "offer_code",
+            "in": "query",
+            "description": "Código da oferta",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "purchase_payment_type",
+            "in": "query",
+            "description": "Tipo de pagamento da compra",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/PaymentType"
+            }
+          },
+          {
+            "name": "subscriber_code",
+            "in": "query",
+            "description": "Código do assinante",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Select"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transações de assinatura retornadas com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SubscriptionTransaction"
+                      }
+                    },
+                    "page_info": {
+                      "$ref": "#/components/schemas/PageInfo"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/api/v1/subscriptions/{subscriber_code}/purchases": {
+      "get": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "operationId": "getSubscriberPurchases",
+        "summary": "Subscriber Purchases",
+        "description": "Retorna as compras de um assinante.",
+        "parameters": [
+          {
+            "name": "subscriber_code",
+            "in": "path",
+            "description": "Código do assinante",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Compras do assinante retornadas com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SubscriberPurchase"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/api/v1/subscriptions/{subscriber_code}/cancel": {
+      "post": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "operationId": "cancelSubscription",
+        "summary": "Cancel Subscription",
+        "description": "Cancela uma assinatura.",
+        "parameters": [
+          {
+            "name": "subscriber_code",
+            "in": "path",
+            "description": "Código do assinante",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "send_mail": {
+                    "type": "boolean",
+                    "description": "Enviar e-mail de notificação ao assinante"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Assinatura cancelada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionCancelResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/api/v1/subscriptions/cancel": {
+      "post": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "operationId": "batchCancelSubscriptions",
+        "summary": "Batch Cancel Subscriptions",
+        "description": "Cancela múltiplas assinaturas em lote.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "subscriber_code"
+                ],
+                "properties": {
+                  "subscriber_code": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Lista de códigos de assinantes"
+                  },
+                  "send_mail": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enviar e-mail de notificação aos assinantes"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resultado do cancelamento em lote",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchSubscriptionResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/api/v1/subscriptions/{subscriber_code}/reactivate": {
+      "post": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "operationId": "reactivateSubscription",
+        "summary": "Reactivate Subscription",
+        "description": "Reativa uma assinatura. O assinante deve aceitar via link por e-mail (validade de 3 dias).",
+        "parameters": [
+          {
+            "name": "subscriber_code",
+            "in": "path",
+            "description": "Código do assinante",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "charge": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Cobrar imediatamente"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Solicitação de reativação enviada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionReactivateResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/api/v1/subscriptions/reactivate": {
+      "post": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "operationId": "batchReactivateSubscriptions",
+        "summary": "Batch Reactivate Subscriptions",
+        "description": "Reativa múltiplas assinaturas em lote.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "subscriber_code"
+                ],
+                "properties": {
+                  "subscriber_code": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Lista de códigos de assinantes"
+                  },
+                  "charge": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Cobrar imediatamente"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resultado da reativação em lote",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchSubscriptionReactivateResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/api/v1/subscriptions/{subscriber_code}": {
+      "patch": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "operationId": "changeSubscriptionDueDay",
+        "summary": "Change Due Day",
+        "description": "Altera o dia de vencimento de uma assinatura. Somente para assinaturas ACTIVE ou DELAYED. Não disponível para trial. O dia 31 será ajustado para 30 em meses mais curtos.",
+        "parameters": [
+          {
+            "name": "subscriber_code",
+            "in": "path",
+            "description": "Código do assinante",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "due_day"
+                ],
+                "properties": {
+                  "due_day": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 31,
+                    "description": "Novo dia de vencimento (1-31)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Dia de vencimento alterado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro na requisição",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/club/api/v1/modules": {
+      "get": {
+        "tags": [
+          "Club"
+        ],
+        "operationId": "getModules",
+        "summary": "Get Modules",
+        "description": "Retorna os módulos da área de membros.",
+        "parameters": [
+          {
+            "name": "subdomain",
+            "in": "query",
+            "description": "Subdomínio da área de membros",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "is_extra",
+            "in": "query",
+            "description": "Filtrar módulos extras",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Select"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Módulos retornados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Module"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/club/api/v1/modules/{module_id}/pages": {
+      "get": {
+        "tags": [
+          "Club"
+        ],
+        "operationId": "getModulePages",
+        "summary": "Get Pages",
+        "description": "Retorna as páginas (aulas) de um módulo.",
+        "parameters": [
+          {
+            "name": "module_id",
+            "in": "path",
+            "description": "ID do módulo",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "subdomain",
+            "in": "query",
+            "description": "Subdomínio da área de membros",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Select"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Páginas retornadas com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Page"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/club/api/v1/users": {
+      "get": {
+        "tags": [
+          "Club"
+        ],
+        "operationId": "getStudents",
+        "summary": "Get Students",
+        "description": "Retorna os alunos da área de membros.",
+        "parameters": [
+          {
+            "name": "subdomain",
+            "in": "query",
+            "description": "Subdomínio da área de membros",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "description": "E-mail do aluno",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Select"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Alunos retornados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Student"
+                      }
+                    },
+                    "page_info": {
+                      "$ref": "#/components/schemas/PageInfo"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/club/api/v1/users/{user_id}/lessons": {
+      "get": {
+        "tags": [
+          "Club"
+        ],
+        "operationId": "getStudentProgress",
+        "summary": "Get Student Progress",
+        "description": "Retorna o progresso de um aluno nas aulas.",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "ID do aluno",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "subdomain",
+            "in": "query",
+            "description": "Subdomínio da área de membros",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Select"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Progresso retornado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "lessons": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/LessonProgress"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/api/v1/products": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "operationId": "listProducts",
+        "summary": "List Products",
+        "description": "Retorna a lista de produtos.",
+        "parameters": [
+          {
+            "name": "max_results",
+            "in": "query",
+            "description": "Número máximo de resultados por página",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50
+            }
+          },
+          {
+            "$ref": "#/components/parameters/PageToken"
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "description": "ID do produto",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Status do produto",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/ProductStatus"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "Formato do produto",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/ProductFormat"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Select"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produtos retornados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Product"
+                      }
+                    },
+                    "page_info": {
+                      "$ref": "#/components/schemas/PageInfo"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/api/v1/products/{product_id}/offers": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "operationId": "getProductOffers",
+        "summary": "Get Product Offers",
+        "description": "Retorna as ofertas de um produto.",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "description": "ID do produto",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/MaxResults"
+          },
+          {
+            "$ref": "#/components/parameters/PageToken"
+          },
+          {
+            "name": "offer_key",
+            "in": "query",
+            "description": "Chave da oferta",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Select"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ofertas retornadas com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Offer"
+                      }
+                    },
+                    "page_info": {
+                      "$ref": "#/components/schemas/PageInfo"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/api/v1/products/{product_id}/plans": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "operationId": "getProductPlans",
+        "summary": "Get Product Plans",
+        "description": "Retorna os planos de assinatura de um produto.",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "description": "ID do produto",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/MaxResults"
+          },
+          {
+            "$ref": "#/components/parameters/PageToken"
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "description": "ID do plano",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Select"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Planos retornados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Plan"
+                      }
+                    },
+                    "page_info": {
+                      "$ref": "#/components/schemas/PageInfo"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/api/v1/product/{product_id}/coupon": {
+      "post": {
+        "tags": [
+          "Coupons"
+        ],
+        "operationId": "createCoupon",
+        "summary": "Create Coupon",
+        "description": "Cria um cupom de desconto para um produto.",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "description": "ID do produto",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCouponRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Cupom criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/api/v1/coupon/product/{product_id}": {
+      "get": {
+        "tags": [
+          "Coupons"
+        ],
+        "operationId": "getCoupons",
+        "summary": "Get Coupons",
+        "description": "Retorna os cupons de um produto.",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "description": "ID do produto",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "description": "Código do cupom",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/PageToken"
+          },
+          {
+            "$ref": "#/components/parameters/Select"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cupons retornados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Coupon"
+                      }
+                    },
+                    "page_info": {
+                      "$ref": "#/components/schemas/PageInfo"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/api/v1/coupon/{coupon_id}": {
+      "delete": {
+        "tags": [
+          "Coupons"
+        ],
+        "operationId": "deleteCoupon",
+        "summary": "Delete Coupon",
+        "description": "Exclui um cupom de desconto.",
+        "parameters": [
+          {
+            "name": "coupon_id",
+            "in": "path",
+            "description": "ID do cupom",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cupom excluído com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/events/api/v1/{event_id}/info": {
+      "get": {
+        "tags": [
+          "Tickets"
+        ],
+        "operationId": "getEventInfo",
+        "summary": "Event Info",
+        "description": "Retorna informações de um evento.",
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "description": "ID do evento",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Select"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Informações do evento retornadas com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/events/api/v1/{event_id}/participants": {
+      "get": {
+        "tags": [
+          "Tickets"
+        ],
+        "operationId": "getEventParticipants",
+        "summary": "Event Participants",
+        "description": "Retorna os participantes de um evento.",
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "description": "ID do evento",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/MaxResults"
+          },
+          {
+            "$ref": "#/components/parameters/PageToken"
+          },
+          {
+            "name": "buyer_email",
+            "in": "query",
+            "description": "E-mail do comprador",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "participant_email",
+            "in": "query",
+            "description": "E-mail do participante",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "last_update",
+            "in": "query",
+            "description": "Última atualização (timestamp em milissegundos)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "id_lot",
+            "in": "query",
+            "description": "ID do lote",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "ticket_status",
+            "in": "query",
+            "description": "Status do ingresso",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TicketStatus"
+            }
+          },
+          {
+            "name": "ticket_type",
+            "in": "query",
+            "description": "Tipo do ingresso",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TicketType"
+            }
+          },
+          {
+            "name": "checkin_status",
+            "in": "query",
+            "description": "Status do check-in",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/CheckinStatus"
+            }
+          },
+          {
+            "name": "id_eticket",
+            "in": "query",
+            "description": "ID do e-ticket",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "ticket_qr_code",
+            "in": "query",
+            "description": "QR code do ingresso",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Select"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Participantes retornados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/EventParticipant"
+                      }
+                    },
+                    "page_info": {
+                      "$ref": "#/components/schemas/PageInfo"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/api/v1/installments/negotiate": {
+      "post": {
+        "tags": [
+          "Negotiation"
+        ],
+        "operationId": "generateNegotiation",
+        "summary": "Generate Negotiation",
+        "description": "Gera boleto ou PIX para parcelas de assinatura em atraso.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NegotiationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Negociação gerada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NegotiationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "OAuth2",
+        "description": "Token OAuth2 obtido via client_credentials no servidor de autenticação (https://api-sec-vlc.hotmart.com)"
+      }
+    },
+    "parameters": {
+      "MaxResults": {
+        "name": "max_results",
+        "in": "query",
+        "description": "Número máximo de resultados por página",
+        "required": false,
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "PageToken": {
+        "name": "page_token",
+        "in": "query",
+        "description": "Token de paginação para a próxima página",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ProductId": {
+        "name": "product_id",
+        "in": "query",
+        "description": "ID do produto",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "StartDate": {
+        "name": "start_date",
+        "in": "query",
+        "description": "Data inicial (timestamp em milissegundos desde epoch)",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "EndDate": {
+        "name": "end_date",
+        "in": "query",
+        "description": "Data final (timestamp em milissegundos desde epoch)",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "SalesSource": {
+        "name": "sales_source",
+        "in": "query",
+        "description": "Origem da venda",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Transaction": {
+        "name": "transaction",
+        "in": "query",
+        "description": "Código da transação",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Select": {
+        "name": "select",
+        "in": "query",
+        "description": "Seleção de campos customizados na resposta",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "schemas": {
+      "PageInfo": {
+        "type": "object",
+        "description": "Informações de paginação",
+        "properties": {
+          "total_results": {
+            "type": "integer",
+            "description": "Total de resultados"
+          },
+          "next_page_token": {
+            "type": "string",
+            "description": "Token para a próxima página"
+          },
+          "prev_page_token": {
+            "type": "string",
+            "description": "Token para a página anterior"
+          },
+          "results_per_page": {
+            "type": "integer",
+            "description": "Número de resultados por página"
+          }
+        }
+      },
+      "Price": {
+        "type": "object",
+        "description": "Representação de valor monetário",
+        "properties": {
+          "value": {
+            "type": "number",
+            "description": "Valor"
+          },
+          "currency_code": {
+            "type": "string",
+            "description": "Código da moeda (ISO 4217)"
+          }
+        }
+      },
+      "TransactionStatus": {
+        "type": "string",
+        "description": "Status da transação",
+        "enum": [
+          "APPROVED",
+          "BLOCKED",
+          "CANCELLED",
+          "CHARGEBACK",
+          "COMPLETE",
+          "EXPIRED",
+          "NO_FUNDS",
+          "OVERDUE",
+          "PARTIALLY_REFUNDED",
+          "PRE_ORDER",
+          "PRINTED_BILLET",
+          "PROCESSING_TRANSACTION",
+          "PROTESTED",
+          "REFUNDED",
+          "STARTED",
+          "UNDER_ANALISYS",
+          "WAITING_PAYMENT"
+        ]
+      },
+      "PaymentType": {
+        "type": "string",
+        "description": "Tipo de pagamento",
+        "enum": [
+          "BILLET",
+          "CASH_PAYMENT",
+          "CREDIT_CARD",
+          "DIRECT_BANK_TRANSFER",
+          "DIRECT_DEBIT",
+          "FINANCED_BILLET",
+          "FINANCED_INSTALLMENT",
+          "GOOGLE_PAY",
+          "HOTCARD",
+          "HYBRID",
+          "MANUAL_TRANSFER",
+          "PAYPAL",
+          "PAYPAL_INTERNACIONAL",
+          "PICPAY",
+          "PIX",
+          "SAMSUNG_PAY",
+          "WALLET"
+        ]
+      },
+      "PaymentMethod": {
+        "type": "string",
+        "description": "Método de pagamento detalhado",
+        "enum": [
+          "BACS_DIRECT_DEBIT",
+          "BALOTO",
+          "BANK_DEBIT",
+          "BILLET",
+          "CREDIT_CARD_AMERICAN_EXPRESS",
+          "CREDIT_CARD_AURA",
+          "CREDIT_CARD_DINERS",
+          "CREDIT_CARD_DISCOVER",
+          "CREDIT_CARD_ELO",
+          "CREDIT_CARD_HIPERCARD",
+          "CREDIT_CARD_MASTERCARD",
+          "CREDIT_CARD_VISA",
+          "CUPON_DE_PAGO",
+          "DIRECT_BANK_TRANSFER_ADYEN_SOFORT",
+          "FINANCED_BILLET",
+          "FINANCED_INSTALLMENT_ADYEN_ONEY",
+          "FINANCED_INSTALLMENT_ADYEN_ONEY_10X",
+          "FINANCED_INSTALLMENT_ADYEN_ONEY_12X",
+          "FINANCED_INSTALLMENT_ADYEN_ONEY_3X",
+          "FINANCED_INSTALLMENT_ADYEN_ONEY_4X",
+          "FINANCED_INSTALLMENT_ADYEN_ONEY_6X",
+          "GOOGLE_PAY",
+          "HOTMART",
+          "HYBRID",
+          "IN_APP_PURCHASE",
+          "MULTIBANCO",
+          "OXXO",
+          "PAGO_EFECTIVO",
+          "PAYPAL",
+          "PICPAY",
+          "PIX",
+          "SAMSUNG_PAY",
+          "SEPA_DIRECT_DEBIT",
+          "BANK_TRANSFER_BB",
+          "BANK_TRANSFER_BRADESCO",
+          "BANK_TRANSFER_ITAU",
+          "APPLE_PAY"
+        ]
+      },
+      "CommissionAs": {
+        "type": "string",
+        "description": "Papel de comissão",
+        "enum": [
+          "PRODUCER",
+          "COPRODUCER",
+          "AFFILIATE"
+        ]
+      },
+      "SubscriptionStatus": {
+        "type": "string",
+        "description": "Status da assinatura",
+        "enum": [
+          "ACTIVE",
+          "INACTIVE",
+          "DELAYED",
+          "CANCELLED_BY_CUSTOMER",
+          "CANCELLED_BY_SELLER",
+          "CANCELLED_BY_ADMIN",
+          "STARTED",
+          "OVERDUE"
+        ]
+      },
+      "BillingType": {
+        "type": "string",
+        "description": "Tipo de cobrança",
+        "enum": [
+          "SUBSCRIPTION",
+          "SMART_INSTALLMENT",
+          "SMART_RECOVERY"
+        ]
+      },
+      "ProductStatus": {
+        "type": "string",
+        "description": "Status do produto",
+        "enum": [
+          "DRAFT",
+          "ACTIVE",
+          "PAUSED",
+          "NOT_APPROVED",
+          "IN_REVIEW",
+          "DELETED",
+          "CHANGES_PENDING_ON_PRODUCT"
+        ]
+      },
+      "ProductFormat": {
+        "type": "string",
+        "description": "Formato do produto",
+        "enum": [
+          "EBOOK",
+          "SOFTWARE",
+          "MOBILE_APPS",
+          "VIDEOS",
+          "AUDIOS",
+          "TEMPLATES",
+          "IMAGES",
+          "ONLINE_COURSE",
+          "SERIAL_CODES",
+          "ETICKET",
+          "ONLINE_SERVICE",
+          "ONLINE_EVENT",
+          "BUNDLE",
+          "COMMUNITY"
+        ]
+      },
+      "TicketStatus": {
+        "type": "string",
+        "description": "Status do ingresso",
+        "enum": [
+          "SOLD",
+          "INVITE",
+          "INVITE_CANCELED",
+          "REFUNDED",
+          "CHARGEBACK",
+          "EXCLUDED",
+          "AVAILABLE",
+          "RESERVED"
+        ]
+      },
+      "TicketType": {
+        "type": "string",
+        "description": "Tipo do ingresso",
+        "enum": [
+          "PAID",
+          "FREE",
+          "ALL"
+        ]
+      },
+      "CheckinStatus": {
+        "type": "string",
+        "description": "Status do check-in",
+        "enum": [
+          "PENDING",
+          "PARTIAL",
+          "CONCLUDED",
+          "ALL"
+        ]
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Código do erro"
+          },
+          "error_description": {
+            "type": "string",
+            "description": "Descrição do erro"
+          },
+          "error_uri": {
+            "type": "string",
+            "description": "URI de referência do erro"
+          }
+        }
+      },
+      "SaleHistory": {
+        "type": "object",
+        "properties": {
+          "product": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Nome do produto"
+              },
+              "id": {
+                "type": "integer",
+                "format": "int64",
+                "description": "ID do produto"
+              }
+            }
+          },
+          "buyer": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Nome do comprador"
+              },
+              "ucode": {
+                "type": "string",
+                "description": "Código único do comprador"
+              },
+              "email": {
+                "type": "string",
+                "description": "E-mail do comprador"
+              }
+            }
+          },
+          "producer": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Nome do produtor"
+              },
+              "ucode": {
+                "type": "string",
+                "description": "Código único do produtor"
+              }
+            }
+          },
+          "purchase": {
+            "type": "object",
+            "properties": {
+              "transaction": {
+                "type": "string",
+                "description": "Código da transação"
+              },
+              "order_date": {
+                "type": "integer",
+                "format": "int64",
+                "description": "Data do pedido (timestamp ms)"
+              },
+              "approved_date": {
+                "type": "integer",
+                "format": "int64",
+                "description": "Data de aprovação (timestamp ms)"
+              },
+              "status": {
+                "$ref": "#/components/schemas/TransactionStatus"
+              },
+              "recurrency_number": {
+                "type": "integer",
+                "description": "Número da recorrência"
+              },
+              "is_subscription": {
+                "type": "boolean",
+                "description": "Se é assinatura"
+              },
+              "commission_as": {
+                "$ref": "#/components/schemas/CommissionAs"
+              },
+              "price": {
+                "$ref": "#/components/schemas/Price"
+              },
+              "payment": {
+                "type": "object",
+                "properties": {
+                  "method": {
+                    "type": "string",
+                    "description": "Método de pagamento"
+                  },
+                  "installments_number": {
+                    "type": "integer",
+                    "description": "Número de parcelas"
+                  },
+                  "type": {
+                    "$ref": "#/components/schemas/PaymentType"
+                  }
+                }
+              },
+              "tracking": {
+                "type": "object",
+                "properties": {
+                  "source_sck": {
+                    "type": "string",
+                    "description": "Source SCK de rastreamento"
+                  },
+                  "source": {
+                    "type": "string",
+                    "description": "Fonte de rastreamento"
+                  },
+                  "external_code": {
+                    "type": "string",
+                    "description": "Código externo de rastreamento"
+                  }
+                }
+              },
+              "warranty_expire_date": {
+                "type": "integer",
+                "format": "int64",
+                "description": "Data de expiração da garantia (timestamp ms)"
+              },
+              "offer": {
+                "type": "object",
+                "properties": {
+                  "payment_mode": {
+                    "type": "string",
+                    "description": "Modo de pagamento da oferta"
+                  },
+                  "code": {
+                    "type": "string",
+                    "description": "Código da oferta"
+                  }
+                }
+              },
+              "hotmart_fee": {
+                "type": "object",
+                "properties": {
+                  "total": {
+                    "type": "number",
+                    "description": "Taxa total da Hotmart"
+                  },
+                  "fixed": {
+                    "type": "number",
+                    "description": "Taxa fixa"
+                  },
+                  "currency_code": {
+                    "type": "string",
+                    "description": "Código da moeda"
+                  },
+                  "base": {
+                    "type": "number",
+                    "description": "Base de cálculo"
+                  },
+                  "percentage": {
+                    "type": "number",
+                    "description": "Percentual da taxa"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "SaleSummary": {
+        "type": "object",
+        "properties": {
+          "total_items": {
+            "type": "integer",
+            "description": "Total de itens"
+          },
+          "total_value": {
+            "$ref": "#/components/schemas/Price"
+          }
+        }
+      },
+      "SaleParticipant": {
+        "type": "object",
+        "properties": {
+          "transaction": {
+            "type": "string",
+            "description": "Código da transação"
+          },
+          "product": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          },
+          "users": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "role": {
+                  "type": "string",
+                  "enum": [
+                    "PRODUCER",
+                    "AFFILIATE",
+                    "COPRODUCER"
+                  ],
+                  "description": "Papel do participante"
+                },
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "ucode": {
+                      "type": "string",
+                      "description": "Código único do usuário"
+                    },
+                    "locale": {
+                      "type": "string",
+                      "description": "Localidade do usuário"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Nome"
+                    },
+                    "trade_name": {
+                      "type": "string",
+                      "description": "Nome comercial"
+                    },
+                    "cellphone": {
+                      "type": "string",
+                      "description": "Celular"
+                    },
+                    "phone": {
+                      "type": "string",
+                      "description": "Telefone"
+                    },
+                    "email": {
+                      "type": "string",
+                      "description": "E-mail"
+                    },
+                    "documents": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "description": "Tipo do documento"
+                          },
+                          "value": {
+                            "type": "string",
+                            "description": "Valor do documento"
+                          }
+                        }
+                      }
+                    },
+                    "address": {
+                      "type": "object",
+                      "properties": {
+                        "city": {
+                          "type": "string"
+                        },
+                        "state": {
+                          "type": "string"
+                        },
+                        "country": {
+                          "type": "string"
+                        },
+                        "zip_code": {
+                          "type": "string"
+                        },
+                        "address": {
+                          "type": "string"
+                        },
+                        "complement": {
+                          "type": "string"
+                        },
+                        "neighborhood": {
+                          "type": "string"
+                        },
+                        "number": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "SaleCommission": {
+        "type": "object",
+        "properties": {
+          "transaction": {
+            "type": "string",
+            "description": "Código da transação"
+          },
+          "product": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          },
+          "exchange_rate_currency_payout": {
+            "type": "number",
+            "description": "Taxa de câmbio para pagamento"
+          },
+          "commissions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "commission": {
+                  "type": "object",
+                  "properties": {
+                    "currency_value": {
+                      "type": "number",
+                      "description": "Valor na moeda local"
+                    },
+                    "value": {
+                      "type": "number",
+                      "description": "Valor da comissão"
+                    }
+                  }
+                },
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "ucode": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "PRODUCER",
+                    "COPRODUCER",
+                    "ADDON"
+                  ],
+                  "description": "Fonte da comissão"
+                }
+              }
+            }
+          }
+        }
+      },
+      "SalePriceDetail": {
+        "type": "object",
+        "properties": {
+          "transaction": {
+            "type": "string",
+            "description": "Código da transação"
+          },
+          "product": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          },
+          "base": {
+            "$ref": "#/components/schemas/Price"
+          },
+          "total": {
+            "$ref": "#/components/schemas/Price"
+          },
+          "vat": {
+            "$ref": "#/components/schemas/Price"
+          },
+          "fee": {
+            "$ref": "#/components/schemas/Price"
+          },
+          "coupon": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "description": "Código do cupom"
+              },
+              "value": {
+                "type": "number",
+                "description": "Valor do desconto"
+              }
+            }
+          },
+          "real_conversion_rate": {
+            "type": "number",
+            "description": "Taxa de conversão real"
+          }
+        }
+      },
+      "Subscription": {
+        "type": "object",
+        "properties": {
+          "subscriber_code": {
+            "type": "string",
+            "description": "Código do assinante"
+          },
+          "subscription_id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "ID da assinatura"
+          },
+          "status": {
+            "$ref": "#/components/schemas/SubscriptionStatus"
+          },
+          "accession_date": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Data de adesão (timestamp ms)"
+          },
+          "end_accession_date": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Data final de adesão (timestamp ms)"
+          },
+          "request_date": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Data da solicitação (timestamp ms)"
+          },
+          "date_next_charge": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Data da próxima cobrança (timestamp ms)"
+          },
+          "trial": {
+            "type": "boolean",
+            "description": "Se está em trial"
+          },
+          "transaction": {
+            "type": "string",
+            "description": "Código da transação"
+          },
+          "plan": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Nome do plano"
+              },
+              "id": {
+                "type": "integer",
+                "format": "int64",
+                "description": "ID do plano"
+              },
+              "recurrency_period": {
+                "type": "string",
+                "description": "Período de recorrência"
+              },
+              "max_charge_cycles": {
+                "type": "integer",
+                "description": "Máximo de ciclos de cobrança"
+              }
+            }
+          },
+          "product": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "name": {
+                "type": "string"
+              },
+              "ucode": {
+                "type": "string"
+              }
+            }
+          },
+          "price": {
+            "$ref": "#/components/schemas/Price"
+          },
+          "subscriber": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "ucode": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "SubscriptionSummary": {
+        "type": "object",
+        "properties": {
+          "subscriber_code": {
+            "type": "string"
+          },
+          "subscription_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "status": {
+            "$ref": "#/components/schemas/SubscriptionStatus"
+          },
+          "lifetime": {
+            "type": "integer",
+            "description": "Tempo de vida da assinatura em dias"
+          },
+          "accession_date": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "end_accession_date": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "trial": {
+            "type": "boolean"
+          },
+          "plan": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "recurrency_period": {
+                "type": "string"
+              }
+            }
+          },
+          "product": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          },
+          "offer": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              }
+            }
+          },
+          "last_recurrency": {
+            "type": "object",
+            "properties": {
+              "number": {
+                "type": "integer",
+                "description": "Número da última recorrência"
+              },
+              "request_date": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "status": {
+                "type": "string"
+              },
+              "transaction_number": {
+                "type": "string"
+              },
+              "billing_type": {
+                "$ref": "#/components/schemas/BillingType"
+              }
+            }
+          },
+          "unpaid_recurrencies": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "number": {
+                  "type": "integer"
+                },
+                "charge_date": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          },
+          "subscriber": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "SubscriptionTransaction": {
+        "type": "object",
+        "properties": {
+          "last_recurrency_start_date": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "has_unpaid_recurrency": {
+            "type": "boolean"
+          },
+          "product": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          },
+          "subscriber": {
+            "type": "object",
+            "properties": {
+              "phone": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "phone_ddd": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              }
+            }
+          },
+          "recurrency": {
+            "type": "object",
+            "properties": {
+              "number": {
+                "type": "integer"
+              },
+              "scheduled_retry": {
+                "type": "boolean"
+              },
+              "number_list": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              },
+              "transaction_sequence": {
+                "type": "integer"
+              },
+              "start_datetime": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "payment_delays_days": {
+                "type": "integer"
+              },
+              "transaction_type": {
+                "type": "string"
+              },
+              "is_current_purchase": {
+                "type": "boolean"
+              },
+              "has_retry": {
+                "type": "boolean"
+              },
+              "status": {
+                "type": "string"
+              }
+            }
+          },
+          "last_recurrency_number": {
+            "type": "integer"
+          },
+          "trial_info": {
+            "type": "object",
+            "properties": {
+              "trial_end": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "trial_period": {
+                "type": "integer"
+              },
+              "trial": {
+                "type": "boolean"
+              }
+            }
+          },
+          "purchase": {
+            "type": "object",
+            "properties": {
+              "order_date": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "price": {
+                "type": "object",
+                "properties": {
+                  "total_value": {
+                    "type": "number"
+                  },
+                  "currency": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "number"
+                  }
+                }
+              },
+              "installment": {
+                "type": "object",
+                "properties": {
+                  "installment_number": {
+                    "type": "integer"
+                  },
+                  "installment_type": {
+                    "type": "string"
+                  }
+                }
+              },
+              "payment": {
+                "type": "object",
+                "properties": {
+                  "refusal_message": {
+                    "type": "string"
+                  },
+                  "refund_chargeback_date": {
+                    "type": "integer",
+                    "format": "int64"
+                  },
+                  "payment_type": {
+                    "$ref": "#/components/schemas/PaymentType"
+                  },
+                  "billet_expiration_date": {
+                    "type": "integer",
+                    "format": "int64"
+                  },
+                  "billet_recovery_type": {
+                    "type": "string"
+                  },
+                  "pix_expiration_date": {
+                    "type": "integer",
+                    "format": "int64"
+                  },
+                  "billet_reprint_code": {
+                    "type": "string"
+                  },
+                  "credit_card_flag": {
+                    "type": "string"
+                  }
+                }
+              },
+              "commission": {
+                "type": "object",
+                "properties": {
+                  "original_value": {
+                    "type": "number"
+                  },
+                  "producer_paid_value": {
+                    "type": "number"
+                  },
+                  "currency": {
+                    "type": "string"
+                  },
+                  "original_paid_value": {
+                    "type": "number"
+                  },
+                  "conversion_rate": {
+                    "type": "number"
+                  },
+                  "producer_value": {
+                    "type": "number"
+                  }
+                }
+              },
+              "approved_date": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "transaction": {
+                "type": "string"
+              },
+              "status": {
+                "$ref": "#/components/schemas/TransactionStatus"
+              }
+            }
+          },
+          "cancellation_date": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "is_paid_anticipation": {
+            "type": "boolean"
+          },
+          "max_cycles": {
+            "type": "integer"
+          },
+          "adoption_date": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "subscriber_code": {
+            "type": "string"
+          },
+          "date_next_charge": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "is_paid_negotiation": {
+            "type": "boolean"
+          },
+          "last_update": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "billing_type": {
+            "$ref": "#/components/schemas/BillingType"
+          },
+          "producer": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              }
+            }
+          },
+          "subscription_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "has_credit_card_change": {
+            "type": "boolean"
+          },
+          "plan": {
+            "type": "object",
+            "properties": {
+              "offer": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "key": {
+                    "type": "string"
+                  }
+                }
+              },
+              "recurrency_period": {
+                "type": "string"
+              },
+              "coupon_code": {
+                "type": "string"
+              },
+              "recurrency_type": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          },
+          "status": {
+            "$ref": "#/components/schemas/SubscriptionStatus"
+          }
+        }
+      },
+      "SubscriberPurchase": {
+        "type": "object",
+        "properties": {
+          "transaction": {
+            "type": "string",
+            "description": "Código da transação"
+          },
+          "approved_date": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Data de aprovação (timestamp ms)"
+          },
+          "payment_engine": {
+            "type": "string",
+            "description": "Motor de pagamento"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TransactionStatus"
+          },
+          "price": {
+            "$ref": "#/components/schemas/Price"
+          },
+          "payment_type": {
+            "$ref": "#/components/schemas/PaymentType"
+          },
+          "payment_method": {
+            "$ref": "#/components/schemas/PaymentMethod"
+          },
+          "recurrency_number": {
+            "type": "integer",
+            "description": "Número da recorrência"
+          },
+          "under_warranty": {
+            "type": "boolean",
+            "description": "Se está dentro da garantia"
+          },
+          "purchase_subscription": {
+            "type": "boolean",
+            "description": "Se é compra de assinatura"
+          }
+        }
+      },
+      "SubscriptionCancelResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ],
+            "description": "Status após cancelamento"
+          },
+          "subscriber_code": {
+            "type": "string"
+          },
+          "creation_date": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "current_recurrence": {
+            "type": "integer"
+          },
+          "date_last_recurrence": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "date_next_charge": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "due_day": {
+            "type": "integer"
+          },
+          "trial_period": {
+            "type": "integer"
+          },
+          "interval_type_between_charges": {
+            "type": "string",
+            "enum": [
+              "DAY",
+              "WEEK",
+              "MONTH",
+              "INVOICE"
+            ]
+          },
+          "interval_between_charges": {
+            "type": "integer"
+          },
+          "max_charge_cycles": {
+            "type": "integer"
+          },
+          "activation_date": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "shopper": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string"
+              },
+              "phone": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "BatchSubscriptionResult": {
+        "type": "object",
+        "properties": {
+          "success_subscriptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SubscriptionCancelResponse"
+            }
+          },
+          "fail_subscriptions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "subscriber_code": {
+                  "type": "string"
+                },
+                "creation_date": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "interval_between_charges": {
+                  "type": "integer"
+                },
+                "shopper": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string"
+                    },
+                    "phone": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "SubscriptionReactivateResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "INACTIVE"
+            ],
+            "description": "Status da assinatura (INACTIVE até o assinante aceitar via e-mail)"
+          },
+          "subscriber_code": {
+            "type": "string"
+          },
+          "creation_date": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "interval_between_charges": {
+            "type": "integer",
+            "enum": [
+              7,
+              30,
+              60,
+              90,
+              180,
+              360
+            ],
+            "description": "Intervalo entre cobranças em dias"
+          },
+          "shopper": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string"
+              },
+              "phone": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "BatchSubscriptionReactivateResult": {
+        "type": "object",
+        "properties": {
+          "success_subscriptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SubscriptionReactivateResponse"
+            }
+          },
+          "fail_subscriptions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "subscriber_code": {
+                  "type": "string"
+                },
+                "creation_date": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "interval_between_charges": {
+                  "type": "integer"
+                },
+                "shopper": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string"
+                    },
+                    "phone": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "Module": {
+        "type": "object",
+        "properties": {
+          "module_id": {
+            "type": "string",
+            "description": "ID do módulo"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome do módulo"
+          },
+          "sequence": {
+            "type": "integer",
+            "description": "Sequência do módulo"
+          },
+          "is_public": {
+            "type": "boolean",
+            "description": "Se é público"
+          },
+          "is_extra": {
+            "type": "boolean",
+            "description": "Se é módulo extra"
+          },
+          "is_extra_paid": {
+            "type": "boolean",
+            "description": "Se é módulo extra pago"
+          },
+          "classes": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "Aulas do módulo"
+          },
+          "total_pages": {
+            "type": "integer",
+            "description": "Total de páginas no módulo"
+          }
+        }
+      },
+      "Page": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string",
+            "description": "ID da página"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome da página"
+          },
+          "page_order": {
+            "type": "integer",
+            "description": "Ordem da página"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "CONTENT",
+              "ADVERTISEMENT",
+              "QUIZ",
+              "WEBINAR"
+            ],
+            "description": "Tipo da página"
+          },
+          "is_published": {
+            "type": "boolean",
+            "description": "Se está publicada"
+          },
+          "total_comments": {
+            "type": "integer",
+            "description": "Total de comentários"
+          },
+          "rates_average": {
+            "type": "number",
+            "description": "Média de avaliações"
+          },
+          "rates": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "rate": {
+                  "type": "integer",
+                  "description": "Nota"
+                },
+                "total": {
+                  "type": "integer",
+                  "description": "Total de avaliações com esta nota"
+                }
+              }
+            }
+          },
+          "has_media": {
+            "type": "boolean",
+            "description": "Se possui mídia"
+          },
+          "liberation_type": {
+            "type": "string",
+            "enum": [
+              "BY_DATE",
+              "BY_DAYS"
+            ],
+            "description": "Tipo de liberação"
+          },
+          "liberation_date": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Data de liberação (timestamp ms)"
+          },
+          "liberation_days": {
+            "type": "integer",
+            "description": "Dias para liberação"
+          },
+          "has_duration": {
+            "type": "boolean",
+            "description": "Se tem duração definida"
+          },
+          "days_of_duration": {
+            "type": "integer",
+            "description": "Dias de duração"
+          }
+        }
+      },
+      "Student": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "ID do aluno"
+          },
+          "engagement": {
+            "type": "string",
+            "enum": [
+              "NONE",
+              "LOW",
+              "MEDIUM",
+              "HIGH"
+            ],
+            "description": "Nível de engajamento"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome do aluno"
+          },
+          "email": {
+            "type": "string",
+            "description": "E-mail do aluno"
+          },
+          "last_access_date": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Data do último acesso (timestamp ms)"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "STUDENT",
+              "FREE_STUDENT",
+              "OWNER",
+              "ADMIN",
+              "CONTENT_EDITOR",
+              "MODERATOR"
+            ],
+            "description": "Papel do aluno"
+          },
+          "first_access_date": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Data do primeiro acesso (timestamp ms)"
+          },
+          "locale": {
+            "type": "string",
+            "description": "Localidade do aluno"
+          },
+          "plus_access": {
+            "type": "string",
+            "enum": [
+              "WITHOUT_PLUS_ACCESS",
+              "HOLDER",
+              "HOLDER_WITH_DEPENDENTS",
+              "HOLDER_WITHOUT_DEPENDENTS",
+              "DEPENDENT"
+            ],
+            "description": "Tipo de acesso Plus"
+          },
+          "progress": {
+            "type": "object",
+            "properties": {
+              "completed_percentage": {
+                "type": "number",
+                "description": "Percentual concluído"
+              },
+              "total": {
+                "type": "integer",
+                "description": "Total de aulas"
+              },
+              "completed": {
+                "type": "integer",
+                "description": "Aulas concluídas"
+              }
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "BLOCKED",
+              "BLOCKED_BY_OWNER",
+              "OVERDUE"
+            ],
+            "description": "Status do aluno"
+          },
+          "purchase_date": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Data da compra (timestamp ms)"
+          },
+          "access_count": {
+            "type": "integer",
+            "description": "Número de acessos"
+          },
+          "is_deletable": {
+            "type": "boolean",
+            "description": "Se pode ser excluído"
+          },
+          "class_id": {
+            "type": "string",
+            "description": "ID da turma"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "BUYER",
+              "IMPORTED",
+              "FREE",
+              "OWNER",
+              "GUEST"
+            ],
+            "description": "Tipo do aluno"
+          }
+        }
+      },
+      "LessonProgress": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string",
+            "description": "ID da página/aula"
+          },
+          "page_name": {
+            "type": "string",
+            "description": "Nome da página/aula"
+          },
+          "module_name": {
+            "type": "string",
+            "description": "Nome do módulo"
+          },
+          "is_module_extra": {
+            "type": "boolean",
+            "description": "Se o módulo é extra"
+          },
+          "is_completed": {
+            "type": "boolean",
+            "description": "Se a aula foi concluída"
+          },
+          "completed_date": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Data de conclusão (timestamp ms)"
+          }
+        }
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "ID do produto"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome do produto"
+          },
+          "ucode": {
+            "type": "string",
+            "description": "Código único do produto"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ProductStatus"
+          },
+          "created_at": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Data de criação (timestamp ms)"
+          },
+          "format": {
+            "$ref": "#/components/schemas/ProductFormat"
+          },
+          "is_subscription": {
+            "type": "boolean",
+            "description": "Se é produto de assinatura"
+          },
+          "warranty_period": {
+            "type": "integer",
+            "description": "Período de garantia em dias"
+          }
+        }
+      },
+      "Offer": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "Chave da oferta"
+          },
+          "status": {
+            "type": "string",
+            "description": "Status da oferta"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome da oferta"
+          },
+          "payment_mode": {
+            "type": "string",
+            "description": "Modo de pagamento"
+          },
+          "offer_payment_type": {
+            "type": "string",
+            "description": "Tipo de pagamento da oferta"
+          },
+          "max_charge_cycles": {
+            "type": "integer",
+            "description": "Máximo de ciclos de cobrança"
+          },
+          "prices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "currency_code": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "number"
+                },
+                "payment_types_prices": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "payment_type": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "is_subscription": {
+            "type": "boolean",
+            "description": "Se é oferta de assinatura"
+          }
+        }
+      },
+      "Plan": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "ID do plano"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome do plano"
+          },
+          "max_charge_cycles": {
+            "type": "integer",
+            "description": "Máximo de ciclos de cobrança"
+          },
+          "recurrency_period": {
+            "type": "string",
+            "description": "Período de recorrência"
+          }
+        }
+      },
+      "CreateCouponRequest": {
+        "type": "object",
+        "required": [
+          "code",
+          "discount"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "maxLength": 25,
+            "description": "Código do cupom (máximo 25 caracteres)"
+          },
+          "discount": {
+            "type": "number",
+            "format": "double",
+            "exclusiveMinimum": true,
+            "minimum": 0,
+            "exclusiveMaximum": true,
+            "maximum": 0.99,
+            "description": "Percentual de desconto (entre 0 e 0.99, exclusivo)"
+          },
+          "start_date": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Data de início de validade (timestamp em milissegundos)"
+          },
+          "end_date": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Data de fim de validade (timestamp em milissegundos)"
+          },
+          "affiliate": {
+            "type": "integer",
+            "format": "int64",
+            "description": "ID do afiliado"
+          },
+          "offer_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "IDs das ofertas aplicáveis"
+          }
+        }
+      },
+      "Coupon": {
+        "type": "object",
+        "properties": {
+          "coupon_code": {
+            "type": "string",
+            "description": "Código do cupom"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Se o cupom está ativo"
+          },
+          "start_date": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Data de início (timestamp ms)"
+          },
+          "discount": {
+            "type": "number",
+            "description": "Percentual de desconto"
+          },
+          "time_zone": {
+            "type": "object",
+            "properties": {
+              "offset": {
+                "type": "string",
+                "description": "Offset do fuso horário"
+              },
+              "description": {
+                "type": "string",
+                "description": "Descrição do fuso horário"
+              },
+              "id": {
+                "type": "string",
+                "description": "ID do fuso horário"
+              },
+              "name": {
+                "type": "string",
+                "description": "Nome do fuso horário"
+              }
+            }
+          },
+          "status": {
+            "type": "string",
+            "description": "Status do cupom"
+          },
+          "id": {
+            "type": "integer",
+            "description": "ID do cupom"
+          }
+        }
+      },
+      "EventInfo": {
+        "type": "object",
+        "properties": {
+          "product": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          },
+          "start_event_date": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Data de início do evento (timestamp ms)"
+          },
+          "end_event_date": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Data de fim do evento (timestamp ms)"
+          },
+          "lots": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int64",
+                  "description": "ID do lote"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Nome do lote"
+                }
+              }
+            }
+          }
+        }
+      },
+      "EventParticipant": {
+        "type": "object",
+        "properties": {
+          "participant": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string"
+              },
+              "document": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "phone": {
+                "type": "string"
+              }
+            }
+          },
+          "buyer": {
+            "type": "object",
+            "properties": {
+              "ucode": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          },
+          "eticket": {
+            "type": "object",
+            "properties": {
+              "ticket_qr_code": {
+                "type": "string",
+                "description": "QR code do ingresso"
+              },
+              "current_update": {
+                "type": "integer",
+                "format": "int64",
+                "description": "Última atualização (timestamp ms)"
+              },
+              "checkin_status": {
+                "$ref": "#/components/schemas/CheckinStatus"
+              },
+              "is_blocked": {
+                "type": "boolean"
+              },
+              "ticket_status": {
+                "$ref": "#/components/schemas/TicketStatus"
+              },
+              "ticket_type": {
+                "$ref": "#/components/schemas/TicketType"
+              },
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "checkin_url": {
+                "type": "string",
+                "description": "URL de check-in"
+              }
+            }
+          },
+          "lot": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          },
+          "product": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "NegotiationRequest": {
+        "type": "object",
+        "required": [
+          "subscription_id",
+          "recurrences",
+          "payment_type"
+        ],
+        "properties": {
+          "subscription_id": {
+            "type": "integer",
+            "description": "ID da assinatura"
+          },
+          "recurrences": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "minItems": 1,
+            "maxItems": 5,
+            "description": "Números das recorrências em atraso (1 a 5 valores)"
+          },
+          "payment_type": {
+            "type": "string",
+            "enum": [
+              "BOLETO",
+              "PIX"
+            ],
+            "description": "Tipo de pagamento para a negociação"
+          },
+          "discount": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "Tipo de desconto"
+              },
+              "value": {
+                "type": "number",
+                "description": "Valor do desconto"
+              }
+            }
+          },
+          "document": {
+            "type": "string",
+            "description": "CPF ou CNPJ do assinante (obrigatório para BOLETO)"
+          }
+        }
+      },
+      "NegotiationResponse": {
+        "type": "object",
+        "properties": {
+          "subscription_id": {
+            "type": "integer",
+            "description": "ID da assinatura"
+          },
+          "transaction": {
+            "type": "string",
+            "description": "Código da transação gerada"
+          },
+          "payment": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "Tipo de pagamento"
+              },
+              "expiration_date": {
+                "type": "integer",
+                "format": "int64",
+                "description": "Data de expiração (timestamp ms)"
+              },
+              "pix_code": {
+                "type": "string",
+                "description": "Código PIX copia-e-cola"
+              },
+              "pix_qrcode": {
+                "type": "string",
+                "description": "QR code PIX"
+              },
+              "billet_url": {
+                "type": "string",
+                "description": "URL do boleto"
+              },
+              "billet_barcode": {
+                "type": "string",
+                "description": "Código de barras do boleto"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
