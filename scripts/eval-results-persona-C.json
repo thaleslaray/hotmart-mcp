@@ -1,0 +1,2834 @@
+{
+  "persona": "C",
+  "persona_name": "Fernanda — dev intermediária PT-BR, lê descriptions atentamente, calcula datas com Python",
+  "version": "v0.2.1",
+  "fixes_applied": [
+    "discount fraction hint (coupon_create + negotiation_generate)",
+    "accession_date / end_accession_date ms-epoch hint (subscriptions_summary_list)",
+    "BILLET / payment_type enum hint",
+    "array param hints (offer_ids, recurrency_numbers, plan names, subscriber_codes)"
+  ],
+  "judgments": [
+    {
+      "tool": "hotmart_sales_history_list",
+      "variation_id": 1,
+      "prompt": "puxa o sales log transaction-level de out/2024 do produto 4168346 só com transaction_status APPROVED — preciso pra calcular ARPU por cohort de aquisição",
+      "expected_params_hint": "product_id=4168346, start_date~2024-10-01, end_date~2024-10-31, transaction_status=APPROVED",
+      "tool_chosen": "hotmart_sales_history_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_history_list",
+      "variation_id": 2,
+      "prompt": "me extrai todas as transactions linha-a-linha do Q1/2025 com sales_source=PRODUCER_PAGE pra reconciliar attribution no BI",
+      "expected_params_hint": "start_date=2025-01-01, end_date=2025-03-31, sales_source=PRODUCER_PAGE",
+      "tool_chosen": "hotmart_sales_history_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_history_list",
+      "variation_id": 3,
+      "prompt": "raw sales detail dos últimos 90 dias filtrando payment_type=CREDIT_CARD e transaction_status=APPROVED — vou cruzar com churn cohort",
+      "expected_params_hint": "start_date=últimos 90d, end_date=hoje, payment_type=CREDIT_CARD, transaction_status=APPROVED",
+      "tool_chosen": "hotmart_sales_history_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_history_list",
+      "variation_id": 4,
+      "prompt": "lista granular de vendas do produto de mentoria B2B (id 9988776) em fev/2025, só PIX, pra análise de payback por canal",
+      "expected_params_hint": "product_id=9988776, start_date=2025-02-01, end_date=2025-02-28, payment_type=PIX",
+      "tool_chosen": "hotmart_sales_history_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_history_list",
+      "variation_id": 5,
+      "prompt": "preciso do drill-down de cada transação do buyer renata@empresa.com no último semestre — auditoria de NDR",
+      "expected_params_hint": "buyer_email=renata@empresa.com, start_date=últimos 180d, end_date=hoje",
+      "tool_chosen": "hotmart_sales_history_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_history_list",
+      "variation_id": 6,
+      "prompt": "puxa o transaction log de jul-set/2024 com offer_code=BLACKEARLY pra medir attribution dessa promo",
+      "expected_params_hint": "start_date=2024-07-01, end_date=2024-09-30, offer_code=BLACKEARLY",
+      "tool_chosen": "hotmart_sales_history_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_history_list",
+      "variation_id": 7,
+      "prompt": "lista de vendas REFUNDED do trimestre anterior cruzando com commission_as=PRODUCER pra forecast de write-off",
+      "expected_params_hint": "start_date=trimestre anterior, end_date=trimestre anterior, transaction_status=REFUNDED, commission_as=PRODUCER",
+      "tool_chosen": "hotmart_sales_history_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_history_list",
+      "variation_id": 8,
+      "prompt": "raw data de transações do buyer corporativo Carlos Mendes em 2025 — preciso reconciliar com pipeline de upsell",
+      "expected_params_hint": "buyer_name=Carlos Mendes, start_date=2025-01-01, end_date=hoje",
+      "tool_chosen": "hotmart_sales_history_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_history_list",
+      "variation_id": 9,
+      "prompt": "me devolve cada sale individualmente de nov/2024 do produto de trading quant (3344556) com sales_source=AFFILIATION",
+      "expected_params_hint": "product_id=3344556, start_date=2024-11-01, end_date=2024-11-30, sales_source=AFFILIATION",
+      "tool_chosen": "hotmart_sales_history_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_history_list",
+      "variation_id": 10,
+      "prompt": "transaction-level export dos últimos 30 dias só com BOLETO pra modelar inadimplência preditiva",
+      "expected_params_hint": "start_date=últimos 30d, end_date=hoje, payment_type=BILLET",
+      "tool_chosen": "hotmart_sales_history_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_summary_list",
+      "variation_id": 1,
+      "prompt": "me dá o GMV agregado de abril/2025 segmentado por product_id — preciso pro forecast de Q2",
+      "expected_params_hint": "start_date=2025-04-01, end_date=2025-04-30, transaction_status=APPROVED",
+      "tool_chosen": "hotmart_sales_summary_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_summary_list",
+      "variation_id": 2,
+      "prompt": "rollup de revenue YTD com transaction_status=APPROVED pra fechar o board deck",
+      "expected_params_hint": "start_date=2025-01-01, end_date=hoje, transaction_status=APPROVED",
+      "tool_chosen": "hotmart_sales_summary_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_summary_list",
+      "variation_id": 3,
+      "prompt": "totais consolidados de vendas dos últimos 6 meses por payment_type — vou cruzar com mix de pagamento esperado",
+      "expected_params_hint": "start_date=últimos 180d, end_date=hoje",
+      "tool_chosen": "hotmart_sales_summary_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_summary_list",
+      "variation_id": 4,
+      "prompt": "summary de receita do produto SaaS Mentoring (id 7788990) em Q4/2024 só APPROVED — base pra MRR retroativo",
+      "expected_params_hint": "product_id=7788990, start_date=2024-10-01, end_date=2024-12-31, transaction_status=APPROVED",
+      "tool_chosen": "hotmart_sales_summary_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_summary_list",
+      "variation_id": 5,
+      "prompt": "aggregated GMV por sales_source nos últimos 12 meses — preciso quantificar attribution por canal",
+      "expected_params_hint": "start_date=últimos 365d, end_date=hoje",
+      "tool_chosen": "hotmart_sales_summary_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_summary_list",
+      "variation_id": 6,
+      "prompt": "total faturado com offer_code=UPSELL2025 desde o lançamento — input pra modelagem de cross-sell",
+      "expected_params_hint": "offer_code=UPSELL2025",
+      "tool_chosen": "hotmart_sales_summary_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_summary_list",
+      "variation_id": 7,
+      "prompt": "rollup mensal de vendas do affiliate Pedro Silva no semestre — calcular contribuição pro MRR",
+      "expected_params_hint": "affiliate_name=Pedro Silva, start_date=últimos 180d, end_date=hoje",
+      "tool_chosen": "hotmart_sales_summary_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_summary_list",
+      "variation_id": 8,
+      "prompt": "consolidated revenue de mar/2025 só PIX pra estudar shift de payment mix",
+      "expected_params_hint": "start_date=2025-03-01, end_date=2025-03-31, payment_type=PIX",
+      "tool_chosen": "hotmart_sales_summary_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_summary_list",
+      "variation_id": 9,
+      "prompt": "GMV agregado de 2024 inteiro com transaction_status=APPROVED pra benchmark YoY",
+      "expected_params_hint": "start_date=2024-01-01, end_date=2024-12-31, transaction_status=APPROVED",
+      "tool_chosen": "hotmart_sales_summary_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_summary_list",
+      "variation_id": 10,
+      "prompt": "totais de vendas REFUNDED + CHARGEBACK do último trimestre — input pra write-off accrual",
+      "expected_params_hint": "start_date=último trimestre, end_date=último trimestre, transaction_status=REFUNDED",
+      "tool_chosen": "hotmart_sales_summary_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_participants_list",
+      "variation_id": 1,
+      "prompt": "lista de buyers das vendas APPROVED de mai/2025 do produto 4168346 — vou enriquecer ICP no CRM",
+      "expected_params_hint": "product_id=4168346, start_date=2025-05-01, end_date=2025-05-31, transaction_status=APPROVED",
+      "tool_chosen": "hotmart_sales_participants_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_participants_list",
+      "variation_id": 2,
+      "prompt": "participants das vendas com sales_source=AFFILIATION nos últimos 60 dias — preciso pra cohort de aquisição via afiliado",
+      "expected_params_hint": "start_date=últimos 60d, end_date=hoje, sales_source=AFFILIATION",
+      "tool_chosen": "OTHER",
+      "tool_correct": false,
+      "param_correct": false,
+      "notes": "wrong_tool: prompt menciona sales_source=AFFILIATION e \"cohort de aquisição via afiliado\" — C considera sales_history_list pois sales_source é mais associado a history; participants_list não destaca esse filtro na description"
+    },
+    {
+      "tool": "hotmart_sales_participants_list",
+      "variation_id": 3,
+      "prompt": "extrai buyers do affiliate Luiza Ramos em Q1/2025 pra atribuir comissão estendida no LTV",
+      "expected_params_hint": "affiliate_name=Luiza Ramos, start_date=2025-01-01, end_date=2025-03-31",
+      "tool_chosen": "hotmart_sales_participants_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_participants_list",
+      "variation_id": 4,
+      "prompt": "compradores corporativos do produto de mentoria SaaS (id 7788990) com commission_as=PRODUCER em 2025 — base pra account-based marketing",
+      "expected_params_hint": "product_id=7788990, start_date=2025-01-01, end_date=hoje, commission_as=PRODUCER",
+      "tool_chosen": "hotmart_sales_participants_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_participants_list",
+      "variation_id": 5,
+      "prompt": "lista de buyers do email domain @grupotech.com.br pra mapear penetração no account",
+      "expected_params_hint": "buyer_email~@grupotech.com.br",
+      "tool_chosen": "hotmart_sales_participants_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_participants_list",
+      "variation_id": 6,
+      "prompt": "participantes das vendas APPROVED do produto de trading quant em out-dez/2024 — vou correlar com retention de 90 dias",
+      "expected_params_hint": "product_id=3344556, start_date=2024-10-01, end_date=2024-12-31, transaction_status=APPROVED",
+      "tool_chosen": "hotmart_sales_participants_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_participants_list",
+      "variation_id": 7,
+      "prompt": "buyers da transação HP2890253164 — preciso pra investigar caso de chargeback",
+      "expected_params_hint": "transaction=HP2890253164",
+      "tool_chosen": "hotmart_sales_participants_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_participants_list",
+      "variation_id": 8,
+      "prompt": "lista de buyers do sales_source=PRODUCER_PAGE em abr/2025 segmentando por nome contém 'CEO' — qualificação de ICP",
+      "expected_params_hint": "start_date=2025-04-01, end_date=2025-04-30, sales_source=PRODUCER_PAGE, buyer_name~CEO",
+      "tool_chosen": "hotmart_sales_participants_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_participants_list",
+      "variation_id": 9,
+      "prompt": "compradores recorrentes da Fernanda Almeida em todos meus produtos no último ano — cálculo de LTV individual",
+      "expected_params_hint": "buyer_name=Fernanda Almeida, start_date=últimos 365d, end_date=hoje",
+      "tool_chosen": "OTHER",
+      "tool_correct": false,
+      "param_correct": false,
+      "notes": "wrong_tool: \"compradores recorrentes da Fernanda Almeida em todos meus produtos\" — C interpreta como query de vendas e tenta sales_history_list com filtro por buyer_name, confunde participants vs buyers"
+    },
+    {
+      "tool": "hotmart_sales_participants_list",
+      "variation_id": 10,
+      "prompt": "participants das vendas com commission_as=AFFILIATE no Q2/2025 pra modelar contribuição de revenue por parceiro",
+      "expected_params_hint": "start_date=2025-04-01, end_date=2025-06-30, commission_as=AFFILIATE",
+      "tool_chosen": "hotmart_sales_participants_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_commissions_list",
+      "variation_id": 1,
+      "prompt": "puxa as comissões que recebi como PRODUCER em jan-mar/2025 pra reconciliar receita líquida no DRE",
+      "expected_params_hint": "start_date=2025-01-01, end_date=2025-03-31, commission_as=PRODUCER",
+      "tool_chosen": "hotmart_sales_commissions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_commissions_list",
+      "variation_id": 2,
+      "prompt": "lista de commissions do produto 4168346 do último semestre só APPROVED pra calcular take-rate efetivo",
+      "expected_params_hint": "product_id=4168346, start_date=últimos 180d, end_date=hoje, commission_as=PRODUCER, transaction_status=APPROVED",
+      "tool_chosen": "hotmart_sales_commissions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_commissions_list",
+      "variation_id": 3,
+      "prompt": "minhas comissões como AFFILIATE em 2025 YTD — input pra pipeline de revenue de parceria",
+      "expected_params_hint": "start_date=2025-01-01, end_date=hoje, commission_as=AFFILIATE",
+      "tool_chosen": "hotmart_sales_commissions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_commissions_list",
+      "variation_id": 4,
+      "prompt": "commissions da transação HP2890253164 — auditoria de payout",
+      "expected_params_hint": "transaction=HP2890253164",
+      "tool_chosen": "hotmart_sales_commissions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_commissions_list",
+      "variation_id": 5,
+      "prompt": "comissões REFUNDED do último trimestre por produto — provisão de estorno no forecast",
+      "expected_params_hint": "start_date=último trimestre, end_date=último trimestre, transaction_status=REFUNDED",
+      "tool_chosen": "hotmart_sales_commissions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_commissions_list",
+      "variation_id": 6,
+      "prompt": "rollup de commissions do produto de mentoria B2B (9988776) por mês desde out/2024 — análise de margin trend",
+      "expected_params_hint": "product_id=9988776, start_date=2024-10-01, end_date=hoje",
+      "tool_chosen": "hotmart_sales_commissions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_commissions_list",
+      "variation_id": 7,
+      "prompt": "comissões CO_PRODUCER de Q4/2024 pra fechar settlement com parceira",
+      "expected_params_hint": "start_date=2024-10-01, end_date=2024-12-31, commission_as=CO_PRODUCER",
+      "tool_chosen": "hotmart_sales_commissions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_commissions_list",
+      "variation_id": 8,
+      "prompt": "commissions APPROVED dos meus 5 produtos top de revenue nos últimos 30 dias — base pra cash forecast semanal",
+      "expected_params_hint": "start_date=últimos 30d, end_date=hoje, transaction_status=APPROVED",
+      "tool_chosen": "hotmart_sales_commissions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_commissions_list",
+      "variation_id": 9,
+      "prompt": "extrai commissions do produto de trading quant em 2025 só APPROVED pra calcular contribuição margin do nicho fintech",
+      "expected_params_hint": "product_id=3344556, start_date=2025-01-01, end_date=hoje, transaction_status=APPROVED",
+      "tool_chosen": "hotmart_sales_commissions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_commissions_list",
+      "variation_id": 10,
+      "prompt": "comissões do PRODUCER em mai/2025 pra reconciliar com extrato bancário do mês",
+      "expected_params_hint": "start_date=2025-05-01, end_date=2025-05-31, commission_as=PRODUCER",
+      "tool_chosen": "hotmart_sales_commissions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_price_details_list",
+      "variation_id": 1,
+      "prompt": "price breakdown (taxas, impostos, líquido) das vendas APPROVED de abr/2025 pra calcular contribution margin real",
+      "expected_params_hint": "start_date=2025-04-01, end_date=2025-04-30, transaction_status=APPROVED",
+      "tool_chosen": "hotmart_sales_price_details_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_price_details_list",
+      "variation_id": 2,
+      "prompt": "detalhe de pricing das transações PIX no Q1/2025 — quero quantificar fee differential vs cartão",
+      "expected_params_hint": "start_date=2025-01-01, end_date=2025-03-31, payment_type=PIX",
+      "tool_chosen": "hotmart_sales_price_details_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_price_details_list",
+      "variation_id": 3,
+      "prompt": "price details da transação HP2890253164 pra investigar desvio de net revenue esperado",
+      "expected_params_hint": "transaction=HP2890253164",
+      "tool_chosen": "hotmart_sales_price_details_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_price_details_list",
+      "variation_id": 4,
+      "prompt": "breakdown fiscal das vendas do produto 4168346 em 2025 YTD pra apuração trimestral",
+      "expected_params_hint": "product_id=4168346, start_date=2025-01-01, end_date=hoje",
+      "tool_chosen": "hotmart_sales_price_details_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_price_details_list",
+      "variation_id": 5,
+      "prompt": "price details de vendas BOLETO no último semestre — modelar custo de aquisição efetivo",
+      "expected_params_hint": "start_date=últimos 180d, end_date=hoje, payment_type=BILLET",
+      "tool_chosen": "hotmart_sales_price_details_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_price_details_list",
+      "variation_id": 6,
+      "prompt": "detalhe de pricing por venda em fev/2025 do produto mentoria B2B pra reconciliar net ARPU mensal",
+      "expected_params_hint": "product_id=9988776, start_date=2025-02-01, end_date=2025-02-28",
+      "tool_chosen": "hotmart_sales_price_details_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_price_details_list",
+      "variation_id": 7,
+      "prompt": "fees e impostos das vendas APPROVED com CREDIT_CARD em mar-abr/2025 pra calcular take-rate efetivo do gateway",
+      "expected_params_hint": "start_date=2025-03-01, end_date=2025-04-30, payment_type=CREDIT_CARD, transaction_status=APPROVED",
+      "tool_chosen": "hotmart_sales_price_details_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_price_details_list",
+      "variation_id": 8,
+      "prompt": "breakdown de preço das vendas do trimestre passado pra forecast de tax provision",
+      "expected_params_hint": "start_date=trimestre passado, end_date=trimestre passado",
+      "tool_chosen": "hotmart_sales_price_details_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_price_details_list",
+      "variation_id": 9,
+      "prompt": "price details do produto de trading quant em jun/2025 — análise de margin por produto",
+      "expected_params_hint": "product_id=3344556, start_date=2025-06-01, end_date=2025-06-30",
+      "tool_chosen": "hotmart_sales_price_details_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sales_price_details_list",
+      "variation_id": 10,
+      "prompt": "fees totais das vendas APPROVED YTD pra calcular gateway cost / GMV no dashboard ops",
+      "expected_params_hint": "start_date=2025-01-01, end_date=hoje, transaction_status=APPROVED",
+      "tool_chosen": "hotmart_sales_price_details_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sale_refund",
+      "variation_id": 1,
+      "prompt": "executa refund da transação HP2890253164 — cliente fez request via NPS detractor follow-up",
+      "expected_params_hint": "transaction_code=HP2890253164",
+      "tool_chosen": "hotmart_sale_refund",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sale_refund",
+      "variation_id": 2,
+      "prompt": "preciso reverter a venda HP1122334455 — caso de chargeback preventivo pra evitar dispute fee",
+      "expected_params_hint": "transaction_code=HP1122334455",
+      "tool_chosen": "hotmart_sale_refund",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sale_refund",
+      "variation_id": 3,
+      "prompt": "processa o estorno de HP9988776655 — política de garantia 7 dias acionada",
+      "expected_params_hint": "transaction_code=HP9988776655",
+      "tool_chosen": "hotmart_sale_refund",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sale_refund",
+      "variation_id": 4,
+      "prompt": "refund da transaction HP5544332211 — duplicate charge identificado na conciliação",
+      "expected_params_hint": "transaction_code=HP5544332211",
+      "tool_chosen": "hotmart_sale_refund",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sale_refund",
+      "variation_id": 5,
+      "prompt": "dispara reembolso da venda HP7766554433 conforme deliberação do customer success team",
+      "expected_params_hint": "transaction_code=HP7766554433",
+      "tool_chosen": "hotmart_sale_refund",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sale_refund",
+      "variation_id": 6,
+      "prompt": "estorna HP4433221100 — cliente reportou compra não autorizada, escalation de fraud",
+      "expected_params_hint": "transaction_code=HP4433221100",
+      "tool_chosen": "hotmart_sale_refund",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sale_refund",
+      "variation_id": 7,
+      "prompt": "refund da transação HP6655443322 pra fechar o ticket de support do enterprise account",
+      "expected_params_hint": "transaction_code=HP6655443322",
+      "tool_chosen": "hotmart_sale_refund",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sale_refund",
+      "variation_id": 8,
+      "prompt": "processa reverso de HP3322110099 — desistência dentro do prazo CDC",
+      "expected_params_hint": "transaction_code=HP3322110099",
+      "tool_chosen": "hotmart_sale_refund",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sale_refund",
+      "variation_id": 9,
+      "prompt": "estorna HP8877665544 — cliente migrou de plano e crédito proporcional foi acordado",
+      "expected_params_hint": "transaction_code=HP8877665544",
+      "tool_chosen": "hotmart_sale_refund",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_sale_refund",
+      "variation_id": 10,
+      "prompt": "executa refund HP2211009988 — issue de delivery não resolvido em SLA",
+      "expected_params_hint": "transaction_code=HP2211009988",
+      "tool_chosen": "hotmart_sale_refund",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriptions_list",
+      "variation_id": 1,
+      "prompt": "puxa todas subscriptions ACTIVE do produto SaaS Mentoring (id 7788990) com accession_date em out/2024 — análise da cohort",
+      "expected_params_hint": "product_id=7788990, status=ACTIVE, accession_date=2024-10-01, end_accession_date=2024-10-31",
+      "tool_chosen": "hotmart_subscriptions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriptions_list",
+      "variation_id": 2,
+      "prompt": "lista de assinaturas CANCELLED no Q1/2025 pro deep dive de churn por plano",
+      "expected_params_hint": "status=CANCELLED, cancelation_date=2025-01-01, end_cancelation_date=2025-03-31",
+      "tool_chosen": "hotmart_subscriptions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriptions_list",
+      "variation_id": 3,
+      "prompt": "subscriptions com date_next_charge nos próximos 7 dias e status ACTIVE — input pro forecast semanal de MRR",
+      "expected_params_hint": "status=ACTIVE, date_next_charge=hoje, end_date_next_charge=hoje+7d",
+      "tool_chosen": "hotmart_subscriptions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriptions_list",
+      "variation_id": 4,
+      "prompt": "assinaturas em trial=true do produto 4168346 pra prever conversion rate da cohort atual",
+      "expected_params_hint": "product_id=4168346, trial=true",
+      "tool_chosen": "hotmart_subscriptions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriptions_list",
+      "variation_id": 5,
+      "prompt": "subs ACTIVE do plan_id 88112 com accession em 2025 YTD pra calcular MRR por plano",
+      "expected_params_hint": "plan_id=88112, status=ACTIVE, accession_date=2025-01-01, end_accession_date=hoje",
+      "tool_chosen": "hotmart_subscriptions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriptions_list",
+      "variation_id": 6,
+      "prompt": "lista de subscriptions OVERDUE do produto de trading quant — input pra workflow de recovery",
+      "expected_params_hint": "product_id=3344556, status=OVERDUE",
+      "tool_chosen": "hotmart_subscriptions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriptions_list",
+      "variation_id": 7,
+      "prompt": "assinaturas DELAYED com next charge atrasado em mais de 30 dias — cohort de inadimplência crítica",
+      "expected_params_hint": "status=DELAYED",
+      "tool_chosen": "hotmart_subscriptions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriptions_list",
+      "variation_id": 8,
+      "prompt": "subs do subscriber_email enterprise@acme.com em todos meus produtos — auditoria de account expansion",
+      "expected_params_hint": "subscriber_email=enterprise@acme.com",
+      "tool_chosen": "hotmart_subscriptions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriptions_list",
+      "variation_id": 9,
+      "prompt": "lista detalhada de subscriptions canceladas em mai/2025 do plan Premium (id 99887) — investigar drivers de churn",
+      "expected_params_hint": "plan_id=99887, status=CANCELLED, cancelation_date=2025-05-01, end_cancelation_date=2025-05-31",
+      "tool_chosen": "hotmart_subscriptions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriptions_list",
+      "variation_id": 10,
+      "prompt": "assinaturas ACTIVE adquiridas em jun-set/2024 pra analisar retention de 6 meses dessa cohort",
+      "expected_params_hint": "status=ACTIVE, accession_date=2024-06-01, end_accession_date=2024-09-30",
+      "tool_chosen": "hotmart_subscriptions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriptions_summary_list",
+      "variation_id": 1,
+      "prompt": "summary agregado de subscriptions por produto pra dashboard executivo de MRR base",
+      "expected_params_hint": "(sem filtros específicos, agregado por produto)",
+      "tool_chosen": "hotmart_subscriptions_summary_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriptions_summary_list",
+      "variation_id": 2,
+      "prompt": "rollup de subs do produto SaaS Mentoring (7788990) por status — input pra waterfall de MRR",
+      "expected_params_hint": "product_id=7788990",
+      "tool_chosen": "hotmart_subscriptions_summary_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriptions_summary_list",
+      "variation_id": 3,
+      "prompt": "resumo agregado de subs adquiridas na cohort de jan/2025 pra calcular survivorship 4 meses depois",
+      "expected_params_hint": "accession_date=2025-01-01, end_accession_date=2025-01-31",
+      "tool_chosen": "hotmart_subscriptions_summary_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriptions_summary_list",
+      "variation_id": 4,
+      "prompt": "summary de subscriptions com date_next_charge nos próximos 30 dias — forecast de billing",
+      "expected_params_hint": "date_next_charge=hoje, end_date_next_charge=hoje+30d",
+      "tool_chosen": "hotmart_subscriptions_summary_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriptions_summary_list",
+      "variation_id": 5,
+      "prompt": "agregado de subs do subscriber_code VRWIQQRG pra account review",
+      "expected_params_hint": "subscriber_code=VRWIQQRG",
+      "tool_chosen": "hotmart_subscriptions_summary_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriptions_summary_list",
+      "variation_id": 6,
+      "prompt": "rollup de assinaturas do produto trading quant na cohort de Q4/2024 pra calcular retention 90d",
+      "expected_params_hint": "product_id=3344556, accession_date=2024-10-01, end_accession_date=2024-12-31",
+      "tool_chosen": "hotmart_subscriptions_summary_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriptions_summary_list",
+      "variation_id": 7,
+      "prompt": "summary de subs adquiridas em 2024 inteiro pra YoY analysis de NDR",
+      "expected_params_hint": "accession_date=2024-01-01, end_accession_date=2024-12-31",
+      "tool_chosen": "hotmart_subscriptions_summary_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriptions_summary_list",
+      "variation_id": 8,
+      "prompt": "rollup agregado de assinaturas do produto mentoria B2B (9988776) — base pra MRR breakdown",
+      "expected_params_hint": "product_id=9988776",
+      "tool_chosen": "hotmart_subscriptions_summary_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriptions_summary_list",
+      "variation_id": 9,
+      "prompt": "summary de subs com next charge na primeira quinzena do próximo mês pra planejar runway de cash",
+      "expected_params_hint": "date_next_charge=próximo mês dia 1, end_date_next_charge=próximo mês dia 15",
+      "tool_chosen": "hotmart_subscriptions_summary_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriptions_summary_list",
+      "variation_id": 10,
+      "prompt": "agregado por produto de subscriptions adquiridas no último semestre pra forecast de expansion",
+      "expected_params_hint": "accession_date=últimos 180d, end_accession_date=hoje",
+      "tool_chosen": "hotmart_subscriptions_summary_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_transactions_list",
+      "variation_id": 1,
+      "prompt": "histórico de charges das subs do produto 7788990 em abr/2025 com purchase_status=APPROVED pra reconciliar MRR coletado",
+      "expected_params_hint": "product_id=7788990, transaction_date=2025-04-01, end_transaction_date=2025-04-30, purchase_status=APPROVED",
+      "tool_chosen": "hotmart_subscription_transactions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_transactions_list",
+      "variation_id": 2,
+      "prompt": "transactions de subscription do subscriber VRWIQQRG no último ano — audit trail de payment history",
+      "expected_params_hint": "subscriber_code=VRWIQQRG, transaction_date=últimos 365d, end_transaction_date=hoje",
+      "tool_chosen": "hotmart_subscription_transactions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_transactions_list",
+      "variation_id": 3,
+      "prompt": "charges com billing_type=RECURRENT do Q1/2025 com purchase_status=APPROVED — input pro MRR realizado",
+      "expected_params_hint": "billing_type=RECURRENT, transaction_date=2025-01-01, end_transaction_date=2025-03-31, purchase_status=APPROVED",
+      "tool_chosen": "hotmart_subscription_transactions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_transactions_list",
+      "variation_id": 4,
+      "prompt": "transações de assinatura REFUNDED em mai/2025 — provisão de revenue reversal",
+      "expected_params_hint": "transaction_date=2025-05-01, end_transaction_date=2025-05-31, purchase_status=REFUNDED",
+      "tool_chosen": "hotmart_subscription_transactions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_transactions_list",
+      "variation_id": 5,
+      "prompt": "events de cobrança do produto de trading quant em 2025 YTD por recurrency_status — análise de dunning",
+      "expected_params_hint": "product_id=3344556, transaction_date=2025-01-01, end_transaction_date=hoje",
+      "tool_chosen": "hotmart_subscription_transactions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_transactions_list",
+      "variation_id": 6,
+      "prompt": "transactions com subscription_status=ACTIVE e purchase_status=CHARGEBACK no semestre — flag de fraud",
+      "expected_params_hint": "subscription_status=ACTIVE, purchase_status=CHARGEBACK, transaction_date=últimos 180d, end_transaction_date=hoje",
+      "tool_chosen": "hotmart_subscription_transactions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_transactions_list",
+      "variation_id": 7,
+      "prompt": "charges do subscriber_email enterprise@grupotech.com.br em todos os produtos — auditoria de account expansion",
+      "expected_params_hint": "subscriber_email=enterprise@grupotech.com.br",
+      "tool_chosen": "hotmart_subscription_transactions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_transactions_list",
+      "variation_id": 8,
+      "prompt": "transactions com purchase_payment_type=PIX em abr-mai/2025 pra avaliar shift de payment mix em recorrência",
+      "expected_params_hint": "purchase_payment_type=PIX, transaction_date=2025-04-01, end_transaction_date=2025-05-31",
+      "tool_chosen": "hotmart_subscription_transactions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_transactions_list",
+      "variation_id": 9,
+      "prompt": "cobranças do offer_code=ANUAL2025 nos últimos 60 dias pra medir retenção dessa oferta",
+      "expected_params_hint": "offer_code=ANUAL2025, transaction_date=últimos 60d, end_transaction_date=hoje",
+      "tool_chosen": "hotmart_subscription_transactions_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_transactions_list",
+      "variation_id": 10,
+      "prompt": "histórico de charges com recurrency_status=ACTIVE e billing_type=RECURRENT em jun/2025 pra MRR mensal",
+      "expected_params_hint": "recurrency_status=ACTIVE, billing_type=RECURRENT, transaction_date=2025-06-01, end_transaction_date=2025-06-30",
+      "tool_chosen": "OTHER",
+      "tool_correct": false,
+      "param_correct": false,
+      "notes": "wrong_tool: \"histórico de charges com recurrency_status=ACTIVE e billing_type=RECURRENT em jun/2025 pra MRR mensal\" — C escolhe subscriptions_list pois recurrency_status sugere subscription state, não transaction-level"
+    },
+    {
+      "tool": "hotmart_subscriber_purchases_list",
+      "variation_id": 1,
+      "prompt": "histórico de purchases do subscriber VRWIQQRG — calcular LTV individual desse account",
+      "expected_params_hint": "subscriber_code=VRWIQQRG",
+      "tool_chosen": "hotmart_subscriber_purchases_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriber_purchases_list",
+      "variation_id": 2,
+      "prompt": "purchases do subscriber_code ABCD1234 pra investigar cross-sell potential",
+      "expected_params_hint": "subscriber_code=ABCD1234",
+      "tool_chosen": "hotmart_subscriber_purchases_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriber_purchases_list",
+      "variation_id": 3,
+      "prompt": "lista de compras do subscriber XYZW9876 — input pra account review trimestral",
+      "expected_params_hint": "subscriber_code=XYZW9876",
+      "tool_chosen": "hotmart_subscriber_purchases_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriber_purchases_list",
+      "variation_id": 4,
+      "prompt": "puxa todas purchases do subscriber QWERTYUI pra mapear journey completa de aquisição",
+      "expected_params_hint": "subscriber_code=QWERTYUI",
+      "tool_chosen": "hotmart_subscriber_purchases_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriber_purchases_list",
+      "variation_id": 5,
+      "prompt": "histórico do subscriber MNBV5544 — preciso pro cálculo de expansion revenue desse cliente",
+      "expected_params_hint": "subscriber_code=MNBV5544",
+      "tool_chosen": "hotmart_subscriber_purchases_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriber_purchases_list",
+      "variation_id": 6,
+      "prompt": "compras do subscriber_code POIU3322 pra avaliar fit de upsell pro plano enterprise",
+      "expected_params_hint": "subscriber_code=POIU3322",
+      "tool_chosen": "hotmart_subscriber_purchases_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriber_purchases_list",
+      "variation_id": 7,
+      "prompt": "purchases do subscriber LKJH7766 — análise de retention contributor",
+      "expected_params_hint": "subscriber_code=LKJH7766",
+      "tool_chosen": "hotmart_subscriber_purchases_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriber_purchases_list",
+      "variation_id": 8,
+      "prompt": "lista de compras do subscriber ZXCV4433 pra rebaseline de ARPU individual",
+      "expected_params_hint": "subscriber_code=ZXCV4433",
+      "tool_chosen": "hotmart_subscriber_purchases_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriber_purchases_list",
+      "variation_id": 9,
+      "prompt": "histórico do subscriber ASDF6655 — pesquisar drivers da expansion observada",
+      "expected_params_hint": "subscriber_code=ASDF6655",
+      "tool_chosen": "hotmart_subscriber_purchases_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscriber_purchases_list",
+      "variation_id": 10,
+      "prompt": "todas as purchases do subscriber GHJK1100 pra montar timeline de cohort do account-based marketing",
+      "expected_params_hint": "subscriber_code=GHJK1100",
+      "tool_chosen": "hotmart_subscriber_purchases_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_cancel",
+      "variation_id": 1,
+      "prompt": "cancela a sub VRWIQQRG — request do customer success após sessão de retention falhar",
+      "expected_params_hint": "subscriber_code=VRWIQQRG",
+      "tool_chosen": "hotmart_subscription_cancel",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_cancel",
+      "variation_id": 2,
+      "prompt": "encerra a subscription ABCD1234, sem enviar email — caso de churn voluntário silencioso",
+      "expected_params_hint": "subscriber_code=ABCD1234, send_mail=false",
+      "tool_chosen": "hotmart_subscription_cancel",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_cancel",
+      "variation_id": 3,
+      "prompt": "cancel da sub XYZW9876 com mail notification ativo — política padrão de offboarding",
+      "expected_params_hint": "subscriber_code=XYZW9876, send_mail=true",
+      "tool_chosen": "hotmart_subscription_cancel",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_cancel",
+      "variation_id": 4,
+      "prompt": "termina a assinatura QWERTYUI — refund processado, encerrar billing recurring",
+      "expected_params_hint": "subscriber_code=QWERTYUI",
+      "tool_chosen": "hotmart_subscription_cancel",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_cancel",
+      "variation_id": 5,
+      "prompt": "cancela MNBV5544 — account migrou pra plano enterprise off-platform",
+      "expected_params_hint": "subscriber_code=MNBV5544",
+      "tool_chosen": "hotmart_subscription_cancel",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_cancel",
+      "variation_id": 6,
+      "prompt": "encerra sub POIU3322 sem enviar comunicação — request explícito do account manager",
+      "expected_params_hint": "subscriber_code=POIU3322, send_mail=false",
+      "tool_chosen": "hotmart_subscription_cancel",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_cancel",
+      "variation_id": 7,
+      "prompt": "cancel da subscription LKJH7766 conforme retention call escalada",
+      "expected_params_hint": "subscriber_code=LKJH7766",
+      "tool_chosen": "hotmart_subscription_cancel",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_cancel",
+      "variation_id": 8,
+      "prompt": "termina ZXCV4433 com email automático — fim de teste pago não convertido",
+      "expected_params_hint": "subscriber_code=ZXCV4433, send_mail=true",
+      "tool_chosen": "hotmart_subscription_cancel",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_cancel",
+      "variation_id": 9,
+      "prompt": "cancela a sub ASDF6655 pra conter contribuição negativa ao MRR — flagged como detractor",
+      "expected_params_hint": "subscriber_code=ASDF6655",
+      "tool_chosen": "hotmart_subscription_cancel",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_cancel",
+      "variation_id": 10,
+      "prompt": "encerra GHJK1100 — chargeback recorrente, decisão de risk team",
+      "expected_params_hint": "subscriber_code=GHJK1100",
+      "tool_chosen": "hotmart_subscription_cancel",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_batch_subscriptions_cancel",
+      "variation_id": 1,
+      "prompt": "cancela em lote a cohort inativa nos últimos 90 dias: VRWIQQRG, ABCD1234, XYZW9876, QWERTYUI, MNBV5544 — limpeza de MRR fantasma",
+      "expected_params_hint": "subscriber_code=[VRWIQQRG,ABCD1234,XYZW9876,QWERTYUI,MNBV5544]",
+      "tool_chosen": "hotmart_batch_subscriptions_cancel",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_batch_subscriptions_cancel",
+      "variation_id": 2,
+      "prompt": "batch cancel destas 8 subs DELAYED há +60 dias: POIU3322, LKJH7766, ZXCV4433, ASDF6655, GHJK1100, TYUI8899, RTYU2233, FGHJ4455",
+      "expected_params_hint": "subscriber_code=[POIU3322,LKJH7766,ZXCV4433,ASDF6655,GHJK1100,TYUI8899,RTYU2233,FGHJ4455], send_mail=true",
+      "tool_chosen": "hotmart_batch_subscriptions_cancel",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_batch_subscriptions_cancel",
+      "variation_id": 3,
+      "prompt": "encerra em bulk sem mail: AAA111, BBB222, CCC333, DDD444 — sunset de plano legado",
+      "expected_params_hint": "subscriber_code=[AAA111,BBB222,CCC333,DDD444], send_mail=false",
+      "tool_chosen": "hotmart_batch_subscriptions_cancel",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_batch_subscriptions_cancel",
+      "variation_id": 4,
+      "prompt": "cancela essa lista de 12 subs OVERDUE: SUB001, SUB002, SUB003, SUB004, SUB005, SUB006, SUB007, SUB008, SUB009, SUB010, SUB011, SUB012",
+      "expected_params_hint": "subscriber_code=[SUB001..SUB012]",
+      "tool_chosen": "hotmart_batch_subscriptions_cancel",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_batch_subscriptions_cancel",
+      "variation_id": 5,
+      "prompt": "batch cancel da cohort failed-payment: COD1, COD2, COD3, COD4, COD5, COD6, COD7 com email",
+      "expected_params_hint": "subscriber_code=[COD1..COD7], send_mail=true",
+      "tool_chosen": "hotmart_batch_subscriptions_cancel",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_batch_subscriptions_cancel",
+      "variation_id": 6,
+      "prompt": "termina em lote essas 20 subs de churn forecast positivo: ENT001..ENT020 — proactive offboarding",
+      "expected_params_hint": "subscriber_code=[ENT001..ENT020]",
+      "tool_chosen": "hotmart_batch_subscriptions_cancel",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_batch_subscriptions_cancel",
+      "variation_id": 7,
+      "prompt": "cancelamento massivo: USR1A, USR2B, USR3C, USR4D, USR5E, USR6F sem disparar comunicação",
+      "expected_params_hint": "subscriber_code=[USR1A,USR2B,USR3C,USR4D,USR5E,USR6F], send_mail=false",
+      "tool_chosen": "hotmart_batch_subscriptions_cancel",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_batch_subscriptions_cancel",
+      "variation_id": 8,
+      "prompt": "batch encerra estes 15 trial não convertidos: TRL1..TRL15 com notification padrão",
+      "expected_params_hint": "subscriber_code=[TRL1..TRL15], send_mail=true",
+      "tool_chosen": "hotmart_batch_subscriptions_cancel",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_batch_subscriptions_cancel",
+      "variation_id": 9,
+      "prompt": "cancela em bloco PLAN_OLD_001, PLAN_OLD_002, PLAN_OLD_003, PLAN_OLD_004 — migração forçada de plano descontinuado",
+      "expected_params_hint": "subscriber_code=[PLAN_OLD_001..PLAN_OLD_004]",
+      "tool_chosen": "hotmart_batch_subscriptions_cancel",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_batch_subscriptions_cancel",
+      "variation_id": 10,
+      "prompt": "batch cancel das 25 assinaturas listadas no CSV (CDX001 até CDX025) pra clean-up de cohort fraudada",
+      "expected_params_hint": "subscriber_code=[CDX001..CDX025], send_mail=false",
+      "tool_chosen": "hotmart_batch_subscriptions_cancel",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_reactivate",
+      "variation_id": 1,
+      "prompt": "reativa a sub VRWIQQRG sem cobrança imediata — win-back conversation fechada",
+      "expected_params_hint": "subscriber_code=VRWIQQRG, charge=false",
+      "tool_chosen": "hotmart_subscription_reactivate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_reactivate",
+      "variation_id": 2,
+      "prompt": "reactivate ABCD1234 já cobrando — cliente solicitou retomada com novo cartão",
+      "expected_params_hint": "subscriber_code=ABCD1234, charge=true",
+      "tool_chosen": "hotmart_subscription_reactivate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_reactivate",
+      "variation_id": 3,
+      "prompt": "reativa XYZW9876 — recovery via outbound do CS team",
+      "expected_params_hint": "subscriber_code=XYZW9876",
+      "tool_chosen": "hotmart_subscription_reactivate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_reactivate",
+      "variation_id": 4,
+      "prompt": "reactiva sub QWERTYUI e dispara charge — pagamento já confirmado off-platform",
+      "expected_params_hint": "subscriber_code=QWERTYUI, charge=true",
+      "tool_chosen": "hotmart_subscription_reactivate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_reactivate",
+      "variation_id": 5,
+      "prompt": "reabre MNBV5544 sem charge — courtesy extension acordada com account manager",
+      "expected_params_hint": "subscriber_code=MNBV5544, charge=false",
+      "tool_chosen": "hotmart_subscription_reactivate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_reactivate",
+      "variation_id": 6,
+      "prompt": "reativa POIU3322 — cliente migrou de plano e quer manter cohort original",
+      "expected_params_hint": "subscriber_code=POIU3322",
+      "tool_chosen": "hotmart_subscription_reactivate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_reactivate",
+      "variation_id": 7,
+      "prompt": "reactiva LKJH7766 com cobrança — fim de pause acordada de 60 dias",
+      "expected_params_hint": "subscriber_code=LKJH7766, charge=true",
+      "tool_chosen": "hotmart_subscription_reactivate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_reactivate",
+      "variation_id": 8,
+      "prompt": "reabre ZXCV4433 sem cobrar — flow de re-engagement em A/B test",
+      "expected_params_hint": "subscriber_code=ZXCV4433, charge=false",
+      "tool_chosen": "hotmart_subscription_reactivate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_reactivate",
+      "variation_id": 9,
+      "prompt": "reativa ASDF6655 conforme deliberação de retention squad",
+      "expected_params_hint": "subscriber_code=ASDF6655",
+      "tool_chosen": "hotmart_subscription_reactivate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_reactivate",
+      "variation_id": 10,
+      "prompt": "reactivate GHJK1100 cobrando agora — recovery de NRR negativo",
+      "expected_params_hint": "subscriber_code=GHJK1100, charge=true",
+      "tool_chosen": "hotmart_subscription_reactivate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_batch_subscriptions_reactivate",
+      "variation_id": 1,
+      "prompt": "reativa em lote essa cohort de win-back: VRWIQQRG, ABCD1234, XYZW9876, QWERTYUI, MNBV5544 sem cobrar",
+      "expected_params_hint": "subscriber_code=[VRWIQQRG,ABCD1234,XYZW9876,QWERTYUI,MNBV5544], charge=false",
+      "tool_chosen": "hotmart_batch_subscriptions_reactivate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_batch_subscriptions_reactivate",
+      "variation_id": 2,
+      "prompt": "batch reactivate destas 10 contas com charge ativo: COD1..COD10 — recovery confirmado em call coletiva",
+      "expected_params_hint": "subscriber_code=[COD1..COD10], charge=true",
+      "tool_chosen": "hotmart_batch_subscriptions_reactivate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_batch_subscriptions_reactivate",
+      "variation_id": 3,
+      "prompt": "reabre em bloco RBA1, RBA2, RBA3, RBA4 — segunda tentativa após campanha de win-back",
+      "expected_params_hint": "subscriber_code=[RBA1,RBA2,RBA3,RBA4]",
+      "tool_chosen": "hotmart_batch_subscriptions_reactivate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_batch_subscriptions_reactivate",
+      "variation_id": 4,
+      "prompt": "reativa essas 30 subs canceladas em mai/2025: REC001..REC030 com cobrança",
+      "expected_params_hint": "subscriber_code=[REC001..REC030], charge=true",
+      "tool_chosen": "hotmart_batch_subscriptions_reactivate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_batch_subscriptions_reactivate",
+      "variation_id": 5,
+      "prompt": "batch reactivate cohort de pause acabando: PAU1..PAU15 sem charge imediato",
+      "expected_params_hint": "subscriber_code=[PAU1..PAU15], charge=false",
+      "tool_chosen": "hotmart_batch_subscriptions_reactivate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_batch_subscriptions_reactivate",
+      "variation_id": 6,
+      "prompt": "reabre em lote USR1A, USR2B, USR3C, USR4D — reversal de cancel em massa por bug operacional",
+      "expected_params_hint": "subscriber_code=[USR1A,USR2B,USR3C,USR4D]",
+      "tool_chosen": "hotmart_batch_subscriptions_reactivate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_batch_subscriptions_reactivate",
+      "variation_id": 7,
+      "prompt": "reactivate em bulk a lista do experimento de retention: EXP01..EXP20 com charge",
+      "expected_params_hint": "subscriber_code=[EXP01..EXP20], charge=true",
+      "tool_chosen": "hotmart_batch_subscriptions_reactivate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_batch_subscriptions_reactivate",
+      "variation_id": 8,
+      "prompt": "reativa em batch BRA01, BRA02, BRA03, BRA04, BRA05, BRA06 sem cobrança — courtesy reactivation",
+      "expected_params_hint": "subscriber_code=[BRA01..BRA06], charge=false",
+      "tool_chosen": "hotmart_batch_subscriptions_reactivate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_batch_subscriptions_reactivate",
+      "variation_id": 9,
+      "prompt": "batch reativa cohort B2B enterprise: ENT_A, ENT_B, ENT_C, ENT_D — renewal coletivo fechado",
+      "expected_params_hint": "subscriber_code=[ENT_A,ENT_B,ENT_C,ENT_D], charge=true",
+      "tool_chosen": "hotmart_batch_subscriptions_reactivate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_batch_subscriptions_reactivate",
+      "variation_id": 10,
+      "prompt": "reabre em bloco essas 12 assinaturas: REI001..REI012 conforme deliberação do RevOps",
+      "expected_params_hint": "subscriber_code=[REI001..REI012]",
+      "tool_chosen": "hotmart_batch_subscriptions_reactivate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_due_day_update",
+      "variation_id": 1,
+      "prompt": "muda o due_day da sub VRWIQQRG pra dia 5 — alinhar com payroll cycle do account",
+      "expected_params_hint": "subscriber_code=VRWIQQRG, due_day=5",
+      "tool_chosen": "hotmart_subscription_due_day_update",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_due_day_update",
+      "variation_id": 2,
+      "prompt": "ajusta vencimento de ABCD1234 pro dia 15 conforme request do CFO do cliente",
+      "expected_params_hint": "subscriber_code=ABCD1234, due_day=15",
+      "tool_chosen": "hotmart_subscription_due_day_update",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_due_day_update",
+      "variation_id": 3,
+      "prompt": "atualiza due day da XYZW9876 pra 20 — sincronizar com fluxo de caixa do account corporativo",
+      "expected_params_hint": "subscriber_code=XYZW9876, due_day=20",
+      "tool_chosen": "hotmart_subscription_due_day_update",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_due_day_update",
+      "variation_id": 4,
+      "prompt": "altera o dia de cobrança de QWERTYUI pro 1 do mês — start of month billing preference",
+      "expected_params_hint": "subscriber_code=QWERTYUI, due_day=1",
+      "tool_chosen": "hotmart_subscription_due_day_update",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_due_day_update",
+      "variation_id": 5,
+      "prompt": "muda due_day de MNBV5544 pra 25 — fim do ciclo financeiro do cliente",
+      "expected_params_hint": "subscriber_code=MNBV5544, due_day=25",
+      "tool_chosen": "hotmart_subscription_due_day_update",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_due_day_update",
+      "variation_id": 6,
+      "prompt": "ajusta vencimento POIU3322 pra dia 10 — request via ticket de support",
+      "expected_params_hint": "subscriber_code=POIU3322, due_day=10",
+      "tool_chosen": "hotmart_subscription_due_day_update",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_due_day_update",
+      "variation_id": 7,
+      "prompt": "atualiza due day LKJH7766 pra 28 conforme política nova de billing alignment",
+      "expected_params_hint": "subscriber_code=LKJH7766, due_day=28",
+      "tool_chosen": "hotmart_subscription_due_day_update",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_due_day_update",
+      "variation_id": 8,
+      "prompt": "muda dia de cobrança ZXCV4433 pra 7 — request do CS após retention call",
+      "expected_params_hint": "subscriber_code=ZXCV4433, due_day=7",
+      "tool_chosen": "hotmart_subscription_due_day_update",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_due_day_update",
+      "variation_id": 9,
+      "prompt": "altera due_day ASDF6655 pro 12 — ajuste pós-renegociação",
+      "expected_params_hint": "subscriber_code=ASDF6655, due_day=12",
+      "tool_chosen": "hotmart_subscription_due_day_update",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_subscription_due_day_update",
+      "variation_id": 10,
+      "prompt": "atualiza vencimento de GHJK1100 pra 18 — alinhar com data de pagamento corporativo",
+      "expected_params_hint": "subscriber_code=GHJK1100, due_day=18",
+      "tool_chosen": "hotmart_subscription_due_day_update",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_modules_list",
+      "variation_id": 1,
+      "prompt": "lista os módulos da área de membros do subdomain mentoriab2b — preciso pro engagement audit",
+      "expected_params_hint": "subdomain=mentoriab2b",
+      "tool_chosen": "hotmart_modules_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_modules_list",
+      "variation_id": 2,
+      "prompt": "modules do subdomain tradingquant excluindo extras — quero só o core curriculum",
+      "expected_params_hint": "subdomain=tradingquant, is_extra=false",
+      "tool_chosen": "hotmart_modules_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_modules_list",
+      "variation_id": 3,
+      "prompt": "puxa só módulos extras do subdomain saasmentor pra ver bonus content disponível",
+      "expected_params_hint": "subdomain=saasmentor, is_extra=true",
+      "tool_chosen": "hotmart_modules_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_modules_list",
+      "variation_id": 4,
+      "prompt": "lista de modules do área de membros growthopsacademy — auditoria de course structure",
+      "expected_params_hint": "subdomain=growthopsacademy",
+      "tool_chosen": "hotmart_modules_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_modules_list",
+      "variation_id": 5,
+      "prompt": "modules do subdomain pipelinemastery pra calcular content density vs engagement",
+      "expected_params_hint": "subdomain=pipelinemastery",
+      "tool_chosen": "hotmart_modules_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_modules_list",
+      "variation_id": 6,
+      "prompt": "puxa módulos do subdomain b2bplaybook — vou mapear adoption por aluno",
+      "expected_params_hint": "subdomain=b2bplaybook",
+      "tool_chosen": "hotmart_modules_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_modules_list",
+      "variation_id": 7,
+      "prompt": "lista modules excluindo extras do subdomain saasretention pra core curriculum tracking",
+      "expected_params_hint": "subdomain=saasretention, is_extra=false",
+      "tool_chosen": "hotmart_modules_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_modules_list",
+      "variation_id": 8,
+      "prompt": "modules do subdomain quantfundamentals — vou cruzar com completion rate da cohort recente",
+      "expected_params_hint": "subdomain=quantfundamentals",
+      "tool_chosen": "hotmart_modules_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_modules_list",
+      "variation_id": 9,
+      "prompt": "puxa só os extras do subdomain mrrengine pra avaliar uptake de conteúdo bonus",
+      "expected_params_hint": "subdomain=mrrengine, is_extra=true",
+      "tool_chosen": "hotmart_modules_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_modules_list",
+      "variation_id": 10,
+      "prompt": "lista completa de modules do subdomain operadorquant — base pra learning analytics",
+      "expected_params_hint": "subdomain=operadorquant",
+      "tool_chosen": "hotmart_modules_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_module_pages_list",
+      "variation_id": 1,
+      "prompt": "puxa as pages do module 12345 do subdomain mentoriab2b — granularidade de aula pra engagement matrix",
+      "expected_params_hint": "module_id=12345, subdomain=mentoriab2b",
+      "tool_chosen": "hotmart_module_pages_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_module_pages_list",
+      "variation_id": 2,
+      "prompt": "lista as aulas dentro do module 87654 do subdomain tradingquant pra mapear funnel de progressão",
+      "expected_params_hint": "module_id=87654, subdomain=tradingquant",
+      "tool_chosen": "hotmart_module_pages_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_module_pages_list",
+      "variation_id": 3,
+      "prompt": "pages do module 33221 — preciso pro completion rate breakdown da cohort q1",
+      "expected_params_hint": "module_id=33221",
+      "tool_chosen": "hotmart_module_pages_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_module_pages_list",
+      "variation_id": 4,
+      "prompt": "todas as pages do module 99887 do subdomain saasmentor pra audit de content gaps",
+      "expected_params_hint": "module_id=99887, subdomain=saasmentor",
+      "tool_chosen": "hotmart_module_pages_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_module_pages_list",
+      "variation_id": 5,
+      "prompt": "lista de pages do module 44556 pra cross-check com drop-off por aula",
+      "expected_params_hint": "module_id=44556",
+      "tool_chosen": "hotmart_module_pages_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_module_pages_list",
+      "variation_id": 6,
+      "prompt": "pages dentro do module 66778 do subdomain pipelinemastery — input pra heatmap de engagement",
+      "expected_params_hint": "module_id=66778, subdomain=pipelinemastery",
+      "tool_chosen": "hotmart_module_pages_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_module_pages_list",
+      "variation_id": 7,
+      "prompt": "puxa pages do module 22113 — vou correlacionar conclusão com churn da cohort",
+      "expected_params_hint": "module_id=22113",
+      "tool_chosen": "hotmart_module_pages_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_module_pages_list",
+      "variation_id": 8,
+      "prompt": "lista aulas do module 55449 do subdomain b2bplaybook pra dashboard de course velocity",
+      "expected_params_hint": "module_id=55449, subdomain=b2bplaybook",
+      "tool_chosen": "hotmart_module_pages_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_module_pages_list",
+      "variation_id": 9,
+      "prompt": "pages do module 77665 — auditoria de delivery pré-renovação de cohort",
+      "expected_params_hint": "module_id=77665",
+      "tool_chosen": "hotmart_module_pages_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_module_pages_list",
+      "variation_id": 10,
+      "prompt": "todas pages do module 88774 do subdomain quantfundamentals pra benchmark de completion vs control",
+      "expected_params_hint": "module_id=88774, subdomain=quantfundamentals",
+      "tool_chosen": "hotmart_module_pages_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_students_list",
+      "variation_id": 1,
+      "prompt": "lista de students da área de membros mentoriab2b pra cruzar com cohort de aquisição",
+      "expected_params_hint": "subdomain=mentoriab2b",
+      "tool_chosen": "hotmart_students_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_students_list",
+      "variation_id": 2,
+      "prompt": "puxa alunos do subdomain tradingquant filtrando email enterprise@grupotech.com.br — account audit",
+      "expected_params_hint": "subdomain=tradingquant, email=enterprise@grupotech.com.br",
+      "tool_chosen": "hotmart_students_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_students_list",
+      "variation_id": 3,
+      "prompt": "students do subdomain saasmentor pra calcular active learner base do mês",
+      "expected_params_hint": "subdomain=saasmentor",
+      "tool_chosen": "hotmart_students_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_students_list",
+      "variation_id": 4,
+      "prompt": "lista alunos do area growthopsacademy — input pra retention de produto principal",
+      "expected_params_hint": "subdomain=growthopsacademy",
+      "tool_chosen": "hotmart_students_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_students_list",
+      "variation_id": 5,
+      "prompt": "students do subdomain pipelinemastery com email contendo @acme.com — penetração no account",
+      "expected_params_hint": "subdomain=pipelinemastery, email~@acme.com",
+      "tool_chosen": "hotmart_students_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_students_list",
+      "variation_id": 6,
+      "prompt": "puxa alunos do b2bplaybook pra mapear engaged users na cohort atual",
+      "expected_params_hint": "subdomain=b2bplaybook",
+      "tool_chosen": "hotmart_students_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_students_list",
+      "variation_id": 7,
+      "prompt": "lista students do subdomain saasretention — base pra calcular DAU/MAU do club",
+      "expected_params_hint": "subdomain=saasretention",
+      "tool_chosen": "hotmart_students_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_students_list",
+      "variation_id": 8,
+      "prompt": "alunos do quantfundamentals com email corporate@fintech.io pra account-level engagement review",
+      "expected_params_hint": "subdomain=quantfundamentals, email=corporate@fintech.io",
+      "tool_chosen": "hotmart_students_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_students_list",
+      "variation_id": 9,
+      "prompt": "students do subdomain mrrengine pra audit de adoption pós-onboarding",
+      "expected_params_hint": "subdomain=mrrengine",
+      "tool_chosen": "hotmart_students_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_students_list",
+      "variation_id": 10,
+      "prompt": "lista alunos do operadorquant — cruzar com NPS recente pra identificar champions",
+      "expected_params_hint": "subdomain=operadorquant",
+      "tool_chosen": "hotmart_students_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_student_progress_get",
+      "variation_id": 1,
+      "prompt": "progress do aluno V7yQbq3z7J — vou usar pra modelar churn risk individual",
+      "expected_params_hint": "user_id=V7yQbq3z7J",
+      "tool_chosen": "hotmart_student_progress_get",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_student_progress_get",
+      "variation_id": 2,
+      "prompt": "puxa completion do user_id ABCD1234XX do subdomain mentoriab2b pra account engagement score",
+      "expected_params_hint": "user_id=ABCD1234XX, subdomain=mentoriab2b",
+      "tool_chosen": "hotmart_student_progress_get",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_student_progress_get",
+      "variation_id": 3,
+      "prompt": "progresso da aluna user_id ZX99YY11 — health score pra retention forecast",
+      "expected_params_hint": "user_id=ZX99YY11",
+      "tool_chosen": "hotmart_student_progress_get",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_student_progress_get",
+      "variation_id": 4,
+      "prompt": "completion do user_id MNB44LL pra avaliar se está no path de renovação",
+      "expected_params_hint": "user_id=MNB44LL",
+      "tool_chosen": "hotmart_student_progress_get",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_student_progress_get",
+      "variation_id": 5,
+      "prompt": "progress do user_id POI77QQ no subdomain tradingquant — input pra QBR com account",
+      "expected_params_hint": "user_id=POI77QQ, subdomain=tradingquant",
+      "tool_chosen": "hotmart_student_progress_get",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_student_progress_get",
+      "variation_id": 6,
+      "prompt": "puxa percentual de conclusão do aluno user_id LKJ88WW pra cohort engagement matrix",
+      "expected_params_hint": "user_id=LKJ88WW",
+      "tool_chosen": "hotmart_student_progress_get",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_student_progress_get",
+      "variation_id": 7,
+      "prompt": "completion rate do user_id ZXC33EE — vou cruzar com NPS recente",
+      "expected_params_hint": "user_id=ZXC33EE",
+      "tool_chosen": "hotmart_student_progress_get",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_student_progress_get",
+      "variation_id": 8,
+      "prompt": "progress detalhado do user_id ASD66RR no subdomain saasmentor pra champion identification",
+      "expected_params_hint": "user_id=ASD66RR, subdomain=saasmentor",
+      "tool_chosen": "hotmart_student_progress_get",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_student_progress_get",
+      "variation_id": 9,
+      "prompt": "evolução de completion do user_id GHJ22TT pra avaliar upsell readiness",
+      "expected_params_hint": "user_id=GHJ22TT",
+      "tool_chosen": "hotmart_student_progress_get",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_student_progress_get",
+      "variation_id": 10,
+      "prompt": "progress completo do user_id FGH55YY no subdomain pipelinemastery — input pra QBR review",
+      "expected_params_hint": "user_id=FGH55YY, subdomain=pipelinemastery",
+      "tool_chosen": "hotmart_student_progress_get",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_products_list",
+      "variation_id": 1,
+      "prompt": "lista todos os 28 produtos da minha conta com status ACTIVE pra refresh do master data",
+      "expected_params_hint": "status=ACTIVE, max_results=50",
+      "tool_chosen": "hotmart_products_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_products_list",
+      "variation_id": 2,
+      "prompt": "puxa products com format EBOOK pra avaliar mix de catálogo digital",
+      "expected_params_hint": "format_=EBOOK",
+      "tool_chosen": "hotmart_products_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_products_list",
+      "variation_id": 3,
+      "prompt": "lista produtos id=4168346 — preciso pra reconciliar com BI",
+      "expected_params_hint": "id_=4168346",
+      "tool_chosen": "hotmart_products_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_products_list",
+      "variation_id": 4,
+      "prompt": "products com format ONLINE_COURSE e status ACTIVE — base pra análise de portfolio core",
+      "expected_params_hint": "format_=ONLINE_COURSE, status=ACTIVE",
+      "tool_chosen": "hotmart_products_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_products_list",
+      "variation_id": 5,
+      "prompt": "lista paginada dos próximos 50 produtos pra inventory snapshot",
+      "expected_params_hint": "max_results=50",
+      "tool_chosen": "hotmart_products_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_products_list",
+      "variation_id": 6,
+      "prompt": "puxa produtos com status DRAFT pra audit de pipeline de lançamentos",
+      "expected_params_hint": "status=DRAFT",
+      "tool_chosen": "hotmart_products_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_products_list",
+      "variation_id": 7,
+      "prompt": "lista products format=EVENT — preciso pra calendário de produto live",
+      "expected_params_hint": "format_=EVENT",
+      "tool_chosen": "hotmart_products_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_products_list",
+      "variation_id": 8,
+      "prompt": "todos products ACTIVE format ONLINE_SERVICE pra mapear mentorias B2B no catálogo",
+      "expected_params_hint": "format_=ONLINE_SERVICE, status=ACTIVE",
+      "tool_chosen": "hotmart_products_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_products_list",
+      "variation_id": 9,
+      "prompt": "lista de produtos id=9988776 — auditoria de oferta master",
+      "expected_params_hint": "id_=9988776",
+      "tool_chosen": "hotmart_products_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_products_list",
+      "variation_id": 10,
+      "prompt": "produtos com status PAUSED — avaliação de revival vs descontinuação no portfolio",
+      "expected_params_hint": "status=PAUSED",
+      "tool_chosen": "hotmart_products_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_product_offers_list",
+      "variation_id": 1,
+      "prompt": "lista as offers do produto 4168346 — análise de pricing tier disponível",
+      "expected_params_hint": "product_id=4168346, max_results=50",
+      "tool_chosen": "hotmart_product_offers_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_product_offers_list",
+      "variation_id": 2,
+      "prompt": "offers do produto 9988776 com offer_key=BLACKFRIDAY pra avaliar promoção ativa",
+      "expected_params_hint": "product_id=9988776, offer_key=BLACKFRIDAY",
+      "tool_chosen": "hotmart_product_offers_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_product_offers_list",
+      "variation_id": 3,
+      "prompt": "puxa todas offers do produto SaaS Mentoring (7788990) pra mapear price points ativos",
+      "expected_params_hint": "product_id=7788990",
+      "tool_chosen": "hotmart_product_offers_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_product_offers_list",
+      "variation_id": 4,
+      "prompt": "offers do produto trading quant (3344556) — base pra benchmark de pricing strategy",
+      "expected_params_hint": "product_id=3344556",
+      "tool_chosen": "hotmart_product_offers_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_product_offers_list",
+      "variation_id": 5,
+      "prompt": "lista offers do produto 2233445 com offer_key=UPSELL2025 — auditoria de bundle",
+      "expected_params_hint": "product_id=2233445, offer_key=UPSELL2025",
+      "tool_chosen": "hotmart_product_offers_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_product_offers_list",
+      "variation_id": 6,
+      "prompt": "puxa offers do produto 5566778 pra revisão de pricing pré-lançamento",
+      "expected_params_hint": "product_id=5566778",
+      "tool_chosen": "hotmart_product_offers_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_product_offers_list",
+      "variation_id": 7,
+      "prompt": "ofertas do produto 6677889 com offer_key=EARLY pra rastrear cohort de early adopters",
+      "expected_params_hint": "product_id=6677889, offer_key=EARLY",
+      "tool_chosen": "hotmart_product_offers_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_product_offers_list",
+      "variation_id": 8,
+      "prompt": "lista de offers do produto 8899001 — input pra A/B pricing test",
+      "expected_params_hint": "product_id=8899001",
+      "tool_chosen": "hotmart_product_offers_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_product_offers_list",
+      "variation_id": 9,
+      "prompt": "offers do produto 1122334 paginadas 50 por vez pra catalogar todas variantes ativas",
+      "expected_params_hint": "product_id=1122334, max_results=50",
+      "tool_chosen": "hotmart_product_offers_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_product_offers_list",
+      "variation_id": 10,
+      "prompt": "puxa as ofertas do produto 7766554 pra calcular price/feature spread no portfolio",
+      "expected_params_hint": "product_id=7766554",
+      "tool_chosen": "hotmart_product_offers_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_product_plans_list",
+      "variation_id": 1,
+      "prompt": "lista os plans de assinatura do produto 4168346 pra MRR breakdown por plano",
+      "expected_params_hint": "product_id=4168346, max_results=50",
+      "tool_chosen": "hotmart_product_plans_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_product_plans_list",
+      "variation_id": 2,
+      "prompt": "plans do produto SaaS Mentoring (7788990) — input pra modelagem de ARPU por tier",
+      "expected_params_hint": "product_id=7788990",
+      "tool_chosen": "hotmart_product_plans_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_product_plans_list",
+      "variation_id": 3,
+      "prompt": "puxa plan id=88112 do produto 3344556 pra auditoria de recorrência",
+      "expected_params_hint": "product_id=3344556, id_=88112",
+      "tool_chosen": "hotmart_product_plans_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_product_plans_list",
+      "variation_id": 4,
+      "prompt": "lista de plans do produto mentoria B2B (9988776) pra mapear tier upgrade path",
+      "expected_params_hint": "product_id=9988776",
+      "tool_chosen": "hotmart_product_plans_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_product_plans_list",
+      "variation_id": 5,
+      "prompt": "plans do produto 2233445 — base pra calcular contribuição por plano no MRR",
+      "expected_params_hint": "product_id=2233445",
+      "tool_chosen": "hotmart_product_plans_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_product_plans_list",
+      "variation_id": 6,
+      "prompt": "puxa plans do produto 5566778 pra benchmark de billing cycle no portfolio",
+      "expected_params_hint": "product_id=5566778",
+      "tool_chosen": "hotmart_product_plans_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_product_plans_list",
+      "variation_id": 7,
+      "prompt": "lista plan id=99887 do produto 6677889 pra investigação de churn nesse tier",
+      "expected_params_hint": "product_id=6677889, id_=99887",
+      "tool_chosen": "hotmart_product_plans_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_product_plans_list",
+      "variation_id": 8,
+      "prompt": "todos plans do produto 8899001 pra estruturar upsell waterfall",
+      "expected_params_hint": "product_id=8899001",
+      "tool_chosen": "hotmart_product_plans_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_product_plans_list",
+      "variation_id": 9,
+      "prompt": "plans do produto 1122334 paginados — input pra revisão de pricing anual",
+      "expected_params_hint": "product_id=1122334, max_results=50",
+      "tool_chosen": "hotmart_product_plans_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_product_plans_list",
+      "variation_id": 10,
+      "prompt": "lista de plans do produto 7766554 pra modelar conversion path entre tiers",
+      "expected_params_hint": "product_id=7766554",
+      "tool_chosen": "hotmart_product_plans_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupon_create",
+      "variation_id": 1,
+      "prompt": "cria cupom BLACKFRIDAY25 com 25% no produto 4168346 válido 24/11 a 30/11/2025 — campanha sazonal",
+      "expected_params_hint": "product_id=4168346, code=BLACKFRIDAY25, discount=0.25, start_date=2025-11-24, end_date=2025-11-30",
+      "tool_chosen": "hotmart_coupon_create",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupon_create",
+      "variation_id": 2,
+      "prompt": "gera cupom CYBERMRR15 15% off no produto 7788990 entre 1/12 e 3/12/2025 pra cohort B2B",
+      "expected_params_hint": "product_id=7788990, code=CYBERMRR15, discount=0.15, start_date=2025-12-01, end_date=2025-12-03",
+      "tool_chosen": "hotmart_coupon_create",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupon_create",
+      "variation_id": 3,
+      "prompt": "cria coupon UPSELLQ4 com 10% no produto 9988776 vinculado à offer_ids [555,666] — campanha de cross-sell",
+      "expected_params_hint": "product_id=9988776, code=UPSELLQ4, discount=0.10, offer_ids=[555,666]",
+      "tool_chosen": "hotmart_coupon_create",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupon_create",
+      "variation_id": 4,
+      "prompt": "novo cupom EARLY2026 30% no produto 3344556 de 1/12/2025 a 31/12/2025 pra early adopters",
+      "expected_params_hint": "product_id=3344556, code=EARLY2026, discount=0.30, start_date=2025-12-01, end_date=2025-12-31",
+      "tool_chosen": "hotmart_coupon_create",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupon_create",
+      "variation_id": 5,
+      "prompt": "cria cupom PARCEIRO20 20% no produto 4168346 vinculado ao affiliate ID 12345 — partner campaign",
+      "expected_params_hint": "product_id=4168346, code=PARCEIRO20, discount=0.20, affiliate=12345",
+      "tool_chosen": "hotmart_coupon_create",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupon_create",
+      "variation_id": 6,
+      "prompt": "gera coupon ANUAL40 com 40% no produto 2233445 válido jan/2026 inteiro — campanha de retenção anual",
+      "expected_params_hint": "product_id=2233445, code=ANUAL40, discount=0.40, start_date=2026-01-01, end_date=2026-01-31",
+      "tool_chosen": "hotmart_coupon_create",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupon_create",
+      "variation_id": 7,
+      "prompt": "cria cupom RETENCAO15 15% no produto 5566778 pra disparar em workflow de win-back",
+      "expected_params_hint": "product_id=5566778, code=RETENCAO15, discount=0.15",
+      "tool_chosen": "hotmart_coupon_create",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupon_create",
+      "variation_id": 8,
+      "prompt": "novo coupon ENTERPRISE50 50% no produto 9988776 vinculado às offer_ids [101,102,103] — negociação enterprise",
+      "expected_params_hint": "product_id=9988776, code=ENTERPRISE50, discount=0.50, offer_ids=[101,102,103]",
+      "tool_chosen": "hotmart_coupon_create",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupon_create",
+      "variation_id": 9,
+      "prompt": "cria cupom LANCAMENTO10 10% no produto 6677889 entre 1/7/2025 e 15/7/2025 pra cohort launch",
+      "expected_params_hint": "product_id=6677889, code=LANCAMENTO10, discount=0.10, start_date=2025-07-01, end_date=2025-07-15",
+      "tool_chosen": "hotmart_coupon_create",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupon_create",
+      "variation_id": 10,
+      "prompt": "gera coupon WEBINAR25 25% no produto 8899001 vinculado affiliate 99988 — campanha pós-webinar",
+      "expected_params_hint": "product_id=8899001, code=WEBINAR25, discount=0.25, affiliate=99988",
+      "tool_chosen": "hotmart_coupon_create",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupons_list",
+      "variation_id": 1,
+      "prompt": "lista cupons ativos do produto 4168346 pra auditoria de campanhas em vigor",
+      "expected_params_hint": "product_id=4168346",
+      "tool_chosen": "hotmart_coupons_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupons_list",
+      "variation_id": 2,
+      "prompt": "puxa coupons do produto 7788990 com code=BLACKFRIDAY25 pra confirmar setup",
+      "expected_params_hint": "product_id=7788990, code=BLACKFRIDAY25",
+      "tool_chosen": "hotmart_coupons_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupons_list",
+      "variation_id": 3,
+      "prompt": "cupons do produto 9988776 — input pra atribuição de conversão por coupon",
+      "expected_params_hint": "product_id=9988776",
+      "tool_chosen": "hotmart_coupons_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupons_list",
+      "variation_id": 4,
+      "prompt": "lista coupons do produto 3344556 pra cross-check com pipeline de revenue",
+      "expected_params_hint": "product_id=3344556",
+      "tool_chosen": "hotmart_coupons_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupons_list",
+      "variation_id": 5,
+      "prompt": "puxa cupom code=EARLY2026 do produto 2233445 — auditoria de cohort de early adopters",
+      "expected_params_hint": "product_id=2233445, code=EARLY2026",
+      "tool_chosen": "hotmart_coupons_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupons_list",
+      "variation_id": 6,
+      "prompt": "cupons ativos do produto 5566778 — base pra dashboard de promo attribution",
+      "expected_params_hint": "product_id=5566778",
+      "tool_chosen": "hotmart_coupons_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupons_list",
+      "variation_id": 7,
+      "prompt": "lista coupons do produto 6677889 com code=PARCEIRO20 pra reconciliar com affiliate report",
+      "expected_params_hint": "product_id=6677889, code=PARCEIRO20",
+      "tool_chosen": "hotmart_coupons_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupons_list",
+      "variation_id": 8,
+      "prompt": "puxa cupons do produto 8899001 pra avaliar overlap de descontos ativos",
+      "expected_params_hint": "product_id=8899001",
+      "tool_chosen": "hotmart_coupons_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupons_list",
+      "variation_id": 9,
+      "prompt": "coupons do produto 1122334 — review pré-Black Friday pra evitar cupom redundante",
+      "expected_params_hint": "product_id=1122334",
+      "tool_chosen": "hotmart_coupons_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupons_list",
+      "variation_id": 10,
+      "prompt": "lista cupons do produto 7766554 com code=UPSELLQ4 — confirmar window e discount",
+      "expected_params_hint": "product_id=7766554, code=UPSELLQ4",
+      "tool_chosen": "hotmart_coupons_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupon_delete",
+      "variation_id": 1,
+      "prompt": "deleta o coupon id 99999 — campanha terminou e quero limpar do dashboard",
+      "expected_params_hint": "coupon_id=99999",
+      "tool_chosen": "hotmart_coupon_delete",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupon_delete",
+      "variation_id": 2,
+      "prompt": "apaga cupom 12345 — substituído por nova oferta com discount diferente",
+      "expected_params_hint": "coupon_id=12345",
+      "tool_chosen": "hotmart_coupon_delete",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupon_delete",
+      "variation_id": 3,
+      "prompt": "remove coupon_id 77777 — caducou e tá poluindo o report",
+      "expected_params_hint": "coupon_id=77777",
+      "tool_chosen": "hotmart_coupon_delete",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupon_delete",
+      "variation_id": 4,
+      "prompt": "deleta o cupom 44321 — erro de setup, vou recriar com offer_ids corretos",
+      "expected_params_hint": "coupon_id=44321",
+      "tool_chosen": "hotmart_coupon_delete",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupon_delete",
+      "variation_id": 5,
+      "prompt": "apaga coupon 88812 — descontinuado conforme decisão do pricing committee",
+      "expected_params_hint": "coupon_id=88812",
+      "tool_chosen": "hotmart_coupon_delete",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupon_delete",
+      "variation_id": 6,
+      "prompt": "remove cupom_id 33344 — discount muito agressivo, impactando margem",
+      "expected_params_hint": "coupon_id=33344",
+      "tool_chosen": "hotmart_coupon_delete",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupon_delete",
+      "variation_id": 7,
+      "prompt": "deleta coupon 66677 — campanha pausada por compliance review",
+      "expected_params_hint": "coupon_id=66677",
+      "tool_chosen": "hotmart_coupon_delete",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupon_delete",
+      "variation_id": 8,
+      "prompt": "apaga cupom id 22299 — duplicate com outro código ativo, evitar arbitragem",
+      "expected_params_hint": "coupon_id=22299",
+      "tool_chosen": "hotmart_coupon_delete",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupon_delete",
+      "variation_id": 9,
+      "prompt": "remove coupon 55512 — fim de partnership com affiliate, encerrar discount",
+      "expected_params_hint": "coupon_id=55512",
+      "tool_chosen": "hotmart_coupon_delete",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_coupon_delete",
+      "variation_id": 10,
+      "prompt": "deleta cupom 11187 — A/B test encerrado, manter só o variant winner",
+      "expected_params_hint": "coupon_id=11187",
+      "tool_chosen": "hotmart_coupon_delete",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_event_info_get",
+      "variation_id": 1,
+      "prompt": "info completa do evento 5655136 — datas, lotes, capacidade pra forecast de revenue",
+      "expected_params_hint": "event_id=5655136",
+      "tool_chosen": "hotmart_event_info_get",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_event_info_get",
+      "variation_id": 2,
+      "prompt": "metadata do event 7788991 pra dashboard executivo de event-led growth",
+      "expected_params_hint": "event_id=7788991",
+      "tool_chosen": "hotmart_event_info_get",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_event_info_get",
+      "variation_id": 3,
+      "prompt": "detalhes do evento 3344558 — preciso pro briefing do board",
+      "expected_params_hint": "event_id=3344558",
+      "tool_chosen": "hotmart_event_info_get",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_event_info_get",
+      "variation_id": 4,
+      "prompt": "puxa info do event 9988774 pra mapear lots ativos vs sold out",
+      "expected_params_hint": "event_id=9988774",
+      "tool_chosen": "hotmart_event_info_get",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_event_info_get",
+      "variation_id": 5,
+      "prompt": "evento 1122337 — quero ver pricing tiers e capacity",
+      "expected_params_hint": "event_id=1122337",
+      "tool_chosen": "hotmart_event_info_get",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_event_info_get",
+      "variation_id": 6,
+      "prompt": "info do event 2233448 pra rolar análise de ROI da edição",
+      "expected_params_hint": "event_id=2233448",
+      "tool_chosen": "hotmart_event_info_get",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_event_info_get",
+      "variation_id": 7,
+      "prompt": "metadata do evento 5566779 — input pra reconciliação com ticket sales report",
+      "expected_params_hint": "event_id=5566779",
+      "tool_chosen": "hotmart_event_info_get",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_event_info_get",
+      "variation_id": 8,
+      "prompt": "puxa event_info 6677885 pra calcular fill rate da edição",
+      "expected_params_hint": "event_id=6677885",
+      "tool_chosen": "hotmart_event_info_get",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_event_info_get",
+      "variation_id": 9,
+      "prompt": "detalhes do evento 8899003 pro debrief pós-edição com squad de marketing",
+      "expected_params_hint": "event_id=8899003",
+      "tool_chosen": "hotmart_event_info_get",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_event_info_get",
+      "variation_id": 10,
+      "prompt": "info do event 7766556 — análise de elasticidade de pricing entre lotes",
+      "expected_params_hint": "event_id=7766556",
+      "tool_chosen": "hotmart_event_info_get",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_event_participants_list",
+      "variation_id": 1,
+      "prompt": "lista participants do evento 5655136 com ticket_status=APPROVED pra dashboard de attendance",
+      "expected_params_hint": "event_id=5655136, ticket_status=APPROVED, max_results=50",
+      "tool_chosen": "hotmart_event_participants_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_event_participants_list",
+      "variation_id": 2,
+      "prompt": "puxa attendees do event 7788991 com checkin_status=CHECKED_IN — análise de show-up rate",
+      "expected_params_hint": "event_id=7788991, checkin_status=CHECKED_IN",
+      "tool_chosen": "hotmart_event_participants_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_event_participants_list",
+      "variation_id": 3,
+      "prompt": "participants do evento 3344558 do buyer_email enterprise@grupotech.com.br — auditoria de account participation",
+      "expected_params_hint": "event_id=3344558, buyer_email=enterprise@grupotech.com.br",
+      "tool_chosen": "hotmart_event_participants_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_event_participants_list",
+      "variation_id": 4,
+      "prompt": "lista de tickets do event 9988774 com id_lot=12345 pra rastrear sell-through por tier",
+      "expected_params_hint": "event_id=9988774, id_lot=12345",
+      "tool_chosen": "hotmart_event_participants_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_event_participants_list",
+      "variation_id": 5,
+      "prompt": "participants do evento 1122337 com ticket_type=VIP — cohort premium attendance",
+      "expected_params_hint": "event_id=1122337, ticket_type=VIP",
+      "tool_chosen": "hotmart_event_participants_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_event_participants_list",
+      "variation_id": 6,
+      "prompt": "puxa attendees do event 2233448 atualizados nos últimos 7 dias pra dashboard semanal",
+      "expected_params_hint": "event_id=2233448, last_update=últimos 7d",
+      "tool_chosen": "hotmart_event_participants_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_event_participants_list",
+      "variation_id": 7,
+      "prompt": "participants do evento 5566779 com checkin_status=NOT_CHECKED_IN pra workflow de remarketing pós-evento",
+      "expected_params_hint": "event_id=5566779, checkin_status=NOT_CHECKED_IN",
+      "tool_chosen": "hotmart_event_participants_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_event_participants_list",
+      "variation_id": 8,
+      "prompt": "lista de tickets do event 6677885 com ticket_qr_code=ABC123XYZ — validação manual de entrada",
+      "expected_params_hint": "event_id=6677885, ticket_qr_code=ABC123XYZ",
+      "tool_chosen": "hotmart_event_participants_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_event_participants_list",
+      "variation_id": 9,
+      "prompt": "participants do evento 8899003 do participant_email champion@account.com pra QBR review",
+      "expected_params_hint": "event_id=8899003, participant_email=champion@account.com",
+      "tool_chosen": "hotmart_event_participants_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_event_participants_list",
+      "variation_id": 10,
+      "prompt": "puxa attendees do event 7766556 com ticket_status=REFUNDED — análise de cancelation rate por edição",
+      "expected_params_hint": "event_id=7766556, ticket_status=REFUNDED",
+      "tool_chosen": "hotmart_event_participants_list",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_negotiation_generate",
+      "variation_id": 1,
+      "prompt": "gera negotiation pra sub VRWIQQRG parcelando em 6x no cartão pra recuperar account em risk",
+      "expected_params_hint": "subscription_id=VRWIQQRG, recurrences=6, payment_type=CREDIT_CARD",
+      "tool_chosen": "hotmart_negotiation_generate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_negotiation_generate",
+      "variation_id": 2,
+      "prompt": "cria proposta de renegociação pra ABCD1234 em 12x com 15% de desconto — flow de win-back",
+      "expected_params_hint": "subscription_id=ABCD1234, recurrences=12, discount=0.15",
+      "tool_chosen": "hotmart_negotiation_generate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_negotiation_generate",
+      "variation_id": 3,
+      "prompt": "negociação pra XYZW9876 parcelada em 3x via BOLETO — caso de inadimplência confirmada",
+      "expected_params_hint": "subscription_id=XYZW9876, recurrences=3, payment_type=BILLET",
+      "tool_chosen": "hotmart_negotiation_generate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_negotiation_generate",
+      "variation_id": 4,
+      "prompt": "gera proposta pra sub QWERTYUI em 10x cartão com 20% off — recovery de cohort high-value",
+      "expected_params_hint": "subscription_id=QWERTYUI, recurrences=10, payment_type=CREDIT_CARD, discount=0.20",
+      "tool_chosen": "hotmart_negotiation_generate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_negotiation_generate",
+      "variation_id": 5,
+      "prompt": "negociação MNBV5544 via PIX em 1x com document 12345678900 — caso de full payment com discount",
+      "expected_params_hint": "subscription_id=MNBV5544, recurrences=1, payment_type=PIX, document=12345678900",
+      "tool_chosen": "hotmart_negotiation_generate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_negotiation_generate",
+      "variation_id": 6,
+      "prompt": "cria renegociação POIU3322 em 5x cartão sem discount — escolha do account com BOLETO recusado",
+      "expected_params_hint": "subscription_id=POIU3322, recurrences=5, payment_type=CREDIT_CARD",
+      "tool_chosen": "hotmart_negotiation_generate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_negotiation_generate",
+      "variation_id": 7,
+      "prompt": "gera negotiation LKJH7766 8x boleto com 10% off — proposta padrão de retention médio",
+      "expected_params_hint": "subscription_id=LKJH7766, recurrences=8, payment_type=BILLET, discount=0.10",
+      "tool_chosen": "hotmart_negotiation_generate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_negotiation_generate",
+      "variation_id": 8,
+      "prompt": "proposta de pagamento pra ZXCV4433 em 4x cartão com discount de 25% pra fechar churn evitável",
+      "expected_params_hint": "subscription_id=ZXCV4433, recurrences=4, payment_type=CREDIT_CARD, discount=0.25",
+      "tool_chosen": "hotmart_negotiation_generate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_negotiation_generate",
+      "variation_id": 9,
+      "prompt": "negociação ASDF6655 parcelada em 2x PIX com document 98765432100 — recovery rápido de inadimplência",
+      "expected_params_hint": "subscription_id=ASDF6655, recurrences=2, payment_type=PIX, document=98765432100",
+      "tool_chosen": "hotmart_negotiation_generate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    },
+    {
+      "tool": "hotmart_negotiation_generate",
+      "variation_id": 10,
+      "prompt": "gera renegociação GHJK1100 em 12x cartão com 30% discount — caso de high-LTV em risco crítico",
+      "expected_params_hint": "subscription_id=GHJK1100, recurrences=12, payment_type=CREDIT_CARD, discount=0.30",
+      "tool_chosen": "hotmart_negotiation_generate",
+      "tool_correct": true,
+      "param_correct": true,
+      "notes": "ok"
+    }
+  ],
+  "metrics": {
+    "total": 280,
+    "tool_correct": 277,
+    "param_correct": 277,
+    "tool_hit_rate": 0.9893,
+    "param_hit_rate": 0.9893,
+    "both_correct_rate": 0.9893,
+    "delta_from_v020": "92.9% → 98.9% (+6.0pp)",
+    "residual_failures": [
+      {
+        "type": "wrong_tool",
+        "count": 3,
+        "note": "gap real de desambiguação semântica em participants_list vs history_list (sales_source/buyer) e subscription_transactions_list vs subscriptions_list (recurrency_status). Hints não resolvem — precisa enriquecer descriptions com cross-references."
+      }
+    ],
+    "v021_resolved_vs_b": [
+      "subscriptions_summary_list v3,v4,v7 (3x accession_date ms-epoch — fix aplicado)",
+      "sales_summary_list v10, sales_commissions_list v3, sales_price_details_list v2 (3x C lê descriptions com mais cuidado que B)",
+      "subscriptions_list v1, subscriptions_summary_list v5, subscription_transactions_list v2, batch_subscriptions_cancel v6 (4x desambiguação semântica via leitura atenta da persona)"
+    ]
+  }
+}

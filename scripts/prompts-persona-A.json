@@ -1,0 +1,426 @@
+{
+  "persona": "A",
+  "persona_name": "Bruna Fit Caseira",
+  "prompts": [
+    {
+      "tool": "hotmart_modules_list",
+      "variations": [
+        {"id": 1, "prompt_pt": "lista os modulo do meu curso de marmita fit la na area de membro", "expected_params_hint": "subdomain do club da Bruna (ex: brunafit)"},
+        {"id": 2, "prompt_pt": "quais modulo tem na minha area de membros hoje?", "expected_params_hint": "subdomain"},
+        {"id": 3, "prompt_pt": "me mostra todos os modulo extra que liberei pras aluna", "expected_params_hint": "is_extra=true"},
+        {"id": 4, "prompt_pt": "ve ai os modulo principais do curso, sem contar os bonus", "expected_params_hint": "is_extra=false"},
+        {"id": 5, "prompt_pt": "to perdida, lista oq tem na area de membros do detox", "expected_params_hint": "subdomain do produto detox"},
+        {"id": 6, "prompt_pt": "preciso saber quantos modulo o curso ja tem antes de gravar mais aula", "expected_params_hint": "listar modules"},
+        {"id": 7, "prompt_pt": "puxa so o nome e id dos modulo, nao precisa de mais nada", "expected_params_hint": "select=name,id"},
+        {"id": 8, "prompt_pt": "ve quais os bonus extra que ta liberado pro pessoal", "expected_params_hint": "is_extra=true"},
+        {"id": 9, "prompt_pt": "lista os modulo da area brunafitcaseira no club", "expected_params_hint": "subdomain=brunafitcaseira"},
+        {"id": 10, "prompt_pt": "me da uma visao geral dos modulo que ta no ar agora", "expected_params_hint": "list all modules"}
+      ]
+    },
+    {
+      "tool": "hotmart_module_pages_list",
+      "variations": [
+        {"id": 1, "prompt_pt": "lista as aula do modulo 'cafe da manha fit' pra mim", "expected_params_hint": "precisa achar module_id primeiro via hotmart_modules_list, depois pegar pages"},
+        {"id": 2, "prompt_pt": "quantas pagina tem no modulo de detox ai?", "expected_params_hint": "module_id do detox"},
+        {"id": 3, "prompt_pt": "ve as aula do modulo MOD12345 pra mim", "expected_params_hint": "module_id=MOD12345"},
+        {"id": 4, "prompt_pt": "quero ver oq tem dentro do modulo de receita low carb", "expected_params_hint": "achar module_id pelo nome"},
+        {"id": 5, "prompt_pt": "puxa todas as aula do primeiro modulo do curso", "expected_params_hint": "list modules first, pick first module_id"},
+        {"id": 6, "prompt_pt": "me lembra quais aula tem no bonus de sobremesa fit", "expected_params_hint": "find module 'sobremesa fit' first"},
+        {"id": 7, "prompt_pt": "ta faltando aula no modulo 3? me mostra oq tem la", "expected_params_hint": "module_id do 3o modulo"},
+        {"id": 8, "prompt_pt": "lista pages do modulo abc123 mas so o titulo", "expected_params_hint": "module_id=abc123, select=title"},
+        {"id": 9, "prompt_pt": "quero ver as aula liberada na area brunafit pro modulo de marmita", "expected_params_hint": "subdomain=brunafit + module_id de marmita"},
+        {"id": 10, "prompt_pt": "me da a lista das pagina do modulo introducao", "expected_params_hint": "module 'introducao' → id → pages"}
+      ]
+    },
+    {
+      "tool": "hotmart_students_list",
+      "variations": [
+        {"id": 1, "prompt_pt": "lista minhas aluna ai por favor", "expected_params_hint": "list all students"},
+        {"id": 2, "prompt_pt": "acha a aluna juliana.silva@gmail.com pra mim", "expected_params_hint": "email=juliana.silva@gmail.com"},
+        {"id": 3, "prompt_pt": "quantas aluna eu tenho ativa hoje?", "expected_params_hint": "list students count"},
+        {"id": 4, "prompt_pt": "ve se a maria fernanda comprou, o email dela eh mafe.oliveira@hotmail.com", "expected_params_hint": "email=mafe.oliveira@hotmail.com"},
+        {"id": 5, "prompt_pt": "puxa as aluna da area brunafitcaseira", "expected_params_hint": "subdomain=brunafitcaseira"},
+        {"id": 6, "prompt_pt": "lista so o nome e email das aluna, nao quero mais nada", "expected_params_hint": "select=name,email"},
+        {"id": 7, "prompt_pt": "ve se tem alguma aluna com email patrícia.costa@yahoo.com.br", "expected_params_hint": "email=patrícia.costa@yahoo.com.br"},
+        {"id": 8, "prompt_pt": "me da a lista geral de quem ta dentro da area de membro", "expected_params_hint": "all students"},
+        {"id": 9, "prompt_pt": "quem sao as aluna que entrou esse mes?", "expected_params_hint": "list students, depois filtrar por data (limitacao)"},
+        {"id": 10, "prompt_pt": "ve a aluna joana@outlook.com que ta reclamando no direct", "expected_params_hint": "email=joana@outlook.com"}
+      ]
+    },
+    {
+      "tool": "hotmart_student_progress_get",
+      "variations": [
+        {"id": 1, "prompt_pt": "ve quanto a aluna USR98765 ja assistiu do curso", "expected_params_hint": "user_id=USR98765"},
+        {"id": 2, "prompt_pt": "como ta o progresso da juliana? id dela eh 12345abc", "expected_params_hint": "user_id=12345abc"},
+        {"id": 3, "prompt_pt": "quero saber se a aluna user_id ZX889 ta terminando o curso", "expected_params_hint": "user_id=ZX889"},
+        {"id": 4, "prompt_pt": "puxa o progresso da maria, id 7788kk", "expected_params_hint": "user_id=7788kk"},
+        {"id": 5, "prompt_pt": "ela disse que parou na metade, ve ai user_id ABC555", "expected_params_hint": "user_id=ABC555"},
+        {"id": 6, "prompt_pt": "tipo, quanto % a aluna ID 99877 ja completou?", "expected_params_hint": "user_id=99877"},
+        {"id": 7, "prompt_pt": "ve o progresso da paty (id pat_001) no curso de detox", "expected_params_hint": "user_id=pat_001"},
+        {"id": 8, "prompt_pt": "essa aluna fer_44 ta engajada? mostra o progresso dela", "expected_params_hint": "user_id=fer_44"},
+        {"id": 9, "prompt_pt": "me da so a porcentagem do progresso da student id KKL909", "expected_params_hint": "user_id=KKL909, select=progress"},
+        {"id": 10, "prompt_pt": "checa pra mim oq a aluna id 5tg8h ja viu de aula", "expected_params_hint": "user_id=5tg8h"}
+      ]
+    },
+    {
+      "tool": "hotmart_coupon_create",
+      "variations": [
+        {"id": 1, "prompt_pt": "cria um cupom de 20% off no produto 1234567 pro lancamento de amanha", "expected_params_hint": "product_id=1234567, discount=0.20"},
+        {"id": 2, "prompt_pt": "faz um cupom BLACKFIT com 30% no curso 9988776", "expected_params_hint": "product_id=9988776, code=BLACKFIT, discount=0.30"},
+        {"id": 3, "prompt_pt": "cria cupom de 50% pro produto 4455667 valendo de hj ate dia 15 de novembro", "expected_params_hint": "product_id=4455667, discount=0.50, end_date=2026-11-15 → ms-epoch"},
+        {"id": 4, "prompt_pt": "preciso de um cupom DETOX10 com 10% off no produto 333222", "expected_params_hint": "code=DETOX10, discount=0.10, product_id=333222"},
+        {"id": 5, "prompt_pt": "cria um cupom 25% pro curso marmita id 111222 com codigo MARMITA25 valendo so semana q vem", "expected_params_hint": "code=MARMITA25, discount=0.25, start_date+end_date semana que vem"},
+        {"id": 6, "prompt_pt": "cupom de 15% no produto 7654321 pro afiliado afil_abc usar", "expected_params_hint": "product_id=7654321, discount=0.15, affiliate=afil_abc"},
+        {"id": 7, "prompt_pt": "FIT40 com 40% off no produto 998877, comeca dia 1 de dezembro acaba dia 5", "expected_params_hint": "code=FIT40, discount=0.40, start/end_date convertidos"},
+        {"id": 8, "prompt_pt": "cria cupom pro produto 5544332 so na oferta off_promo01 e off_promo02 com 20%", "expected_params_hint": "product_id=5544332, discount=0.20, offer_ids=[off_promo01,off_promo02]"},
+        {"id": 9, "prompt_pt": "preciso urgente: cupom LIVE30 com 30% no curso 222111 valendo so hj", "expected_params_hint": "code=LIVE30, discount=0.30, start_date=today, end_date=today"},
+        {"id": 10, "prompt_pt": "cria um cupom de 12% no produto 887766 pro pessoal do meu insta", "expected_params_hint": "product_id=887766, discount=0.12"}
+      ]
+    },
+    {
+      "tool": "hotmart_coupons_list",
+      "variations": [
+        {"id": 1, "prompt_pt": "lista todos os cupom que ta ativo no produto 1234567", "expected_params_hint": "product_id=1234567"},
+        {"id": 2, "prompt_pt": "quais cupom eu ja criei pro curso de marmita?", "expected_params_hint": "product_id do curso marmita"},
+        {"id": 3, "prompt_pt": "ve se tem cupom BLACKFIT ativo no produto 9988776", "expected_params_hint": "product_id=9988776, code=BLACKFIT"},
+        {"id": 4, "prompt_pt": "puxa os cupom do produto 555444 mas so o codigo e o desconto", "expected_params_hint": "product_id=555444, select=code,discount"},
+        {"id": 5, "prompt_pt": "tipo quantos cupom eu tenho rodando no curso detox 333222", "expected_params_hint": "product_id=333222"},
+        {"id": 6, "prompt_pt": "ve ai os cupom do produto 111222, acho q tem uns vencido", "expected_params_hint": "product_id=111222"},
+        {"id": 7, "prompt_pt": "lista cupom do curso 7654321 e me fala se o LIVE30 ta valendo", "expected_params_hint": "product_id=7654321, depois inspecionar"},
+        {"id": 8, "prompt_pt": "to procurando o cupom MARMITA25 no produto 111222", "expected_params_hint": "product_id=111222, code=MARMITA25"},
+        {"id": 9, "prompt_pt": "me mostra todos os cupom ativos do produto 887766", "expected_params_hint": "product_id=887766"},
+        {"id": 10, "prompt_pt": "puxa cupom do produto 222111 e me da a proxima pagina depois", "expected_params_hint": "product_id=222111, page_token na sequencia"}
+      ]
+    },
+    {
+      "tool": "hotmart_coupon_delete",
+      "variations": [
+        {"id": 1, "prompt_pt": "apaga o cupom 998877 q eu criei errado", "expected_params_hint": "coupon_id=998877"},
+        {"id": 2, "prompt_pt": "deleta esse cupom aqui id 12345 ja vencido", "expected_params_hint": "coupon_id=12345"},
+        {"id": 3, "prompt_pt": "tira o cupom 77665544 do ar, ta atrapalhando o lancamento", "expected_params_hint": "coupon_id=77665544"},
+        {"id": 4, "prompt_pt": "remove o cupom de id 33221100 por favor", "expected_params_hint": "coupon_id=33221100"},
+        {"id": 5, "prompt_pt": "esse cupom 555666 ta dando desconto demais, apaga ele", "expected_params_hint": "coupon_id=555666"},
+        {"id": 6, "prompt_pt": "deleta o cupom 1010101 q eu fiz pra teste", "expected_params_hint": "coupon_id=1010101"},
+        {"id": 7, "prompt_pt": "tira o cupom BLACKFIT, o id eh 887766", "expected_params_hint": "coupon_id=887766"},
+        {"id": 8, "prompt_pt": "preciso q vc apague o cupom de id 4321 agora", "expected_params_hint": "coupon_id=4321"},
+        {"id": 9, "prompt_pt": "esse cupom 999888 ta vazando no grupo do whats, deleta", "expected_params_hint": "coupon_id=999888"},
+        {"id": 10, "prompt_pt": "remove o cupom id 6543210 ja era", "expected_params_hint": "coupon_id=6543210"}
+      ]
+    },
+    {
+      "tool": "hotmart_negotiation_generate",
+      "variations": [
+        {"id": 1, "prompt_pt": "a aluna SUB12345 quer renegociar, faz uma proposta de 3 parcelas no cartao com 20% off", "expected_params_hint": "subscription_id=SUB12345, recurrences=3, payment_type=CREDIT_CARD, discount=0.20"},
+        {"id": 2, "prompt_pt": "gera negociacao pra assinatura SUB99887 com 6x e 15% off", "expected_params_hint": "subscription_id=SUB99887, recurrences=6, discount=0.15"},
+        {"id": 3, "prompt_pt": "essa aluna ID assin SUB44556 ta pedindo boleto, faz 12x sem desconto", "expected_params_hint": "subscription_id=SUB44556, recurrences=12, payment_type=BILLET"},
+        {"id": 4, "prompt_pt": "monta uma renegociacao pra SUB77889 cpf 12345678901 em 4 parcela com 25%", "expected_params_hint": "subscription_id=SUB77889, document=12345678901, recurrences=4, discount=0.25"},
+        {"id": 5, "prompt_pt": "ela quer pagar a vista no pix, faz proposta pra SUB11223 com 30% off", "expected_params_hint": "subscription_id=SUB11223, payment_type=PIX, recurrences=1, discount=0.30"},
+        {"id": 6, "prompt_pt": "gera negociacao SUB66554 em 10 parcelas no cartao", "expected_params_hint": "subscription_id=SUB66554, recurrences=10, payment_type=CREDIT_CARD"},
+        {"id": 7, "prompt_pt": "preciso reativar a assin SUB223344 oferecendo 5x com 10% desconto", "expected_params_hint": "subscription_id=SUB223344, recurrences=5, discount=0.10"},
+        {"id": 8, "prompt_pt": "essa cliente ta ameacando cancelar SUB987654, faz 8x com 40% off", "expected_params_hint": "subscription_id=SUB987654, recurrences=8, discount=0.40"},
+        {"id": 9, "prompt_pt": "negociacao pra SUB445566 cpf 98765432100 em 2x boleto", "expected_params_hint": "subscription_id=SUB445566, document=98765432100, recurrences=2, payment_type=BILLET"},
+        {"id": 10, "prompt_pt": "faz proposta pra assinante SUB778899 com pix avista 50% off", "expected_params_hint": "subscription_id=SUB778899, payment_type=PIX, recurrences=1, discount=0.50"}
+      ]
+    },
+    {
+      "tool": "hotmart_products_list",
+      "variations": [
+        {"id": 1, "prompt_pt": "lista meus produto ai", "expected_params_hint": "list products"},
+        {"id": 2, "prompt_pt": "quantos produto eu tenho ativo na hotmart hoje?", "expected_params_hint": "status=ACTIVE"},
+        {"id": 3, "prompt_pt": "me mostra os 5 primeiro produto", "expected_params_hint": "max_results=5"},
+        {"id": 4, "prompt_pt": "puxa o produto de id 1234567 so pra confirmar o nome", "expected_params_hint": "id_=1234567"},
+        {"id": 5, "prompt_pt": "lista so os produto que ta como rascunho", "expected_params_hint": "status=DRAFT"},
+        {"id": 6, "prompt_pt": "mostra meus produto pausado", "expected_params_hint": "status=PAUSED"},
+        {"id": 7, "prompt_pt": "quero ver so nome e id dos meus produto, sem mais nada", "expected_params_hint": "select=name,id"},
+        {"id": 8, "prompt_pt": "lista os ebook que eu tenho", "expected_params_hint": "format_=EBOOK"},
+        {"id": 9, "prompt_pt": "puxa meus produto que sao curso online", "expected_params_hint": "format_=ONLINE_COURSE"},
+        {"id": 10, "prompt_pt": "lista todos meus produto, me da a proxima pagina depois", "expected_params_hint": "page_token na 2a chamada"}
+      ]
+    },
+    {
+      "tool": "hotmart_product_offers_list",
+      "variations": [
+        {"id": 1, "prompt_pt": "lista as oferta do meu produto 1234567", "expected_params_hint": "product_id=1234567"},
+        {"id": 2, "prompt_pt": "quais oferta to rodando no curso de marmita id 9988776?", "expected_params_hint": "product_id=9988776"},
+        {"id": 3, "prompt_pt": "ve a oferta especifica off_blackfit no produto 4455667", "expected_params_hint": "product_id=4455667, offer_key=off_blackfit"},
+        {"id": 4, "prompt_pt": "puxa as 3 primeira oferta do produto 333222", "expected_params_hint": "product_id=333222, max_results=3"},
+        {"id": 5, "prompt_pt": "me mostra as oferta do detox 111222 so com nome e preco", "expected_params_hint": "product_id=111222, select=name,price"},
+        {"id": 6, "prompt_pt": "quantas oferta tem ativa no produto 887766?", "expected_params_hint": "product_id=887766"},
+        {"id": 7, "prompt_pt": "tipo, quero ver todas as oferta do curso 222111", "expected_params_hint": "product_id=222111"},
+        {"id": 8, "prompt_pt": "ve a oferta de chave off_lancamento no produto 7654321", "expected_params_hint": "product_id=7654321, offer_key=off_lancamento"},
+        {"id": 9, "prompt_pt": "lista oferta do produto 5544332 e me da proxima pag depois", "expected_params_hint": "product_id=5544332 + page_token"},
+        {"id": 10, "prompt_pt": "quero ver as oferta promo do curso 998877", "expected_params_hint": "product_id=998877"}
+      ]
+    },
+    {
+      "tool": "hotmart_product_plans_list",
+      "variations": [
+        {"id": 1, "prompt_pt": "lista os plano de assinatura do meu produto 1234567", "expected_params_hint": "product_id=1234567"},
+        {"id": 2, "prompt_pt": "quais plano eu tenho no curso recorrente 9988776?", "expected_params_hint": "product_id=9988776"},
+        {"id": 3, "prompt_pt": "puxa os 5 primeiro plano do produto 4455667", "expected_params_hint": "product_id=4455667, max_results=5"},
+        {"id": 4, "prompt_pt": "ve o plano de id PL123 no produto 333222", "expected_params_hint": "product_id=333222, id_=PL123"},
+        {"id": 5, "prompt_pt": "me mostra so o nome dos plano do produto 111222", "expected_params_hint": "product_id=111222, select=name"},
+        {"id": 6, "prompt_pt": "quantos plano de mensalidade tem no produto 887766?", "expected_params_hint": "product_id=887766"},
+        {"id": 7, "prompt_pt": "lista os plano do meu detox 222111", "expected_params_hint": "product_id=222111"},
+        {"id": 8, "prompt_pt": "ve os plano do produto 7654321, acho q tem um errado", "expected_params_hint": "product_id=7654321"},
+        {"id": 9, "prompt_pt": "puxa o plano PL_TRIM do curso 5544332", "expected_params_hint": "product_id=5544332, id_=PL_TRIM"},
+        {"id": 10, "prompt_pt": "lista plano do produto 998877 e me da proxima pagina depois", "expected_params_hint": "product_id=998877 + page_token"}
+      ]
+    },
+    {
+      "tool": "hotmart_sales_history_list",
+      "variations": [
+        {"id": 1, "prompt_pt": "quantas venda saiu hoje no curso de marmita?", "expected_params_hint": "start_date=hoje 00:00 ms-epoch, end_date=agora; mas tool detalhe nao agrega — historico"},
+        {"id": 2, "prompt_pt": "puxa as venda de outubro inteiro pra mim", "expected_params_hint": "start_date=2025-10-01 ms-epoch, end_date=2025-10-31 ms-epoch"},
+        {"id": 3, "prompt_pt": "ve as venda aprovada da semana passada", "expected_params_hint": "transaction_status=APPROVED, start_date/end_date semana passada"},
+        {"id": 4, "prompt_pt": "lista as venda do produto 1234567 nos ultimos 7 dia", "expected_params_hint": "product_id=1234567, start_date=hoje-7d"},
+        {"id": 5, "prompt_pt": "achou a venda da cliente juliana@gmail.com?", "expected_params_hint": "buyer_email=juliana@gmail.com"},
+        {"id": 6, "prompt_pt": "ve as venda da maria silva ontem", "expected_params_hint": "buyer_name=maria silva, start_date=ontem"},
+        {"id": 7, "prompt_pt": "puxa as venda boleto que ainda nao pagou", "expected_params_hint": "payment_type=BILLET, transaction_status=WAITING_PAYMENT"},
+        {"id": 8, "prompt_pt": "lista venda no pix de novembro inteiro", "expected_params_hint": "payment_type=PIX, start_date=2025-11-01, end_date=2025-11-30"},
+        {"id": 9, "prompt_pt": "ve a transacao HP123456789 ai", "expected_params_hint": "transaction=HP123456789"},
+        {"id": 10, "prompt_pt": "venda do cupom BLACKFIT da semana", "expected_params_hint": "offer_code=BLACKFIT, start_date/end_date semana"}
+      ]
+    },
+    {
+      "tool": "hotmart_sales_summary_list",
+      "variations": [
+        {"id": 1, "prompt_pt": "quanto faturei aprovado em outubro?", "expected_params_hint": "transaction_status=APPROVED, start_date/end_date outubro ms-epoch"},
+        {"id": 2, "prompt_pt": "ve o resumo de venda da semana", "expected_params_hint": "start_date=segunda dessa semana, end_date=hoje"},
+        {"id": 3, "prompt_pt": "soma de venda aprovada hoje quanto deu?", "expected_params_hint": "transaction_status=APPROVED, start_date=hoje 00:00"},
+        {"id": 4, "prompt_pt": "puxa o sumario do produto 1234567 esse mes", "expected_params_hint": "product_id=1234567, start_date=01 desse mes"},
+        {"id": 5, "prompt_pt": "faturamento total do detox em novembro", "expected_params_hint": "product_id=detox, start_date=2025-11-01, end_date=2025-11-30"},
+        {"id": 6, "prompt_pt": "ve as venda pix aprovada do mes", "expected_params_hint": "payment_type=PIX, transaction_status=APPROVED"},
+        {"id": 7, "prompt_pt": "resumo de venda da afiliada Carol Mendes esse mes", "expected_params_hint": "affiliate_name=Carol Mendes"},
+        {"id": 8, "prompt_pt": "quanto eu fiz no cupom BLACKFIT total?", "expected_params_hint": "offer_code=BLACKFIT"},
+        {"id": 9, "prompt_pt": "soma de venda boleto reembolsada ano todo", "expected_params_hint": "payment_type=BILLET, transaction_status=REFUNDED, start/end_date ano"},
+        {"id": 10, "prompt_pt": "deu ruim ontem? caiu muito as venda ou eh impressao minha?", "expected_params_hint": "start_date=ontem, end_date=ontem 23:59, transaction_status=APPROVED"}
+      ]
+    },
+    {
+      "tool": "hotmart_sales_participants_list",
+      "variations": [
+        {"id": 1, "prompt_pt": "lista quem comprou meu curso essa semana", "expected_params_hint": "start_date=segunda, end_date=hoje, transaction_status=APPROVED"},
+        {"id": 2, "prompt_pt": "ve a participante juliana@gmail.com nas venda", "expected_params_hint": "buyer_email=juliana@gmail.com"},
+        {"id": 3, "prompt_pt": "puxa as compradora do produto 1234567 ontem", "expected_params_hint": "product_id=1234567, start_date=ontem"},
+        {"id": 4, "prompt_pt": "ve quem veio pela afiliada Carol Mendes esse mes", "expected_params_hint": "affiliate_name=Carol Mendes, start_date=01 mes"},
+        {"id": 5, "prompt_pt": "lista os dados da compradora maria fernanda silva", "expected_params_hint": "buyer_name=maria fernanda silva"},
+        {"id": 6, "prompt_pt": "quem comprou aprovado em outubro?", "expected_params_hint": "transaction_status=APPROVED, outubro"},
+        {"id": 7, "prompt_pt": "ve participantes da transacao HP998877", "expected_params_hint": "transaction=HP998877"},
+        {"id": 8, "prompt_pt": "lista comprador do produto detox 333222 essa semana", "expected_params_hint": "product_id=333222, semana"},
+        {"id": 9, "prompt_pt": "puxa so o nome e email dos comprador do mes", "expected_params_hint": "select=name,email, start_date=01 mes"},
+        {"id": 10, "prompt_pt": "tem alguma compradora do email patricia.costa@yahoo.com hj?", "expected_params_hint": "buyer_email=patricia.costa@yahoo.com, start_date=hoje"}
+      ]
+    },
+    {
+      "tool": "hotmart_sales_commissions_list",
+      "variations": [
+        {"id": 1, "prompt_pt": "quanto saiu de comissao pra mim esse mes?", "expected_params_hint": "commission_as=PRODUCER, start_date=01 mes"},
+        {"id": 2, "prompt_pt": "ve as comissao das afiliada em outubro", "expected_params_hint": "commission_as=AFFILIATE, start_date/end_date outubro"},
+        {"id": 3, "prompt_pt": "puxa minhas comissao aprovada do produto 1234567 esse ano", "expected_params_hint": "product_id=1234567, transaction_status=APPROVED, start_date=01-01 ano"},
+        {"id": 4, "prompt_pt": "lista comissao da transacao HP556677", "expected_params_hint": "transaction=HP556677"},
+        {"id": 5, "prompt_pt": "comissao da afiliada total na semana passada", "expected_params_hint": "commission_as=AFFILIATE, semana passada"},
+        {"id": 6, "prompt_pt": "ve as 10 ultimas comissao", "expected_params_hint": "max_results=10"},
+        {"id": 7, "prompt_pt": "minha comissao do detox 333222 esse mes ta quanto?", "expected_params_hint": "product_id=333222, commission_as=PRODUCER, mes"},
+        {"id": 8, "prompt_pt": "lista comissao reembolsada do ano todo", "expected_params_hint": "transaction_status=REFUNDED, start_date=01-01"},
+        {"id": 9, "prompt_pt": "puxa as comissao do curso de marmita 1234567 de novembro", "expected_params_hint": "product_id=1234567, start_date=2025-11-01, end_date=2025-11-30"},
+        {"id": 10, "prompt_pt": "quanto pagamos pras afiliada total esse ano?", "expected_params_hint": "commission_as=AFFILIATE, start_date=01-01 ano"}
+      ]
+    },
+    {
+      "tool": "hotmart_sales_price_details_list",
+      "variations": [
+        {"id": 1, "prompt_pt": "puxa detalhe de preco das venda aprovada essa semana", "expected_params_hint": "transaction_status=APPROVED, start_date=segunda"},
+        {"id": 2, "prompt_pt": "ve quanto teve de taxa nas venda pix do mes", "expected_params_hint": "payment_type=PIX, start_date=01 mes"},
+        {"id": 3, "prompt_pt": "detalhe de preco da transacao HP998877", "expected_params_hint": "transaction=HP998877"},
+        {"id": 4, "prompt_pt": "lista os valores das venda do produto 1234567 em outubro", "expected_params_hint": "product_id=1234567, outubro"},
+        {"id": 5, "prompt_pt": "ve quanto deu de desconto nas venda boleto essa semana", "expected_params_hint": "payment_type=BILLET, semana"},
+        {"id": 6, "prompt_pt": "puxa detalhe preco das 20 ultimas venda", "expected_params_hint": "max_results=20"},
+        {"id": 7, "prompt_pt": "quanto deu de taxa hotmart no detox 333222 esse mes?", "expected_params_hint": "product_id=333222, start_date=01 mes"},
+        {"id": 8, "prompt_pt": "ve breakdown preco das venda no cartao em novembro", "expected_params_hint": "payment_type=CREDIT_CARD, novembro"},
+        {"id": 9, "prompt_pt": "lista preco das venda aprovada hj", "expected_params_hint": "transaction_status=APPROVED, start_date=hoje"},
+        {"id": 10, "prompt_pt": "detalhe de preco das venda do curso 1234567 mes passado", "expected_params_hint": "product_id=1234567, mes passado start/end"}
+      ]
+    },
+    {
+      "tool": "hotmart_sale_refund",
+      "variations": [
+        {"id": 1, "prompt_pt": "estorna a venda HP123456 da aluna que tava reclamando", "expected_params_hint": "transaction_code=HP123456"},
+        {"id": 2, "prompt_pt": "faz reembolso da transacao ABC789XY", "expected_params_hint": "transaction_code=ABC789XY"},
+        {"id": 3, "prompt_pt": "preciso devolver o dinheiro da venda HP998877, ela ameacou processar", "expected_params_hint": "transaction_code=HP998877"},
+        {"id": 4, "prompt_pt": "estorna HP445566, ela nao gostou do curso", "expected_params_hint": "transaction_code=HP445566"},
+        {"id": 5, "prompt_pt": "reembolsa a venda codigo HP112233 por favor", "expected_params_hint": "transaction_code=HP112233"},
+        {"id": 6, "prompt_pt": "essa transacao HP776655 foi duplicada, estorna", "expected_params_hint": "transaction_code=HP776655"},
+        {"id": 7, "prompt_pt": "faz refund da HP223344 q ela pediu no direct", "expected_params_hint": "transaction_code=HP223344"},
+        {"id": 8, "prompt_pt": "devolve a venda HP889900 pq cobrou errado", "expected_params_hint": "transaction_code=HP889900"},
+        {"id": 9, "prompt_pt": "estorna HP556677 ja, deu ruim", "expected_params_hint": "transaction_code=HP556677"},
+        {"id": 10, "prompt_pt": "reembolso da transacao ABCXYZ12 urgente", "expected_params_hint": "transaction_code=ABCXYZ12"}
+      ]
+    },
+    {
+      "tool": "hotmart_subscriptions_list",
+      "variations": [
+        {"id": 1, "prompt_pt": "lista minhas assinatura ativa", "expected_params_hint": "status=ACTIVE"},
+        {"id": 2, "prompt_pt": "quantas aluna assinante eu tenho hoje?", "expected_params_hint": "status=ACTIVE, max_results contagem"},
+        {"id": 3, "prompt_pt": "puxa as assinatura canceladas mes passado", "expected_params_hint": "status=CANCELLED_BY_CUSTOMER, cancelation_date+end_cancelation_date mes passado"},
+        {"id": 4, "prompt_pt": "ve a assinatura da maria@gmail.com", "expected_params_hint": "subscriber_email=maria@gmail.com"},
+        {"id": 5, "prompt_pt": "lista assinatura do plano premium id PL_PREM", "expected_params_hint": "plan_id=PL_PREM"},
+        {"id": 6, "prompt_pt": "quais assinante entrou esse mes no produto 1234567?", "expected_params_hint": "product_id=1234567, accession_date=01 mes, end_accession_date=hoje"},
+        {"id": 7, "prompt_pt": "ve assinatura q vai cobrar essa semana", "expected_params_hint": "date_next_charge=segunda, end_date_next_charge=domingo"},
+        {"id": 8, "prompt_pt": "lista assinatura em trial ativo", "expected_params_hint": "trial=true, status=ACTIVE"},
+        {"id": 9, "prompt_pt": "puxa a assinatura SUB12345 pra ver detalhe", "expected_params_hint": "subscriber_code=SUB12345"},
+        {"id": 10, "prompt_pt": "tem assinatura inadimplente?", "expected_params_hint": "status=DELAYED"}
+      ]
+    },
+    {
+      "tool": "hotmart_subscriptions_summary_list",
+      "variations": [
+        {"id": 1, "prompt_pt": "resumo das minhas assinatura por favor", "expected_params_hint": "list summary"},
+        {"id": 2, "prompt_pt": "ve resumo de assinatura do produto 1234567", "expected_params_hint": "product_id=1234567"},
+        {"id": 3, "prompt_pt": "puxa as 20 primeira no resumo de assinatura", "expected_params_hint": "max_results=20"},
+        {"id": 4, "prompt_pt": "ve resumo da assinante SUB99887", "expected_params_hint": "subscriber_code=SUB99887"},
+        {"id": 5, "prompt_pt": "lista resumo de quem entrou em outubro", "expected_params_hint": "accession_date=2025-10-01, end_accession_date=2025-10-31"},
+        {"id": 6, "prompt_pt": "quais assinante vao ser cobrado essa semana, modo resumido", "expected_params_hint": "date_next_charge=semana"},
+        {"id": 7, "prompt_pt": "resumo so nome e proxima cobranca", "expected_params_hint": "select=name,next_charge"},
+        {"id": 8, "prompt_pt": "ve summary do detox 333222", "expected_params_hint": "product_id=333222"},
+        {"id": 9, "prompt_pt": "puxa resumo assinatura q entrou semana passada", "expected_params_hint": "accession_date=semana passada"},
+        {"id": 10, "prompt_pt": "resumo das 10 ultima assinatura no produto 1234567", "expected_params_hint": "product_id=1234567, max_results=10"}
+      ]
+    },
+    {
+      "tool": "hotmart_subscription_transactions_list",
+      "variations": [
+        {"id": 1, "prompt_pt": "ve as cobranca da assinatura SUB12345", "expected_params_hint": "subscriber_code=SUB12345"},
+        {"id": 2, "prompt_pt": "lista transacao de assinatura aprovada do mes", "expected_params_hint": "purchase_status=APPROVED, transaction_date=01 mes"},
+        {"id": 3, "prompt_pt": "puxa cobranca recorrente do produto 1234567 essa semana", "expected_params_hint": "product_id=1234567, transaction_date=semana"},
+        {"id": 4, "prompt_pt": "ve cobranca da maria@gmail.com em outubro", "expected_params_hint": "subscriber_email=maria@gmail.com, transaction_date=outubro"},
+        {"id": 5, "prompt_pt": "lista as cobranca recusada essa semana", "expected_params_hint": "purchase_status=REFUSED, transaction_date=semana"},
+        {"id": 6, "prompt_pt": "ve transacao da assinatura por boleto que ta atrasada", "expected_params_hint": "billing_type=BILLET, recurrency_status=DELAYED"},
+        {"id": 7, "prompt_pt": "puxa a transacao HP998877 pra ver oq aconteceu", "expected_params_hint": "transaction=HP998877"},
+        {"id": 8, "prompt_pt": "ve cobranca da assinante juliana silva ultimo mes", "expected_params_hint": "subscriber_name=juliana silva, transaction_date=mes passado"},
+        {"id": 9, "prompt_pt": "lista cobranca cancelada na recorrencia", "expected_params_hint": "recurrency_status=CANCELLED"},
+        {"id": 10, "prompt_pt": "ve transacao do plano BLACK no produto 1234567", "expected_params_hint": "product_id=1234567, offer_code=BLACK"}
+      ]
+    },
+    {
+      "tool": "hotmart_subscriber_purchases_list",
+      "variations": [
+        {"id": 1, "prompt_pt": "ve tudo q a assinante SUB12345 ja comprou", "expected_params_hint": "subscriber_code=SUB12345"},
+        {"id": 2, "prompt_pt": "lista compras da assinante codigo SUB99887", "expected_params_hint": "subscriber_code=SUB99887"},
+        {"id": 3, "prompt_pt": "puxa o historico de compra da SUB44556", "expected_params_hint": "subscriber_code=SUB44556"},
+        {"id": 4, "prompt_pt": "essa aluna SUB77889 ja comprou outro produto meu?", "expected_params_hint": "subscriber_code=SUB77889"},
+        {"id": 5, "prompt_pt": "ve compras da SUB11223 pra entender o ticket dela", "expected_params_hint": "subscriber_code=SUB11223"},
+        {"id": 6, "prompt_pt": "lista oq SUB66554 comprou pra eu fazer upsell", "expected_params_hint": "subscriber_code=SUB66554"},
+        {"id": 7, "prompt_pt": "puxa compras da assinante SUB223344", "expected_params_hint": "subscriber_code=SUB223344"},
+        {"id": 8, "prompt_pt": "ela disse q comprou 3 curso meu, ve SUB987654", "expected_params_hint": "subscriber_code=SUB987654"},
+        {"id": 9, "prompt_pt": "ve historico SUB445566 pra ver se eh cliente antiga", "expected_params_hint": "subscriber_code=SUB445566"},
+        {"id": 10, "prompt_pt": "lista compras da SUB778899", "expected_params_hint": "subscriber_code=SUB778899"}
+      ]
+    },
+    {
+      "tool": "hotmart_subscription_cancel",
+      "variations": [
+        {"id": 1, "prompt_pt": "cancela a assinatura SUB12345 q ela pediu no direct", "expected_params_hint": "subscriber_code=SUB12345"},
+        {"id": 2, "prompt_pt": "cancela SUB99887 e ja avisa por email", "expected_params_hint": "subscriber_code=SUB99887, send_mail=true"},
+        {"id": 3, "prompt_pt": "cancela a assin SUB44556 sem mandar email pq eu ja falei com ela", "expected_params_hint": "subscriber_code=SUB44556, send_mail=false"},
+        {"id": 4, "prompt_pt": "preciso cancelar SUB77889 agora", "expected_params_hint": "subscriber_code=SUB77889"},
+        {"id": 5, "prompt_pt": "essa aluna SUB11223 ta sumida, cancela pra mim", "expected_params_hint": "subscriber_code=SUB11223"},
+        {"id": 6, "prompt_pt": "cancela SUB66554 e manda email", "expected_params_hint": "subscriber_code=SUB66554, send_mail=true"},
+        {"id": 7, "prompt_pt": "tira a assinatura SUB223344 do ar", "expected_params_hint": "subscriber_code=SUB223344"},
+        {"id": 8, "prompt_pt": "cancela essa SUB987654 q deu chargeback", "expected_params_hint": "subscriber_code=SUB987654"},
+        {"id": 9, "prompt_pt": "cancelamento SUB445566 sem aviso por email", "expected_params_hint": "subscriber_code=SUB445566, send_mail=false"},
+        {"id": 10, "prompt_pt": "cancela a recorrente SUB778899", "expected_params_hint": "subscriber_code=SUB778899"}
+      ]
+    },
+    {
+      "tool": "hotmart_batch_subscriptions_cancel",
+      "variations": [
+        {"id": 1, "prompt_pt": "cancela essas 3 assinatura: SUB111, SUB222, SUB333", "expected_params_hint": "subscriber_code=[SUB111,SUB222,SUB333]"},
+        {"id": 2, "prompt_pt": "cancela em lote: SUB12345, SUB67890, SUB99887 e manda email pra todas", "expected_params_hint": "lista de codes, send_mail=true"},
+        {"id": 3, "prompt_pt": "tira essas inadimplente do ar: SUB445, SUB667, SUB889, SUB001", "expected_params_hint": "lista 4 codes"},
+        {"id": 4, "prompt_pt": "cancela tudo isso aqui sem mandar email: SUB100, SUB200", "expected_params_hint": "send_mail=false, codes=[SUB100,SUB200]"},
+        {"id": 5, "prompt_pt": "cancelamento em massa: SUB_a, SUB_b, SUB_c, SUB_d, SUB_e", "expected_params_hint": "5 codes batch"},
+        {"id": 6, "prompt_pt": "essas aluna pediram juntas no zap, cancela: SUB777, SUB888, SUB999", "expected_params_hint": "3 codes"},
+        {"id": 7, "prompt_pt": "batch cancel pras SUB_inad1 SUB_inad2 SUB_inad3 que ta com 3 cobranca atrasada", "expected_params_hint": "3 codes batch"},
+        {"id": 8, "prompt_pt": "cancela junto: SUB12, SUB34, SUB56 e avisa por email", "expected_params_hint": "send_mail=true, 3 codes"},
+        {"id": 9, "prompt_pt": "limpa minha base, cancela SUB_zzz1, SUB_zzz2, SUB_zzz3, SUB_zzz4", "expected_params_hint": "4 codes"},
+        {"id": 10, "prompt_pt": "encerra essas em lote: SUB_a1 SUB_b2 SUB_c3 SUB_d4 SUB_e5 SUB_f6", "expected_params_hint": "6 codes batch"}
+      ]
+    },
+    {
+      "tool": "hotmart_subscription_reactivate",
+      "variations": [
+        {"id": 1, "prompt_pt": "reativa a assinatura SUB12345 q ela voltou atras", "expected_params_hint": "subscriber_code=SUB12345"},
+        {"id": 2, "prompt_pt": "volta a assin SUB99887, ela mudou de ideia", "expected_params_hint": "subscriber_code=SUB99887"},
+        {"id": 3, "prompt_pt": "reativa SUB44556 e manda email avisando", "expected_params_hint": "subscriber_code=SUB44556, send_mail=true (se aplicavel)"},
+        {"id": 4, "prompt_pt": "preciso reativar a SUB77889 hj", "expected_params_hint": "subscriber_code=SUB77889"},
+        {"id": 5, "prompt_pt": "essa cliente SUB11223 voltou, reativa", "expected_params_hint": "subscriber_code=SUB11223"},
+        {"id": 6, "prompt_pt": "reativa SUB66554, foi engano dela cancelar", "expected_params_hint": "subscriber_code=SUB66554"},
+        {"id": 7, "prompt_pt": "religa a assin SUB223344 sem mandar email", "expected_params_hint": "subscriber_code=SUB223344"},
+        {"id": 8, "prompt_pt": "reativa SUB987654 q tava cancelada", "expected_params_hint": "subscriber_code=SUB987654"},
+        {"id": 9, "prompt_pt": "volta a SUB445566 pro ar", "expected_params_hint": "subscriber_code=SUB445566"},
+        {"id": 10, "prompt_pt": "reativa SUB778899 ela pediu desculpa", "expected_params_hint": "subscriber_code=SUB778899"}
+      ]
+    },
+    {
+      "tool": "hotmart_batch_subscriptions_reactivate",
+      "variations": [
+        {"id": 1, "prompt_pt": "reativa em lote: SUB111, SUB222, SUB333", "expected_params_hint": "lista de 3"},
+        {"id": 2, "prompt_pt": "volta essas 4 assinatura: SUB12345, SUB67890, SUB99887, SUB44556", "expected_params_hint": "4 codes"},
+        {"id": 3, "prompt_pt": "reativa em massa SUB_a, SUB_b, SUB_c sem mandar email", "expected_params_hint": "3 codes, send_mail=false (se aplicavel)"},
+        {"id": 4, "prompt_pt": "essas aluna voltaram, reativa todas: SUB_x1 SUB_x2 SUB_x3 SUB_x4 SUB_x5", "expected_params_hint": "5 codes"},
+        {"id": 5, "prompt_pt": "batch reativacao: SUB100, SUB200, SUB300", "expected_params_hint": "3 codes"},
+        {"id": 6, "prompt_pt": "religa essas em lote q eu cancelei errado: SUB777 SUB888", "expected_params_hint": "2 codes"},
+        {"id": 7, "prompt_pt": "reativa junto SUB_inad1, SUB_inad2, SUB_inad3, SUB_inad4 e avisa por email", "expected_params_hint": "4 codes, send_mail=true"},
+        {"id": 8, "prompt_pt": "reativa essas 3 do detox: SUB_dx1 SUB_dx2 SUB_dx3", "expected_params_hint": "3 codes"},
+        {"id": 9, "prompt_pt": "volta o pessoal q tinha cancelado: SUB_a1 SUB_b2 SUB_c3 SUB_d4 SUB_e5 SUB_f6", "expected_params_hint": "6 codes"},
+        {"id": 10, "prompt_pt": "religa em lote SUB_z1, SUB_z2", "expected_params_hint": "2 codes"}
+      ]
+    },
+    {
+      "tool": "hotmart_subscription_due_day_update",
+      "variations": [
+        {"id": 1, "prompt_pt": "muda o dia de cobranca da SUB12345 pra dia 10", "expected_params_hint": "subscriber_code=SUB12345, due_day=10"},
+        {"id": 2, "prompt_pt": "altera vencimento da assin SUB99887 pra todo dia 5", "expected_params_hint": "subscriber_code=SUB99887, due_day=5"},
+        {"id": 3, "prompt_pt": "ela quer cobrar todo dia 20, troca SUB44556", "expected_params_hint": "subscriber_code=SUB44556, due_day=20"},
+        {"id": 4, "prompt_pt": "muda SUB77889 pra dia 15 q eh quando ela recebe", "expected_params_hint": "subscriber_code=SUB77889, due_day=15"},
+        {"id": 5, "prompt_pt": "ajusta o dia de cobranca SUB11223 pro dia 1", "expected_params_hint": "subscriber_code=SUB11223, due_day=1"},
+        {"id": 6, "prompt_pt": "troca dia vencimento SUB66554 pra 25", "expected_params_hint": "subscriber_code=SUB66554, due_day=25"},
+        {"id": 7, "prompt_pt": "muda SUB223344 pra cobrar dia 8 todo mes", "expected_params_hint": "subscriber_code=SUB223344, due_day=8"},
+        {"id": 8, "prompt_pt": "altera vencimento da SUB987654 pra dia 28", "expected_params_hint": "subscriber_code=SUB987654, due_day=28"},
+        {"id": 9, "prompt_pt": "passa a cobranca da SUB445566 pra dia 12", "expected_params_hint": "subscriber_code=SUB445566, due_day=12"},
+        {"id": 10, "prompt_pt": "muda o due day da SUB778899 pra dia 3", "expected_params_hint": "subscriber_code=SUB778899, due_day=3"}
+      ]
+    },
+    {
+      "tool": "hotmart_event_info_get",
+      "variations": [
+        {"id": 1, "prompt_pt": "ve info do evento EVT12345", "expected_params_hint": "event_id=EVT12345"},
+        {"id": 2, "prompt_pt": "puxa detalhe do meu evento ao vivo id EV_LIVE01", "expected_params_hint": "event_id=EV_LIVE01"},
+        {"id": 3, "prompt_pt": "info do evento da imersao detox EVT_DTX22", "expected_params_hint": "event_id=EVT_DTX22"},
+        {"id": 4, "prompt_pt": "ve oq tem registrado no evento EVT_998877", "expected_params_hint": "event_id=EVT_998877"},
+        {"id": 5, "prompt_pt": "puxa dado do evento EVT77665544", "expected_params_hint": "event_id=EVT77665544"},
+        {"id": 6, "prompt_pt": "checa o evento de id EVT_001 pra ver hora e link", "expected_params_hint": "event_id=EVT_001"},
+        {"id": 7, "prompt_pt": "info EVT_marmita_live por favor", "expected_params_hint": "event_id=EVT_marmita_live"},
+        {"id": 8, "prompt_pt": "ve evento EVT_aula_bonus oq tem nele", "expected_params_hint": "event_id=EVT_aula_bonus"},
+        {"id": 9, "prompt_pt": "puxa info do evento EVT44556677 q eh o lancamento", "expected_params_hint": "event_id=EVT44556677"},
+        {"id": 10, "prompt_pt": "detalhes do evento EVT_lanc_nov pra mim", "expected_params_hint": "event_id=EVT_lanc_nov"}
+      ]
+    },
+    {
+      "tool": "hotmart_event_participants_list",
+      "variations": [
+        {"id": 1, "prompt_pt": "lista quem se inscreveu no evento EVT12345", "expected_params_hint": "event_id=EVT12345"},
+        {"id": 2, "prompt_pt": "quantas inscrita no meu evento EV_LIVE01?", "expected_params_hint": "event_id=EV_LIVE01"},
+        {"id": 3, "prompt_pt": "puxa participantes do evento EVT_DTX22 da imersao", "expected_params_hint": "event_id=EVT_DTX22"},
+        {"id": 4, "prompt_pt": "ve as pessoa inscrita no EVT_998877", "expected_params_hint": "event_id=EVT_998877"},
+        {"id": 5, "prompt_pt": "lista participante do EVT77665544 so nome e email", "expected_params_hint": "event_id=EVT77665544, select=name,email"},
+        {"id": 6, "prompt_pt": "quem ta inscrito no evento EVT_001?", "expected_params_hint": "event_id=EVT_001"},
+        {"id": 7, "prompt_pt": "puxa as 50 primeiras inscrita do EVT_marmita_live", "expected_params_hint": "event_id=EVT_marmita_live, max_results=50"},
+        {"id": 8, "prompt_pt": "lista participantes EVT_aula_bonus", "expected_params_hint": "event_id=EVT_aula_bonus"},
+        {"id": 9, "prompt_pt": "ve as inscrita no evento EVT44556677 do lancamento", "expected_params_hint": "event_id=EVT44556677"},
+        {"id": 10, "prompt_pt": "lista quem se inscreveu no EVT_lanc_nov e me da proxima pagina depois", "expected_params_hint": "event_id=EVT_lanc_nov + page_token"}
+      ]
+    }
+  ]
+}

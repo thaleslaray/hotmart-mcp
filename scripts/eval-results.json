@@ -1,0 +1,236 @@
+{
+  "version": "v0.2.0",
+  "judgments": [
+    {
+      "case_id": 1,
+      "prompt": "me mostra as vendas do último mês pra eu ver transação por transação",
+      "expected": "hotmart_sales_history_list",
+      "chosen": "hotmart_sales_history_list",
+      "correct": true,
+      "reasoning": "Description explicitly contrasts with summary for per-transaction details."
+    },
+    {
+      "case_id": 2,
+      "prompt": "quanto faturei esse ano? quero o total agregado, não o detalhe",
+      "expected": "hotmart_sales_summary_list",
+      "chosen": "hotmart_sales_summary_list",
+      "correct": true,
+      "reasoning": "Summary description mentions totals/counts; user explicitly wants aggregated."
+    },
+    {
+      "case_id": 3,
+      "prompt": "lista os compradores das minhas vendas recentes",
+      "expected": "hotmart_sales_participants_list",
+      "chosen": "hotmart_sales_participants_list",
+      "correct": true,
+      "reasoning": "Participants = buyers in sales context."
+    },
+    {
+      "case_id": 4,
+      "prompt": "quero ver as comissões que recebi como afiliado",
+      "expected": "hotmart_sales_commissions_list",
+      "chosen": "hotmart_sales_commissions_list",
+      "correct": true,
+      "reasoning": "Direct match: commissions."
+    },
+    {
+      "case_id": 5,
+      "prompt": "detalhe de preço (impostos, taxas) das últimas vendas",
+      "expected": "hotmart_sales_price_details_list",
+      "chosen": "hotmart_sales_price_details_list",
+      "correct": true,
+      "reasoning": "Price details directly matches."
+    },
+    {
+      "case_id": 6,
+      "prompt": "preciso estornar a venda com código HP2890253164",
+      "expected": "hotmart_sale_refund",
+      "chosen": "hotmart_sale_refund",
+      "correct": true,
+      "reasoning": "Refund = estorno."
+    },
+    {
+      "case_id": 7,
+      "prompt": "me lista todas as assinaturas ativas dos meus produtos",
+      "expected": "hotmart_subscriptions_list",
+      "chosen": "hotmart_subscriptions_list",
+      "correct": true,
+      "reasoning": "Listing subscriptions; description distinguishes from transactions."
+    },
+    {
+      "case_id": 8,
+      "prompt": "quantas assinaturas ativas eu tenho no total por status?",
+      "expected": "hotmart_subscriptions_summary_list",
+      "chosen": "hotmart_subscriptions_summary_list",
+      "correct": true,
+      "reasoning": "Summary fits 'quantas no total'."
+    },
+    {
+      "case_id": 9,
+      "prompt": "histórico de cobranças/pagamentos de assinatura — quero ver as transações",
+      "expected": "hotmart_subscription_transactions_list",
+      "chosen": "hotmart_subscription_transactions_list",
+      "correct": true,
+      "reasoning": "Transactions for charges/payments per description."
+    },
+    {
+      "case_id": 10,
+      "prompt": "as compras de um assinante específico — código VRWIQQRG",
+      "expected": "hotmart_subscriber_purchases_list",
+      "chosen": "hotmart_subscriber_purchases_list",
+      "correct": true,
+      "reasoning": "Subscriber purchases takes subscriber_code."
+    },
+    {
+      "case_id": 11,
+      "prompt": "cancela a assinatura VRWIQQRG agora",
+      "expected": "hotmart_subscription_cancel",
+      "chosen": "hotmart_subscription_cancel",
+      "correct": true,
+      "reasoning": "Single subscriber_code → singular cancel per description."
+    },
+    {
+      "case_id": 12,
+      "prompt": "cancela essas 50 assinaturas em lote: ABC, DEF, GHI...",
+      "expected": "hotmart_batch_subscriptions_cancel",
+      "chosen": "hotmart_batch_subscriptions_cancel",
+      "correct": true,
+      "reasoning": "Multiple codes → batch per description."
+    },
+    {
+      "case_id": 13,
+      "prompt": "reativa a assinatura VRWIQQRG",
+      "expected": "hotmart_subscription_reactivate",
+      "chosen": "hotmart_subscription_reactivate",
+      "correct": true,
+      "reasoning": "Single subscriber → singular reactivate."
+    },
+    {
+      "case_id": 14,
+      "prompt": "reativa essas 30 assinaturas todas de uma vez",
+      "expected": "hotmart_batch_subscriptions_reactivate",
+      "chosen": "hotmart_batch_subscriptions_reactivate",
+      "correct": true,
+      "reasoning": "Multiple at once → batch reactivate."
+    },
+    {
+      "case_id": 15,
+      "prompt": "muda o dia de vencimento da assinatura VRWIQQRG pra dia 10",
+      "expected": "hotmart_subscription_due_day_update",
+      "chosen": "hotmart_subscription_due_day_update",
+      "correct": true,
+      "reasoning": "Change due day matches dia de vencimento."
+    },
+    {
+      "case_id": 16,
+      "prompt": "quais módulos eu tenho na minha área de membros? subdomínio é afantasticafabricadasautomacoe",
+      "expected": "hotmart_modules_list",
+      "chosen": "hotmart_modules_list",
+      "correct": true,
+      "reasoning": "Lists module containers; description tells to use modules_list first."
+    },
+    {
+      "case_id": 17,
+      "prompt": "dentro do módulo 12345, me lista todas as páginas/aulas",
+      "expected": "hotmart_module_pages_list",
+      "chosen": "hotmart_module_pages_list",
+      "correct": true,
+      "reasoning": "Pages inside a module with module_id."
+    },
+    {
+      "case_id": 18,
+      "prompt": "quais alunos tenho cadastrados na área de membros?",
+      "expected": "hotmart_students_list",
+      "chosen": "hotmart_students_list",
+      "correct": true,
+      "reasoning": "Students list directly matches alunos."
+    },
+    {
+      "case_id": 19,
+      "prompt": "o aluno V7yQbq3z7J completou quais aulas?",
+      "expected": "hotmart_student_progress_get",
+      "chosen": "hotmart_student_progress_get",
+      "correct": true,
+      "reasoning": "Student progress takes user_id."
+    },
+    {
+      "case_id": 20,
+      "prompt": "me lista todos os produtos cadastrados na minha conta Hotmart",
+      "expected": "hotmart_products_list",
+      "chosen": "hotmart_products_list",
+      "correct": true,
+      "reasoning": "Products list direct match."
+    },
+    {
+      "case_id": 21,
+      "prompt": "quais ofertas (preços/condições) tem o produto 4168346?",
+      "expected": "hotmart_product_offers_list",
+      "chosen": "hotmart_product_offers_list",
+      "correct": true,
+      "reasoning": "Offers matches ofertas/preços."
+    },
+    {
+      "case_id": 22,
+      "prompt": "quais planos de assinatura existem pro produto 4168346?",
+      "expected": "hotmart_product_plans_list",
+      "chosen": "hotmart_product_plans_list",
+      "correct": true,
+      "reasoning": "Plans matches planos."
+    },
+    {
+      "case_id": 23,
+      "prompt": "cria um cupom de 10% pro produto 4168346 com código BLACKFRIDAY",
+      "expected": "hotmart_coupon_create",
+      "chosen": "hotmart_coupon_create",
+      "correct": true,
+      "reasoning": "Create coupon."
+    },
+    {
+      "case_id": 24,
+      "prompt": "lista os cupons ativos do produto 4168346",
+      "expected": "hotmart_coupons_list",
+      "chosen": "hotmart_coupons_list",
+      "correct": true,
+      "reasoning": "List coupons."
+    },
+    {
+      "case_id": 25,
+      "prompt": "apaga o cupom de id 99999",
+      "expected": "hotmart_coupon_delete",
+      "chosen": "hotmart_coupon_delete",
+      "correct": true,
+      "reasoning": "Delete coupon."
+    },
+    {
+      "case_id": 26,
+      "prompt": "informações do evento 5655136 — datas, lotes, etc",
+      "expected": "hotmart_event_info_get",
+      "chosen": "hotmart_event_info_get",
+      "correct": true,
+      "reasoning": "Event info for metadata."
+    },
+    {
+      "case_id": 27,
+      "prompt": "quem comprou ingresso pro evento 5655136?",
+      "expected": "hotmart_event_participants_list",
+      "chosen": "hotmart_event_participants_list",
+      "correct": true,
+      "reasoning": "Participants = ticket buyers."
+    },
+    {
+      "case_id": 28,
+      "prompt": "o aluno tá inadimplente — gera uma negociação parcelada pra ele",
+      "expected": "hotmart_negotiation_generate",
+      "chosen": "hotmart_negotiation_generate",
+      "correct": true,
+      "reasoning": "Generate negotiation direct match."
+    }
+  ],
+  "metrics": {
+    "total": 28,
+    "correct": 28,
+    "tool_hit_rate": 1.0,
+    "ambiguous_correct": 15,
+    "non_ambiguous_correct": 13
+  }
+}

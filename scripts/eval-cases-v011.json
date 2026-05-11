@@ -1,0 +1,314 @@
+{
+  "tools": [
+    {
+      "name": "get_modules",
+      "description": "Get Modules\n\nRetorna os módulos da área de membros.",
+      "module": "club"
+    },
+    {
+      "name": "get_module_pages",
+      "description": "Get Pages\n\nRetorna as páginas (aulas) de um módulo.",
+      "module": "club"
+    },
+    {
+      "name": "get_students",
+      "description": "Get Students\n\nRetorna os alunos da área de membros.",
+      "module": "club"
+    },
+    {
+      "name": "get_student_progress",
+      "description": "Get Student Progress\n\nRetorna o progresso de um aluno nas aulas.",
+      "module": "club"
+    },
+    {
+      "name": "create_coupon",
+      "description": "Create Coupon\n\nCria um cupom de desconto para um produto.",
+      "module": "coupons"
+    },
+    {
+      "name": "get_coupons",
+      "description": "Get Coupons\n\nRetorna os cupons de um produto.",
+      "module": "coupons"
+    },
+    {
+      "name": "delete_coupon",
+      "description": "Delete Coupon\n\nExclui um cupom de desconto.",
+      "module": "coupons"
+    },
+    {
+      "name": "generate_negotiation",
+      "description": "Generate Negotiation\n\nGera boleto ou PIX para parcelas de assinatura em atraso.",
+      "module": "negotiation"
+    },
+    {
+      "name": "list_products",
+      "description": "List Products\n\nRetorna a lista de produtos.",
+      "module": "products"
+    },
+    {
+      "name": "get_product_offers",
+      "description": "Get Product Offers\n\nRetorna as ofertas de um produto.",
+      "module": "products"
+    },
+    {
+      "name": "get_product_plans",
+      "description": "Get Product Plans\n\nRetorna os planos de assinatura de um produto.",
+      "module": "products"
+    },
+    {
+      "name": "get_sales_history",
+      "description": "Sales History\n\nRetorna o histórico de vendas. Sem os filtros transaction ou transaction_status, apenas vendas com status APPROVED e COMPLETE são retornadas.",
+      "module": "sales"
+    },
+    {
+      "name": "get_sales_summary",
+      "description": "Sales Summary\n\nRetorna o resumo das vendas.",
+      "module": "sales"
+    },
+    {
+      "name": "get_sales_participants",
+      "description": "Sales Participants\n\nRetorna os participantes de uma venda (produtor, afiliado, coprodutor).",
+      "module": "sales"
+    },
+    {
+      "name": "get_sales_commissions",
+      "description": "Sales Commissions\n\nRetorna as comissões de vendas.",
+      "module": "sales"
+    },
+    {
+      "name": "get_sales_price_details",
+      "description": "Sales Price Details\n\nRetorna os detalhes de preço das vendas. Sem os filtros transaction ou transaction_status, apenas vendas com status APPROVED e COMPLETE são retornadas.",
+      "module": "sales"
+    },
+    {
+      "name": "refund_sale",
+      "description": "Sales Refund\n\nRealiza o reembolso de uma venda. A venda deve estar com status APPROVED ou COMPLETE. Não disponível para trial, BACS ou SEPA. Janela de reembolso de 7 a 30 dias (máximo 60).",
+      "module": "sales"
+    },
+    {
+      "name": "get_subscriptions",
+      "description": "Get Subscriptions\n\nRetorna a lista de assinaturas.",
+      "module": "subscriptions"
+    },
+    {
+      "name": "get_subscriptions_summary",
+      "description": "Subscription Summary\n\nRetorna o resumo das assinaturas.",
+      "module": "subscriptions"
+    },
+    {
+      "name": "get_subscription_transactions",
+      "description": "Subscription Transactions\n\nRetorna as transações de assinatura. Dados com atraso de 24h. Por padrão retorna os últimos 30 dias.",
+      "module": "subscriptions"
+    },
+    {
+      "name": "get_subscriber_purchases",
+      "description": "Subscriber Purchases\n\nRetorna as compras de um assinante.",
+      "module": "subscriptions"
+    },
+    {
+      "name": "cancel_subscription",
+      "description": "Cancel Subscription\n\nCancela uma assinatura.",
+      "module": "subscriptions"
+    },
+    {
+      "name": "batch_cancel_subscriptions",
+      "description": "Batch Cancel Subscriptions\n\nCancela múltiplas assinaturas em lote.",
+      "module": "subscriptions"
+    },
+    {
+      "name": "reactivate_subscription",
+      "description": "Reactivate Subscription\n\nReativa uma assinatura. O assinante deve aceitar via link por e-mail (validade de 3 dias).",
+      "module": "subscriptions"
+    },
+    {
+      "name": "batch_reactivate_subscriptions",
+      "description": "Batch Reactivate Subscriptions\n\nReativa múltiplas assinaturas em lote.",
+      "module": "subscriptions"
+    },
+    {
+      "name": "change_subscription_due_day",
+      "description": "Change Due Day\n\nAltera o dia de vencimento de uma assinatura. Somente para assinaturas ACTIVE ou DELAYED. Não disponível para trial. O dia 31 será ajustado para 30 em meses mais curtos.",
+      "module": "subscriptions"
+    },
+    {
+      "name": "get_event_info",
+      "description": "Event Info\n\nRetorna informações de um evento.",
+      "module": "tickets"
+    },
+    {
+      "name": "get_event_participants",
+      "description": "Event Participants\n\nRetorna os participantes de um evento.",
+      "module": "tickets"
+    }
+  ],
+  "cases": [
+    {
+      "id": 1,
+      "prompt_pt": "me mostra as vendas do último mês pra eu ver transação por transação",
+      "expected_tool": "get_sales_history",
+      "ambiguous_alt": "get_sales_summary"
+    },
+    {
+      "id": 2,
+      "prompt_pt": "quanto faturei esse ano? quero o total agregado, não o detalhe",
+      "expected_tool": "get_sales_summary",
+      "ambiguous_alt": "get_sales_history"
+    },
+    {
+      "id": 3,
+      "prompt_pt": "lista os compradores das minhas vendas recentes",
+      "expected_tool": "get_sales_participants",
+      "ambiguous_alt": null
+    },
+    {
+      "id": 4,
+      "prompt_pt": "quero ver as comissões que recebi como afiliado",
+      "expected_tool": "get_sales_commissions",
+      "ambiguous_alt": null
+    },
+    {
+      "id": 5,
+      "prompt_pt": "detalhe de preço (impostos, taxas) das últimas vendas",
+      "expected_tool": "get_sales_price_details",
+      "ambiguous_alt": null
+    },
+    {
+      "id": 6,
+      "prompt_pt": "preciso estornar a venda com código HP2890253164",
+      "expected_tool": "refund_sale",
+      "ambiguous_alt": null
+    },
+    {
+      "id": 7,
+      "prompt_pt": "me lista todas as assinaturas ativas dos meus produtos",
+      "expected_tool": "get_subscriptions",
+      "ambiguous_alt": "get_subscriptions_summary"
+    },
+    {
+      "id": 8,
+      "prompt_pt": "quantas assinaturas ativas eu tenho no total por status?",
+      "expected_tool": "get_subscriptions_summary",
+      "ambiguous_alt": "get_subscriptions"
+    },
+    {
+      "id": 9,
+      "prompt_pt": "histórico de cobranças/pagamentos de assinatura — quero ver as transações",
+      "expected_tool": "get_subscription_transactions",
+      "ambiguous_alt": "get_subscriptions"
+    },
+    {
+      "id": 10,
+      "prompt_pt": "as compras de um assinante específico — código VRWIQQRG",
+      "expected_tool": "get_subscriber_purchases",
+      "ambiguous_alt": null
+    },
+    {
+      "id": 11,
+      "prompt_pt": "cancela a assinatura VRWIQQRG agora",
+      "expected_tool": "cancel_subscription",
+      "ambiguous_alt": "batch_cancel_subscriptions"
+    },
+    {
+      "id": 12,
+      "prompt_pt": "cancela essas 50 assinaturas em lote: ABC, DEF, GHI...",
+      "expected_tool": "batch_cancel_subscriptions",
+      "ambiguous_alt": "cancel_subscription"
+    },
+    {
+      "id": 13,
+      "prompt_pt": "reativa a assinatura VRWIQQRG",
+      "expected_tool": "reactivate_subscription",
+      "ambiguous_alt": "batch_reactivate_subscriptions"
+    },
+    {
+      "id": 14,
+      "prompt_pt": "reativa essas 30 assinaturas todas de uma vez",
+      "expected_tool": "batch_reactivate_subscriptions",
+      "ambiguous_alt": "reactivate_subscription"
+    },
+    {
+      "id": 15,
+      "prompt_pt": "muda o dia de vencimento da assinatura VRWIQQRG pra dia 10",
+      "expected_tool": "change_subscription_due_day",
+      "ambiguous_alt": null
+    },
+    {
+      "id": 16,
+      "prompt_pt": "quais módulos eu tenho na minha área de membros? subdomínio é afantasticafabricadasautomacoe",
+      "expected_tool": "get_modules",
+      "ambiguous_alt": "get_module_pages"
+    },
+    {
+      "id": 17,
+      "prompt_pt": "dentro do módulo 12345, me lista todas as páginas/aulas",
+      "expected_tool": "get_module_pages",
+      "ambiguous_alt": "get_modules"
+    },
+    {
+      "id": 18,
+      "prompt_pt": "quais alunos tenho cadastrados na área de membros?",
+      "expected_tool": "get_students",
+      "ambiguous_alt": null
+    },
+    {
+      "id": 19,
+      "prompt_pt": "o aluno V7yQbq3z7J completou quais aulas?",
+      "expected_tool": "get_student_progress",
+      "ambiguous_alt": null
+    },
+    {
+      "id": 20,
+      "prompt_pt": "me lista todos os produtos cadastrados na minha conta Hotmart",
+      "expected_tool": "list_products",
+      "ambiguous_alt": null
+    },
+    {
+      "id": 21,
+      "prompt_pt": "quais ofertas (preços/condições) tem o produto 4168346?",
+      "expected_tool": "get_product_offers",
+      "ambiguous_alt": "get_product_plans"
+    },
+    {
+      "id": 22,
+      "prompt_pt": "quais planos de assinatura existem pro produto 4168346?",
+      "expected_tool": "get_product_plans",
+      "ambiguous_alt": "get_product_offers"
+    },
+    {
+      "id": 23,
+      "prompt_pt": "cria um cupom de 10% pro produto 4168346 com código BLACKFRIDAY",
+      "expected_tool": "create_coupon",
+      "ambiguous_alt": null
+    },
+    {
+      "id": 24,
+      "prompt_pt": "lista os cupons ativos do produto 4168346",
+      "expected_tool": "get_coupons",
+      "ambiguous_alt": null
+    },
+    {
+      "id": 25,
+      "prompt_pt": "apaga o cupom de id 99999",
+      "expected_tool": "delete_coupon",
+      "ambiguous_alt": null
+    },
+    {
+      "id": 26,
+      "prompt_pt": "informações do evento 5655136 — datas, lotes, etc",
+      "expected_tool": "get_event_info",
+      "ambiguous_alt": "get_event_participants"
+    },
+    {
+      "id": 27,
+      "prompt_pt": "quem comprou ingresso pro evento 5655136?",
+      "expected_tool": "get_event_participants",
+      "ambiguous_alt": "get_event_info"
+    },
+    {
+      "id": 28,
+      "prompt_pt": "o aluno tá inadimplente — gera uma negociação parcelada pra ele",
+      "expected_tool": "generate_negotiation",
+      "ambiguous_alt": null
+    }
+  ]
+}

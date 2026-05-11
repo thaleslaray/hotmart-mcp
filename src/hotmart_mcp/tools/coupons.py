@@ -21,12 +21,12 @@ async def hotmart_coupon_create(
     
     Args:
         product_id: Product ID
-        code: Código do cupom (máximo 25 caracteres)
-        discount: Percentual de desconto (entre 0 e 0.99, exclusivo)
+        code: Coupon code (máximo 25 caracteres)
+        discount: Discount fraction (between 0 and 0.99 exclusive). **Fraction between 0 and 1** (NOT percent). Ex: `0.25` = 25% off. Pass `0.10` for 10%, NOT `10`.
         start_date: Validity start date. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
         end_date: Data de fim de validade. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
         affiliate: ID do afiliado
-        offer_ids: IDs das ofertas aplicáveis"""
+        offer_ids: IDs das ofertas aplicáveis. Pass a JSON array of integers, e.g. `[12345, 67890]`."""
     endpoint = f"/products/api/v1/product/{product_id}/coupon"
     body = {}
     body["code"] = code
@@ -53,7 +53,7 @@ async def hotmart_coupons_list(
     
     Args:
         product_id: Product ID
-        code: Código do cupom
+        code: Coupon code
         page_token: Pagination token for the next page
         select: Custom field selection in response"""
     endpoint = f"/products/api/v1/coupon/product/{product_id}"
@@ -74,7 +74,7 @@ async def hotmart_coupon_delete(
     """Delete Coupon. Example: hotmart_coupon_delete(coupon_id=12345).
     
     Args:
-        coupon_id: ID do cupom"""
+        coupon_id: Coupon ID"""
     endpoint = f"/products/api/v1/coupon/{coupon_id}"
     result = await get_client().delete(endpoint)
     return json.dumps(result, indent=2)

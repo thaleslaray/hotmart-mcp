@@ -19,10 +19,10 @@ async def hotmart_negotiation_generate(
     
     Args:
         subscription_id: ID da assinatura
-        recurrences: Números das recorrências em atraso (1 a 5 valores)
+        recurrences: Números das recorrências em atraso (1 a 5 valores). Pass a JSON array of integers, e.g. `[12345, 67890]`.
         payment_type: Payment type para a negociação. Allowed values: 'BOLETO', 'PIX'
-        discount: discount
-        document: CPF ou CNPJ do assinante (obrigatório para BOLETO)"""
+        discount: discount. **Fraction between 0 and 1** (NOT percent). Ex: `0.25` = 25% off. Pass `0.10` for 10%, NOT `10`.
+        document: Subscriber's CPF or CNPJ (required when payment_method is BILLET)"""
     endpoint = "/payments/api/v1/installments/negotiate"
     body = {}
     body["subscription_id"] = subscription_id

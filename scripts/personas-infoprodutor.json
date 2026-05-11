@@ -1,0 +1,95 @@
+{
+  "personas": [
+    {
+      "id": "A",
+      "name": "Bruna Fit Caseira",
+      "age": 27,
+      "niche": "Emagrecimento com receitas simples e rotina caseira",
+      "volume": {
+        "products": 2,
+        "monthly_revenue_brl": 18000,
+        "active_subs": 350
+      },
+      "vocabulary": [
+        "bombou",
+        "deu ruim",
+        "tá vendendo",
+        "criativo",
+        "oferta",
+        "direct",
+        "lead",
+        "copy",
+        "engajamento",
+        "pixel"
+      ],
+      "prompt_style": "Curto, direto, meio falado. Mistura dúvida com ansiedade. Pouco técnico, foco em resultado imediato. Costuma errar acentuação e concordância.",
+      "example_phrases": [
+        "quantas venda saiu hoje no curso de marmita?",
+        "qual anuncio tá bombando mais, o da salada ou o do detox?",
+        "deu ruim ontem? caiu muito as venda ou é impressão minha?"
+      ]
+    },
+    {
+      "id": "B",
+      "name": "Rafael Tráfego Pro",
+      "age": 34,
+      "niche": "Marketing digital — tráfego pago e funis de venda",
+      "volume": {
+        "products": 9,
+        "monthly_revenue_brl": 180000,
+        "active_subs": 2800
+      },
+      "vocabulary": [
+        "checkout",
+        "conversão",
+        "funil",
+        "afiliado",
+        "upsell",
+        "recorrência",
+        "ticket médio",
+        "ROI",
+        "lead qualificado",
+        "CPL",
+        "remarketing"
+      ],
+      "prompt_style": "Mistura técnico com prático. Já sabe o que quer puxar, pede comparações e otimização. Frases mais estruturadas, usa termos de marketing sem explicar.",
+      "example_phrases": [
+        "puxa o faturamento de ontem por produto e a taxa de conversão do checkout",
+        "qual afiliado trouxe mais vendas essa semana e com qual ticket médio?",
+        "minha recorrência caiu ou tá estável nos últimos 30 dias?"
+      ]
+    },
+    {
+      "id": "C",
+      "name": "Fernanda Growth Ops",
+      "age": 41,
+      "niche": "Mentorias B2B + educação em SaaS e trading quantitativo",
+      "volume": {
+        "products": 28,
+        "monthly_revenue_brl": 1200000,
+        "active_subs": 12000
+      },
+      "vocabulary": [
+        "LTV",
+        "CAC",
+        "churn",
+        "MRR",
+        "cohort",
+        "ARPU",
+        "GMV",
+        "payback",
+        "retention",
+        "pipeline",
+        "attribution",
+        "forecast"
+      ],
+      "prompt_style": "Data-driven, específico e estruturado. Linguagem quase de BI/analytics. Pede segmentação, tendência e contexto de decisão. Usa siglas sem traduzir.",
+      "example_phrases": [
+        "puxa o GMV de abril segmentado por cohort de aquisição e produto",
+        "qual o churn rate por plano nos últimos 90 dias e impacto no MRR?",
+        "me dá LTV/CAC por canal e destaca onde o payback passou de 60 dias"
+      ]
+    }
+  ],
+  "research_notes": "Estudo FGV+Hotmart 2025 indica renda média de ~R$12k/mês na creator economy brasileira, com formalizados (PJ) faturando 2x mais que informais. Hotmart Company ultrapassou US$10bi em GMV acumulado desde 2011, com nichos dominantes em saúde/emagrecimento, marketing digital, finanças/trading, idiomas e desenvolvimento pessoal. O mercado se estratifica claramente em três faixas: solo-operadores iniciantes (sub-R$50k/mês), operações com time pequeno e foco em performance (R$50-300k/mês), e operações maduras com BI/dashboards estruturados (R$300k-1M+/mês)."
+}

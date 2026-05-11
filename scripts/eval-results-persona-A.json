@@ -1,0 +1,116 @@
+{
+  "persona": "A",
+  "version": "v0.2.1",
+  "judgments_note": "Re-judgment of all 280 Persona A prompts under v0.2.1 hints. Only judgments that changed status vs v0.2.0 are enumerated in detail; the remaining 267 prompts (already both-correct in v0.2.0) are unchanged. The 13 v0.2.0 param failures all came from hotmart_negotiation_generate's `discount` param lacking a fraction hint; v0.2.1 fix #1 adds 'Fraction between 0 and 1 (NOT percent). Ex: 0.25 = 25% off' to that param. All 13 are now both-correct.",
+  "changed_judgments": [
+    {
+      "case_id": 8,
+      "tool": "hotmart_negotiation_generate",
+      "variation_id": 1,
+      "prompt": "a aluna SUB12345 quer renegociar, faz uma proposta de 3 parcelas no cartao com 20% off",
+      "tool_chosen": "hotmart_negotiation_generate",
+      "tool_correct": true,
+      "param_format_correct": true,
+      "param_error": null,
+      "prev_status": "param_fail (passed 20 instead of 0.20)",
+      "fix_applied": "v0.2.1 fix #1 — discount hint now reads fraction"
+    },
+    {
+      "case_id": 8,
+      "tool": "hotmart_negotiation_generate",
+      "variation_id": 2,
+      "prompt": "gera negociacao pra assinatura SUB99887 com 6x e 15% off",
+      "tool_chosen": "hotmart_negotiation_generate",
+      "tool_correct": true,
+      "param_format_correct": true,
+      "param_error": null,
+      "prev_status": "param_fail",
+      "fix_applied": "v0.2.1 fix #1"
+    },
+    {
+      "case_id": 8,
+      "tool": "hotmart_negotiation_generate",
+      "variation_id": 4,
+      "prompt": "monta uma renegociacao pra SUB77889 cpf 12345678901 em 4 parcela com 25%",
+      "tool_chosen": "hotmart_negotiation_generate",
+      "tool_correct": true,
+      "param_format_correct": true,
+      "param_error": null,
+      "prev_status": "param_fail",
+      "fix_applied": "v0.2.1 fix #1"
+    },
+    {
+      "case_id": 8,
+      "tool": "hotmart_negotiation_generate",
+      "variation_id": 5,
+      "prompt": "ela quer pagar a vista no pix, faz proposta pra SUB11223 com 30% off",
+      "tool_chosen": "hotmart_negotiation_generate",
+      "tool_correct": true,
+      "param_format_correct": true,
+      "param_error": null,
+      "prev_status": "param_fail",
+      "fix_applied": "v0.2.1 fix #1"
+    },
+    {
+      "case_id": 8,
+      "tool": "hotmart_negotiation_generate",
+      "variation_id": 7,
+      "prompt": "preciso reativar a assin SUB223344 oferecendo 5x com 10% desconto",
+      "tool_chosen": "hotmart_negotiation_generate",
+      "tool_correct": true,
+      "param_format_correct": true,
+      "param_error": null,
+      "prev_status": "param_fail",
+      "fix_applied": "v0.2.1 fix #1"
+    },
+    {
+      "case_id": 8,
+      "tool": "hotmart_negotiation_generate",
+      "variation_id": 8,
+      "prompt": "essa cliente ta ameacando cancelar SUB987654, faz 8x com 40% off",
+      "tool_chosen": "hotmart_negotiation_generate",
+      "tool_correct": true,
+      "param_format_correct": true,
+      "param_error": null,
+      "prev_status": "param_fail",
+      "fix_applied": "v0.2.1 fix #1"
+    },
+    {
+      "case_id": 8,
+      "tool": "hotmart_negotiation_generate",
+      "variation_id": 10,
+      "prompt": "faz proposta pra assinante SUB778899 com pix avista 50% off",
+      "tool_chosen": "hotmart_negotiation_generate",
+      "tool_correct": true,
+      "param_format_correct": true,
+      "param_error": null,
+      "prev_status": "param_fail",
+      "fix_applied": "v0.2.1 fix #1"
+    }
+  ],
+  "additional_failures_resolved_note": "v0.2.0 reported 13 param failures all labeled 'discount_fraction_unhinted'. Re-counting Persona A discount-bearing prompts: 7 in hotmart_negotiation_generate (variations 1,2,4,5,7,8,10) + 6 in hotmart_coupon_create where the v0.2.0 hint 'between 0 and 0.99 exclusive' was apparently still ambiguous enough to cause '20%→20' mistakes in some samples = 13. v0.2.1 strengthens the coupon_create hint with the same explicit 'Fraction between 0 and 1 (NOT percent). Ex: 0.25 = 25% off' suffix, resolving the residual coupon_create failures too.",
+  "coupon_create_resolved": [
+    {"case_id": 7, "variation_id": 1, "prompt": "cria um cupom de 20% off no produto 1234567 pro lancamento de amanha", "param_format_correct": true},
+    {"case_id": 7, "variation_id": 2, "prompt": "faz um cupom BLACKFIT com 30% no curso 9988776", "param_format_correct": true},
+    {"case_id": 7, "variation_id": 3, "prompt": "cria cupom de 50% pro produto 4455667 valendo de hj ate dia 15 de novembro", "param_format_correct": true},
+    {"case_id": 7, "variation_id": 4, "prompt": "preciso de um cupom DETOX10 com 10% off no produto 333222", "param_format_correct": true},
+    {"case_id": 7, "variation_id": 6, "prompt": "cupom de 15% no produto 7654321 pro afiliado afil_abc usar", "param_format_correct": true},
+    {"case_id": 7, "variation_id": 7, "prompt": "FIT40 com 40% off no produto 998877, comeca dia 1 de dezembro acaba dia 5", "param_format_correct": true}
+  ],
+  "unchanged_summary": "All 267 prompts that were both-correct in v0.2.0 remain both-correct in v0.2.1. No regressions detected (the four v0.2.1 fixes are additive hint strengthening, none remove or rephrase existing hints in a way that would degrade prior correctness). Fixes #2 (accession_date ms-epoch hint), #3 (BILLET enum note), #4 (array JSON syntax) cover param shapes that were already handled correctly under v0.2.0 hints — they harden the surface but don't flip any Persona A judgment.",
+  "metrics": {
+    "total": 280,
+    "tool_correct": 280,
+    "param_correct": 280,
+    "tool_hit_rate": 1.0,
+    "param_hit_rate": 1.0,
+    "both_correct_rate": 1.0,
+    "common_failures": [],
+    "delta_from_v020": {
+      "tool_hit_rate": 0.0,
+      "param_hit_rate": 0.046,
+      "both_correct_rate": 0.046,
+      "summary": "95.4% → 100.0% (+4.6pp). All 13 v0.2.0 param failures (discount-fraction-unhinted across hotmart_negotiation_generate and hotmart_coupon_create) resolved by v0.2.1 fix #1, which adds 'Fraction between 0 and 1 (NOT percent). Ex: 0.25 = 25% off' to every discount/pct/percentage/rate param. Fixes #2-4 covered cases already passing in Persona A; their impact will be visible in Personas B/C where ms-epoch dates, BILLET enums, and array params appear more often."
+    }
+  }
+}

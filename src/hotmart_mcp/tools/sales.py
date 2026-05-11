@@ -76,7 +76,8 @@ async def hotmart_sales_history_list(
           - `PICPAY`
           - `PIX`
           - `SAMSUNG_PAY`
-          - `WALLET`"""
+          - `WALLET`
+        Note: API uses English `'BILLET'` (NOT Portuguese `'BOLETO'`)."""
     endpoint = "/payments/api/v1/sales/history"
     params = {}
     if max_results is not None:
@@ -174,6 +175,7 @@ async def hotmart_sales_summary_list(
           - `PIX`
           - `SAMSUNG_PAY`
           - `WALLET`
+        Note: API uses English `'BILLET'` (NOT Portuguese `'BOLETO'`).
         offer_code: Offer code. Format: alphanumeric Hotmart code (ex: `H123A4B5`, not UUID, not int)
         select: Custom field selection in response"""
     endpoint = "/payments/api/v1/sales/summary"
@@ -410,6 +412,7 @@ async def hotmart_sales_price_details_list(
           - `PIX`
           - `SAMSUNG_PAY`
           - `WALLET`
+        Note: API uses English `'BILLET'` (NOT Portuguese `'BOLETO'`).
         select: Custom field selection in response"""
     endpoint = "/payments/api/v1/sales/price/details"
     params = {}

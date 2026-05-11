@@ -33,10 +33,10 @@ async def hotmart_subscriptions_list(
         max_results: Max results per page
         page_token: Pagination token for the next page
         product_id: Product ID
-        plan: Nomes dos planos
+        plan: Nomes dos planos. Pass a JSON array of strings, e.g. `['ABC123XY', 'DEF456ZW']`.
         plan_id: ID do plano
-        accession_date: Data de adesão inicial. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
-        end_accession_date: Data de adesão final. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        accession_date: Subscription start date (lower bound). Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        end_accession_date: Subscription start date (upper bound). Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
         status: Subscription status.
         Allowed values (case-sensitive, pass EXACTLY as listed):
           - `ACTIVE`
@@ -113,8 +113,8 @@ async def hotmart_subscriptions_summary_list(
         page_token: Pagination token for the next page
         product_id: Product ID
         subscriber_code: Subscriber code
-        accession_date: Data de adesão inicial
-        end_accession_date: Data de adesão final
+        accession_date: Subscription start date (lower bound). Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        end_accession_date: Subscription start date (upper bound). Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
         date_next_charge: Data da próxima cobrança. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
         select: Custom field selection in response"""
     endpoint = "/payments/api/v1/subscriptions/summary"
@@ -208,6 +208,7 @@ async def hotmart_subscription_transactions_list(
           - `PIX`
           - `SAMSUNG_PAY`
           - `WALLET`
+        Note: API uses English `'BILLET'` (NOT Portuguese `'BOLETO'`).
         subscriber_code: Subscriber code. Format: alphanumeric Hotmart code (ex: `H123A4B5`, not UUID, not int)
         select: Custom field selection in response"""
     endpoint = "/payments/api/v1/subscriptions/transactions"
@@ -284,7 +285,7 @@ async def hotmart_batch_subscriptions_cancel(
     """Batch Cancel Subscriptions. Use this for multiple subscriber_codes at once. For a single one, prefer `hotmart_subscription_cancel`.
     
     Args:
-        subscriber_code: Lista de códigos de assinantes
+        subscriber_code: List of subscriber codess. Pass a JSON array of strings, e.g. `['ABC123XY', 'DEF456ZW']`.
         send_mail: Enviar e-mail de notificação aos assinantes"""
     endpoint = "/payments/api/v1/subscriptions/cancel"
     body = {}
@@ -319,7 +320,7 @@ async def hotmart_batch_subscriptions_reactivate(
     """Batch Reactivate Subscriptions. Use this for multiple subscriber_codes at once. For a single one, prefer `hotmart_subscription_reactivate`.
     
     Args:
-        subscriber_code: Lista de códigos de assinantes
+        subscriber_code: List of subscriber codess. Pass a JSON array of strings, e.g. `['ABC123XY', 'DEF456ZW']`.
         charge: Cobrar imediatamente"""
     endpoint = "/payments/api/v1/subscriptions/reactivate"
     body = {}

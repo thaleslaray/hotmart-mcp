@@ -134,6 +134,19 @@ _PT_TO_EN: list[tuple[str, str]] = [
     ("ID do evento", "Event ID"),
     ("Chave da oferta", "Offer key"),
     ("E-mail", "Email"),
+    ("Data de adesão inicial", "Subscription start date (lower bound)"),
+    ("Data de adesão final", "Subscription start date (upper bound)"),
+    ("Data de adesão", "Subscription accession date"),
+    ("Percentual de desconto (entre 0 e 0.99, exclusivo)", "Discount fraction (between 0 and 0.99 exclusive)"),
+    ("Percentual de desconto", "Discount fraction"),
+    ("CPF ou CNPJ do assinante (obrigatório para BOLETO)", "Subscriber's CPF or CNPJ (required when payment_method is BILLET)"),
+    ("CPF ou CNPJ do assinante", "Subscriber's CPF or CNPJ"),
+    ("Lista de códigos de assinante", "List of subscriber codes"),
+    ("Códigos de assinante", "Subscriber codes"),
+    ("Código do cupom", "Coupon code"),
+    ("ID do cupom", "Coupon ID"),
+    ("Quantidade de parcelas", "Number of installments"),
+    ("Dia de vencimento", "Due day (1-31)"),
     ("(timestamp em milissegundos desde epoch)", ""),
     ("(timestamp em milissegundos)", ""),
     ("(timestamp ms)", ""),
@@ -145,6 +158,15 @@ def _translate_pt(desc: str) -> str:
     for pt, en in _PT_TO_EN:
         desc = desc.replace(pt, en)
     return desc.strip(" .,").strip()
+
+
+_DISCOUNT_HINT = (
+    "**Fraction between 0 and 1** (NOT percent). "
+    "Ex: `0.25` = 25% off. Pass `0.10` for 10%, NOT `10`."
+)
+_BILLET_NOTE = "Note: API uses English `'BILLET'` (NOT Portuguese `'BOLETO'`)."
+
+_DISCOUNT_PARAM_NAMES = {"discount", "pct", "percentage", "commission_pct", "rate"}
 
 
 def _enrich_param_description(
@@ -160,12 +182,30 @@ def _enrich_param_description(
     inputSchema.properties[].description.
     """
     desc = _translate_pt(base_desc.strip()) if base_desc else api_name
+    name_lower = api_name.lower()
 
     # --- date timestamps (ms) ---
-    is_date_name = any(h in api_name.lower() for h in _DATE_NAME_HINTS)
-    is_int64 = resolved_schema.get("type") == "integer" and resolved_schema.get("format") == "int64"
-    if (is_date_name and is_int64) or (is_date_name and "ms" in desc.lower()):
+    # Relaxed: trigger on name match + (int64 OR plain integer OR "ms" in desc).
+    # Some Hotmart endpoints omit `format: int64` for date fields (e.g. accession_date).
+    is_date_name = any(h in name_lower for h in _DATE_NAME_HINTS)
+    schema_type = resolved_schema.get("type")
+    is_integer = schema_type == "integer"
+    has_ms_hint = "ms" in desc.lower() or "milissegundos" in desc.lower() or "millisecond" in desc.lower()
+    if is_date_name and (is_integer or has_ms_hint):
         desc += f". {_DATE_EXAMPLE_HINT}"
+
+    # --- discount / percentage as fraction ---
+    if name_lower in _DISCOUNT_PARAM_NAMES:
+        desc += f". {_DISCOUNT_HINT}"
+
+    # --- batch arrays (lists of codes/IDs) ---
+    if schema_type == "array":
+        items = resolved_schema.get("items", {})
+        items_type = items.get("type", "string")
+        if items_type == "string":
+            desc += ". Pass a JSON array of strings, e.g. `['ABC123XY', 'DEF456ZW']`."
+        elif items_type == "integer":
+            desc += ". Pass a JSON array of integers, e.g. `[12345, 67890]`."
 
     # --- enums: inline if <=3 values, bullet list if more (case-sensitive warning) ---
     if enum_values:
@@ -175,6 +215,9 @@ def _enrich_param_description(
             desc += ".\n        Allowed values (case-sensitive, pass EXACTLY as listed):"
             for v in enum_values:
                 desc += f"\n          - `{v}`"
+        # Flag BILLET/BOLETO confusion explicitly
+        if "BILLET" in (enum_values or []):
+            desc += f"\n        {_BILLET_NOTE}"
 
     # --- code/id formats ---
     fmt = resolved_schema.get("format")

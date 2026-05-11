@@ -1,0 +1,1050 @@
+{
+  "tools": [
+    {
+      "name": "hotmart_modules_list",
+      "description": "Get Modules. Lists module containers only. To get pages inside a module, use `hotmart_module_pages_list` with the module_id.",
+      "params": [
+        {
+          "name": "subdomain",
+          "description": "Members area subdomain (the slug from `hotmart.com/club/<slug>` URL)"
+        },
+        {
+          "name": "is_extra",
+          "description": "Filtrar módulos extras"
+        },
+        {
+          "name": "select",
+          "description": "Custom field selection in response"
+        }
+      ],
+      "module": "club"
+    },
+    {
+      "name": "hotmart_module_pages_list",
+      "description": "Get Pages. Example: hotmart_module_pages_list(module_id='…'). Requires module_id from `hotmart_modules_list` first.",
+      "params": [
+        {
+          "name": "module_id",
+          "description": "Module ID"
+        },
+        {
+          "name": "subdomain",
+          "description": "Members area subdomain (the slug from `hotmart.com/club/<slug>` URL)"
+        },
+        {
+          "name": "select",
+          "description": "Custom field selection in response"
+        }
+      ],
+      "module": "club"
+    },
+    {
+      "name": "hotmart_students_list",
+      "description": "Get Students.",
+      "params": [
+        {
+          "name": "subdomain",
+          "description": "Members area subdomain (the slug from `hotmart.com/club/<slug>` URL)"
+        },
+        {
+          "name": "email",
+          "description": "Email do aluno"
+        },
+        {
+          "name": "select",
+          "description": "Custom field selection in response"
+        }
+      ],
+      "module": "club"
+    },
+    {
+      "name": "hotmart_student_progress_get",
+      "description": "Get Student Progress. Example: hotmart_student_progress_get(user_id='…').",
+      "params": [
+        {
+          "name": "user_id",
+          "description": "ID do aluno"
+        },
+        {
+          "name": "subdomain",
+          "description": "Members area subdomain (the slug from `hotmart.com/club/<slug>` URL)"
+        },
+        {
+          "name": "select",
+          "description": "Custom field selection in response"
+        }
+      ],
+      "module": "club"
+    },
+    {
+      "name": "hotmart_coupon_create",
+      "description": "Create Coupon. Example: hotmart_coupon_create(product_id=12345).",
+      "params": [
+        {
+          "name": "product_id",
+          "description": "Product ID"
+        },
+        {
+          "name": "code",
+          "description": "Coupon code (máximo 25 caracteres)"
+        },
+        {
+          "name": "discount",
+          "description": "Discount fraction (between 0 and 0.99 exclusive). **Fraction between 0 and 1** (NOT percent). Ex: `0.25` = 25% off. Pass `0.10` for 10%, NOT `10`."
+        },
+        {
+          "name": "start_date",
+          "description": "Validity start date. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+        },
+        {
+          "name": "end_date",
+          "description": "Data de fim de validade. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+        },
+        {
+          "name": "affiliate",
+          "description": "ID do afiliado"
+        },
+        {
+          "name": "offer_ids",
+          "description": "IDs das ofertas aplicáveis. Pass a JSON array of integers, e.g. `[12345, 67890]`."
+        }
+      ],
+      "module": "coupons"
+    },
+    {
+      "name": "hotmart_coupons_list",
+      "description": "Get Coupons. Example: hotmart_coupons_list(product_id=12345).",
+      "params": [
+        {
+          "name": "product_id",
+          "description": "Product ID"
+        },
+        {
+          "name": "code",
+          "description": "Coupon code"
+        },
+        {
+          "name": "page_token",
+          "description": "Pagination token for the next page"
+        },
+        {
+          "name": "select",
+          "description": "Custom field selection in response"
+        }
+      ],
+      "module": "coupons"
+    },
+    {
+      "name": "hotmart_coupon_delete",
+      "description": "Delete Coupon. Example: hotmart_coupon_delete(coupon_id=12345).",
+      "params": [
+        {
+          "name": "coupon_id",
+          "description": "Coupon ID"
+        }
+      ],
+      "module": "coupons"
+    },
+    {
+      "name": "hotmart_negotiation_generate",
+      "description": "Generate Negotiation.",
+      "params": [
+        {
+          "name": "subscription_id",
+          "description": "ID da assinatura"
+        },
+        {
+          "name": "recurrences",
+          "description": "Números das recorrências em atraso (1 a 5 valores). Pass a JSON array of integers, e.g. `[12345, 67890]`."
+        },
+        {
+          "name": "payment_type",
+          "description": "Payment type para a negociação. Allowed values: 'BOLETO', 'PIX'"
+        },
+        {
+          "name": "discount",
+          "description": "discount. **Fraction between 0 and 1** (NOT percent). Ex: `0.25` = 25% off. Pass `0.10` for 10%, NOT `10`."
+        },
+        {
+          "name": "document",
+          "description": "Subscriber's CPF or CNPJ (required when payment_method is BILLET)"
+        }
+      ],
+      "module": "negotiation"
+    },
+    {
+      "name": "hotmart_products_list",
+      "description": "List Products. Example: hotmart_products_list(max_results=10).",
+      "params": [
+        {
+          "name": "max_results",
+          "description": "Max results per page"
+        },
+        {
+          "name": "page_token",
+          "description": "Pagination token for the next page"
+        },
+        {
+          "name": "id_",
+          "description": "Product ID"
+        },
+        {
+          "name": "status",
+          "description": "Status do produto.\nAllowed values (case-sensitive, pass EXACTLY as listed):\n- `DRAFT`\n- `ACTIVE`\n- `PAUSED`\n- `NOT_APPROVED`\n- `IN_REVIEW`\n- `DELETED`\n- `CHANGES_PENDING_ON_PRODUCT`"
+        },
+        {
+          "name": "format_",
+          "description": "Formato do produto.\nAllowed values (case-sensitive, pass EXACTLY as listed):\n- `EBOOK`\n- `SOFTWARE`\n- `MOBILE_APPS`\n- `VIDEOS`\n- `AUDIOS`\n- `TEMPLATES`\n- `IMAGES`\n- `ONLINE_COURSE`\n- `SERIAL_CODES`\n- `ETICKET`\n- `ONLINE_SERVICE`\n- `ONLINE_EVENT`\n- `BUNDLE`\n- `COMMUNITY`"
+        },
+        {
+          "name": "select",
+          "description": "Custom field selection in response"
+        }
+      ],
+      "module": "products"
+    },
+    {
+      "name": "hotmart_product_offers_list",
+      "description": "Get Product Offers. Example: hotmart_product_offers_list(product_id=12345, max_results=10).",
+      "params": [
+        {
+          "name": "product_id",
+          "description": "Product ID"
+        },
+        {
+          "name": "max_results",
+          "description": "Max results per page"
+        },
+        {
+          "name": "page_token",
+          "description": "Pagination token for the next page"
+        },
+        {
+          "name": "offer_key",
+          "description": "Offer key"
+        },
+        {
+          "name": "select",
+          "description": "Custom field selection in response"
+        }
+      ],
+      "module": "products"
+    },
+    {
+      "name": "hotmart_product_plans_list",
+      "description": "Get Product Plans. Example: hotmart_product_plans_list(product_id=12345, max_results=10).",
+      "params": [
+        {
+          "name": "product_id",
+          "description": "Product ID"
+        },
+        {
+          "name": "max_results",
+          "description": "Max results per page"
+        },
+        {
+          "name": "page_token",
+          "description": "Pagination token for the next page"
+        },
+        {
+          "name": "id_",
+          "description": "ID do plano"
+        },
+        {
+          "name": "select",
+          "description": "Custom field selection in response"
+        }
+      ],
+      "module": "products"
+    },
+    {
+      "name": "hotmart_sales_history_list",
+      "description": "Sales History. Example: hotmart_sales_history_list(max_results=10). Don't use this for aggregated metrics — use `hotmart_sales_summary_list` for totals/counts.",
+      "params": [
+        {
+          "name": "max_results",
+          "description": "Max results per page"
+        },
+        {
+          "name": "page_token",
+          "description": "Pagination token for the next page"
+        },
+        {
+          "name": "product_id",
+          "description": "Product ID"
+        },
+        {
+          "name": "start_date",
+          "description": "Start date. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+        },
+        {
+          "name": "end_date",
+          "description": "End date. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+        },
+        {
+          "name": "sales_source",
+          "description": "Sale source"
+        },
+        {
+          "name": "transaction",
+          "description": "Transaction code"
+        },
+        {
+          "name": "select",
+          "description": "Custom field selection in response"
+        },
+        {
+          "name": "buyer_name",
+          "description": "Buyer name"
+        },
+        {
+          "name": "buyer_email",
+          "description": "Buyer email"
+        },
+        {
+          "name": "offer_code",
+          "description": "Offer code. Format: alphanumeric Hotmart code (ex: `H123A4B5`, not UUID, not int)"
+        },
+        {
+          "name": "commission_as",
+          "description": "Authenticated user's commission role. Allowed values: 'PRODUCER', 'COPRODUCER', 'AFFILIATE'"
+        },
+        {
+          "name": "transaction_status",
+          "description": "Transaction status.\nAllowed values (case-sensitive, pass EXACTLY as listed):\n- `APPROVED`\n- `BLOCKED`\n- `CANCELLED`\n- `CHARGEBACK`\n- `COMPLETE`\n- `EXPIRED`\n- `NO_FUNDS`\n- `OVERDUE`\n- `PARTIALLY_REFUNDED`\n- `PRE_ORDER`\n- `PRINTED_BILLET`\n- `PROCESSING_TRANSACTION`\n- `PROTESTED`\n- `REFUNDED`\n- `STARTED`\n- `UNDER_ANALISYS`\n- `WAITING_PAYMENT`"
+        },
+        {
+          "name": "payment_type",
+          "description": "Payment type.\nAllowed values (case-sensitive, pass EXACTLY as listed):\n- `BILLET`\n- `CASH_PAYMENT`\n- `CREDIT_CARD`\n- `DIRECT_BANK_TRANSFER`\n- `DIRECT_DEBIT`\n- `FINANCED_BILLET`\n- `FINANCED_INSTALLMENT`\n- `GOOGLE_PAY`\n- `HOTCARD`\n- `HYBRID`\n- `MANUAL_TRANSFER`\n- `PAYPAL`\n- `PAYPAL_INTERNACIONAL`\n- `PICPAY`\n- `PIX`\n- `SAMSUNG_PAY`\n- `WALLET`"
+        }
+      ],
+      "module": "sales"
+    },
+    {
+      "name": "hotmart_sales_summary_list",
+      "description": "Sales Summary. Example: hotmart_sales_summary_list(transaction_status='APPROVED'). Don't use this for per-transaction details — use `hotmart_sales_history_list` for the raw list.",
+      "params": [
+        {
+          "name": "transaction",
+          "description": "Transaction code"
+        },
+        {
+          "name": "transaction_status",
+          "description": "Transaction status.\nAllowed values (case-sensitive, pass EXACTLY as listed):\n- `APPROVED`\n- `BLOCKED`\n- `CANCELLED`\n- `CHARGEBACK`\n- `COMPLETE`\n- `EXPIRED`\n- `NO_FUNDS`\n- `OVERDUE`\n- `PARTIALLY_REFUNDED`\n- `PRE_ORDER`\n- `PRINTED_BILLET`\n- `PROCESSING_TRANSACTION`\n- `PROTESTED`\n- `REFUNDED`\n- `STARTED`\n- `UNDER_ANALISYS`\n- `WAITING_PAYMENT`"
+        },
+        {
+          "name": "max_results",
+          "description": "Max results per page"
+        },
+        {
+          "name": "page_token",
+          "description": "Pagination token for the next page"
+        },
+        {
+          "name": "product_id",
+          "description": "Product ID"
+        },
+        {
+          "name": "start_date",
+          "description": "Start date. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+        },
+        {
+          "name": "end_date",
+          "description": "End date. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+        },
+        {
+          "name": "sales_source",
+          "description": "Sale source"
+        },
+        {
+          "name": "affiliate_name",
+          "description": "Nome do afiliado"
+        },
+        {
+          "name": "payment_type",
+          "description": "Payment type.\nAllowed values (case-sensitive, pass EXACTLY as listed):\n- `BILLET`\n- `CASH_PAYMENT`\n- `CREDIT_CARD`\n- `DIRECT_BANK_TRANSFER`\n- `DIRECT_DEBIT`\n- `FINANCED_BILLET`\n- `FINANCED_INSTALLMENT`\n- `GOOGLE_PAY`\n- `HOTCARD`\n- `HYBRID`\n- `MANUAL_TRANSFER`\n- `PAYPAL`\n- `PAYPAL_INTERNACIONAL`\n- `PICPAY`\n- `PIX`\n- `SAMSUNG_PAY`\n- `WALLET`"
+        },
+        {
+          "name": "offer_code",
+          "description": "Offer code. Format: alphanumeric Hotmart code (ex: `H123A4B5`, not UUID, not int)"
+        },
+        {
+          "name": "select",
+          "description": "Custom field selection in response"
+        }
+      ],
+      "module": "sales"
+    },
+    {
+      "name": "hotmart_sales_participants_list",
+      "description": "Sales Participants. Example: hotmart_sales_participants_list(transaction_status='APPROVED').",
+      "params": [
+        {
+          "name": "transaction",
+          "description": "Transaction code"
+        },
+        {
+          "name": "transaction_status",
+          "description": "Transaction status.\nAllowed values (case-sensitive, pass EXACTLY as listed):\n- `APPROVED`\n- `BLOCKED`\n- `CANCELLED`\n- `CHARGEBACK`\n- `COMPLETE`\n- `EXPIRED`\n- `NO_FUNDS`\n- `OVERDUE`\n- `PARTIALLY_REFUNDED`\n- `PRE_ORDER`\n- `PRINTED_BILLET`\n- `PROCESSING_TRANSACTION`\n- `PROTESTED`\n- `REFUNDED`\n- `STARTED`\n- `UNDER_ANALISYS`\n- `WAITING_PAYMENT`"
+        },
+        {
+          "name": "max_results",
+          "description": "Max results per page"
+        },
+        {
+          "name": "page_token",
+          "description": "Pagination token for the next page"
+        },
+        {
+          "name": "product_id",
+          "description": "Product ID"
+        },
+        {
+          "name": "start_date",
+          "description": "Start date. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+        },
+        {
+          "name": "end_date",
+          "description": "End date. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+        },
+        {
+          "name": "buyer_email",
+          "description": "Buyer email"
+        },
+        {
+          "name": "sales_source",
+          "description": "Sale source"
+        },
+        {
+          "name": "buyer_name",
+          "description": "Buyer name"
+        },
+        {
+          "name": "affiliate_name",
+          "description": "Nome do afiliado"
+        },
+        {
+          "name": "commission_as",
+          "description": "Authenticated user's commission role. Allowed values: 'PRODUCER', 'COPRODUCER', 'AFFILIATE'"
+        },
+        {
+          "name": "select",
+          "description": "Custom field selection in response"
+        }
+      ],
+      "module": "sales"
+    },
+    {
+      "name": "hotmart_sales_commissions_list",
+      "description": "Sales Commissions. Example: hotmart_sales_commissions_list(max_results=10).",
+      "params": [
+        {
+          "name": "max_results",
+          "description": "Max results per page"
+        },
+        {
+          "name": "page_token",
+          "description": "Pagination token for the next page"
+        },
+        {
+          "name": "product_id",
+          "description": "Product ID"
+        },
+        {
+          "name": "start_date",
+          "description": "Start date. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+        },
+        {
+          "name": "end_date",
+          "description": "End date. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+        },
+        {
+          "name": "transaction",
+          "description": "Transaction code"
+        },
+        {
+          "name": "commission_as",
+          "description": "Authenticated user's commission role. Allowed values: 'PRODUCER', 'COPRODUCER', 'AFFILIATE'"
+        },
+        {
+          "name": "transaction_status",
+          "description": "Transaction status.\nAllowed values (case-sensitive, pass EXACTLY as listed):\n- `APPROVED`\n- `BLOCKED`\n- `CANCELLED`\n- `CHARGEBACK`\n- `COMPLETE`\n- `EXPIRED`\n- `NO_FUNDS`\n- `OVERDUE`\n- `PARTIALLY_REFUNDED`\n- `PRE_ORDER`\n- `PRINTED_BILLET`\n- `PROCESSING_TRANSACTION`\n- `PROTESTED`\n- `REFUNDED`\n- `STARTED`\n- `UNDER_ANALISYS`\n- `WAITING_PAYMENT`"
+        },
+        {
+          "name": "select",
+          "description": "Custom field selection in response"
+        }
+      ],
+      "module": "sales"
+    },
+    {
+      "name": "hotmart_sales_price_details_list",
+      "description": "Sales Price Details. Example: hotmart_sales_price_details_list(transaction_status='APPROVED').",
+      "params": [
+        {
+          "name": "transaction",
+          "description": "Transaction code"
+        },
+        {
+          "name": "transaction_status",
+          "description": "Transaction status.\nAllowed values (case-sensitive, pass EXACTLY as listed):\n- `APPROVED`\n- `BLOCKED`\n- `CANCELLED`\n- `CHARGEBACK`\n- `COMPLETE`\n- `EXPIRED`\n- `NO_FUNDS`\n- `OVERDUE`\n- `PARTIALLY_REFUNDED`\n- `PRE_ORDER`\n- `PRINTED_BILLET`\n- `PROCESSING_TRANSACTION`\n- `PROTESTED`\n- `REFUNDED`\n- `STARTED`\n- `UNDER_ANALISYS`\n- `WAITING_PAYMENT`"
+        },
+        {
+          "name": "max_results",
+          "description": "Max results per page"
+        },
+        {
+          "name": "page_token",
+          "description": "Pagination token for the next page"
+        },
+        {
+          "name": "product_id",
+          "description": "Product ID"
+        },
+        {
+          "name": "start_date",
+          "description": "Start date. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+        },
+        {
+          "name": "end_date",
+          "description": "End date. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+        },
+        {
+          "name": "payment_type",
+          "description": "Payment type.\nAllowed values (case-sensitive, pass EXACTLY as listed):\n- `BILLET`\n- `CASH_PAYMENT`\n- `CREDIT_CARD`\n- `DIRECT_BANK_TRANSFER`\n- `DIRECT_DEBIT`\n- `FINANCED_BILLET`\n- `FINANCED_INSTALLMENT`\n- `GOOGLE_PAY`\n- `HOTCARD`\n- `HYBRID`\n- `MANUAL_TRANSFER`\n- `PAYPAL`\n- `PAYPAL_INTERNACIONAL`\n- `PICPAY`\n- `PIX`\n- `SAMSUNG_PAY`\n- `WALLET`"
+        },
+        {
+          "name": "select",
+          "description": "Custom field selection in response"
+        }
+      ],
+      "module": "sales"
+    },
+    {
+      "name": "hotmart_sale_refund",
+      "description": "Sales Refund. Example: hotmart_sale_refund(transaction_code='ABC123XY').",
+      "params": [
+        {
+          "name": "transaction_code",
+          "description": "Transaction code. Format: alphanumeric Hotmart code (ex: `H123A4B5`, not UUID, not int)"
+        }
+      ],
+      "module": "sales"
+    },
+    {
+      "name": "hotmart_subscriptions_list",
+      "description": "Get Subscriptions. Example: hotmart_subscriptions_list(max_results=10). Don't use this for payment events — use `hotmart_subscription_transactions_list` for charges/refunds per subscription.",
+      "params": [
+        {
+          "name": "max_results",
+          "description": "Max results per page"
+        },
+        {
+          "name": "page_token",
+          "description": "Pagination token for the next page"
+        },
+        {
+          "name": "product_id",
+          "description": "Product ID"
+        },
+        {
+          "name": "plan",
+          "description": "Nomes dos planos. Pass a JSON array of strings, e.g. `['ABC123XY', 'DEF456ZW']`."
+        },
+        {
+          "name": "plan_id",
+          "description": "ID do plano"
+        },
+        {
+          "name": "accession_date",
+          "description": "Subscription start date (lower bound). Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+        },
+        {
+          "name": "end_accession_date",
+          "description": "Subscription start date (upper bound). Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+        },
+        {
+          "name": "status",
+          "description": "Subscription status.\nAllowed values (case-sensitive, pass EXACTLY as listed):\n- `ACTIVE`\n- `INACTIVE`\n- `DELAYED`\n- `CANCELLED_BY_CUSTOMER`\n- `CANCELLED_BY_SELLER`\n- `CANCELLED_BY_ADMIN`\n- `STARTED`\n- `OVERDUE`"
+        },
+        {
+          "name": "subscriber_code",
+          "description": "Subscriber code. Format: alphanumeric Hotmart code (ex: `H123A4B5`, not UUID, not int)"
+        },
+        {
+          "name": "subscriber_email",
+          "description": "Email do assinante"
+        },
+        {
+          "name": "transaction",
+          "description": "Transaction code"
+        },
+        {
+          "name": "trial",
+          "description": "Filtrar por trial"
+        },
+        {
+          "name": "cancelation_date",
+          "description": "Data de cancelamento inicial. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+        },
+        {
+          "name": "end_cancelation_date",
+          "description": "Data de cancelamento final. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+        },
+        {
+          "name": "date_next_charge",
+          "description": "Data da próxima cobrança inicial. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+        },
+        {
+          "name": "end_date_next_charge",
+          "description": "Data da próxima cobrança final. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+        },
+        {
+          "name": "select",
+          "description": "Custom field selection in response"
+        }
+      ],
+      "module": "subscriptions"
+    },
+    {
+      "name": "hotmart_subscriptions_summary_list",
+      "description": "Subscription Summary. Example: hotmart_subscriptions_summary_list(max_results=10).",
+      "params": [
+        {
+          "name": "max_results",
+          "description": "Max results per page"
+        },
+        {
+          "name": "page_token",
+          "description": "Pagination token for the next page"
+        },
+        {
+          "name": "product_id",
+          "description": "Product ID"
+        },
+        {
+          "name": "subscriber_code",
+          "description": "Subscriber code"
+        },
+        {
+          "name": "accession_date",
+          "description": "Subscription start date (lower bound). Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+        },
+        {
+          "name": "end_accession_date",
+          "description": "Subscription start date (upper bound). Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+        },
+        {
+          "name": "date_next_charge",
+          "description": "Data da próxima cobrança. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+        },
+        {
+          "name": "select",
+          "description": "Custom field selection in response"
+        }
+      ],
+      "module": "subscriptions"
+    },
+    {
+      "name": "hotmart_subscription_transactions_list",
+      "description": "Subscription Transactions. Example: hotmart_subscription_transactions_list(max_results=10). Don't use this for the subscription list itself — use `hotmart_subscriptions_list`.",
+      "params": [
+        {
+          "name": "max_results",
+          "description": "Max results per page"
+        },
+        {
+          "name": "page_token",
+          "description": "Pagination token for the next page"
+        },
+        {
+          "name": "product_id",
+          "description": "Product ID"
+        },
+        {
+          "name": "transaction",
+          "description": "Transaction code"
+        },
+        {
+          "name": "subscriber_name",
+          "description": "Nome do assinante"
+        },
+        {
+          "name": "subscriber_email",
+          "description": "Email do assinante"
+        },
+        {
+          "name": "billing_type",
+          "description": "Tipo de cobrança. Allowed values: 'SUBSCRIPTION', 'SMART_INSTALLMENT', 'SMART_RECOVERY'"
+        },
+        {
+          "name": "subscription_status",
+          "description": "Subscription status.\nAllowed values (case-sensitive, pass EXACTLY as listed):\n- `STARTED`\n- `INACTIVE`\n- `ACTIVE`\n- `DELAYED`\n- `CANCELLED`\n- `CANCELLED_BY_ADMIN`\n- `CANCELLED_BY_CUSTOMER`\n- `CANCELLED_BY_SELLER`\n- `OVERDUE`"
+        },
+        {
+          "name": "recurrency_status",
+          "description": "Status da recorrência.\nAllowed values (case-sensitive, pass EXACTLY as listed):\n- `PAID`\n- `NOT_PAID`\n- `CLAIMED`\n- `REFUNDED`\n- `CHARGEBACK`"
+        },
+        {
+          "name": "purchase_status",
+          "description": "Status da compra"
+        },
+        {
+          "name": "transaction_date",
+          "description": "Data da transação inicial. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+        },
+        {
+          "name": "end_transaction_date",
+          "description": "Data da transação final. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+        },
+        {
+          "name": "offer_code",
+          "description": "Offer code. Format: alphanumeric Hotmart code (ex: `H123A4B5`, not UUID, not int)"
+        },
+        {
+          "name": "purchase_payment_type",
+          "description": "Payment type da compra.\nAllowed values (case-sensitive, pass EXACTLY as listed):\n- `BILLET`\n- `CASH_PAYMENT`\n- `CREDIT_CARD`\n- `DIRECT_BANK_TRANSFER`\n- `DIRECT_DEBIT`\n- `FINANCED_BILLET`\n- `FINANCED_INSTALLMENT`\n- `GOOGLE_PAY`\n- `HOTCARD`\n- `HYBRID`\n- `MANUAL_TRANSFER`\n- `PAYPAL`\n- `PAYPAL_INTERNACIONAL`\n- `PICPAY`\n- `PIX`\n- `SAMSUNG_PAY`\n- `WALLET`"
+        },
+        {
+          "name": "subscriber_code",
+          "description": "Subscriber code. Format: alphanumeric Hotmart code (ex: `H123A4B5`, not UUID, not int)"
+        },
+        {
+          "name": "select",
+          "description": "Custom field selection in response"
+        }
+      ],
+      "module": "subscriptions"
+    },
+    {
+      "name": "hotmart_subscriber_purchases_list",
+      "description": "Subscriber Purchases. Example: hotmart_subscriber_purchases_list(subscriber_code='ABC123XY').",
+      "params": [
+        {
+          "name": "subscriber_code",
+          "description": "Subscriber code. Format: alphanumeric Hotmart code (ex: `H123A4B5`, not UUID, not int)"
+        }
+      ],
+      "module": "subscriptions"
+    },
+    {
+      "name": "hotmart_subscription_cancel",
+      "description": "Cancel Subscription. Example: hotmart_subscription_cancel(subscriber_code='ABC123XY'). Use this for ONE subscriber_code. For 2+ subscriptions, use `hotmart_batch_subscriptions_cancel`.",
+      "params": [
+        {
+          "name": "subscriber_code",
+          "description": "Subscriber code. Format: alphanumeric Hotmart code (ex: `H123A4B5`, not UUID, not int)"
+        },
+        {
+          "name": "send_mail",
+          "description": "Enviar e-mail de notificação ao assinante"
+        }
+      ],
+      "module": "subscriptions"
+    },
+    {
+      "name": "hotmart_batch_subscriptions_cancel",
+      "description": "Batch Cancel Subscriptions. Use this for multiple subscriber_codes at once. For a single one, prefer `hotmart_subscription_cancel`.",
+      "params": [
+        {
+          "name": "subscriber_code",
+          "description": "List of subscriber codess. Pass a JSON array of strings, e.g. `['ABC123XY', 'DEF456ZW']`."
+        },
+        {
+          "name": "send_mail",
+          "description": "Enviar e-mail de notificação aos assinantes"
+        }
+      ],
+      "module": "subscriptions"
+    },
+    {
+      "name": "hotmart_subscription_reactivate",
+      "description": "Reactivate Subscription. Example: hotmart_subscription_reactivate(subscriber_code='ABC123XY'). Use this for ONE subscriber_code. For 2+, use `hotmart_batch_subscriptions_reactivate`.",
+      "params": [
+        {
+          "name": "subscriber_code",
+          "description": "Subscriber code. Format: alphanumeric Hotmart code (ex: `H123A4B5`, not UUID, not int)"
+        },
+        {
+          "name": "charge",
+          "description": "Cobrar imediatamente"
+        }
+      ],
+      "module": "subscriptions"
+    },
+    {
+      "name": "hotmart_batch_subscriptions_reactivate",
+      "description": "Batch Reactivate Subscriptions. Use this for multiple subscriber_codes at once. For a single one, prefer `hotmart_subscription_reactivate`.",
+      "params": [
+        {
+          "name": "subscriber_code",
+          "description": "List of subscriber codess. Pass a JSON array of strings, e.g. `['ABC123XY', 'DEF456ZW']`."
+        },
+        {
+          "name": "charge",
+          "description": "Cobrar imediatamente"
+        }
+      ],
+      "module": "subscriptions"
+    },
+    {
+      "name": "hotmart_subscription_due_day_update",
+      "description": "Change Due Day. Example: hotmart_subscription_due_day_update(subscriber_code='ABC123XY').",
+      "params": [
+        {
+          "name": "subscriber_code",
+          "description": "Subscriber code. Format: alphanumeric Hotmart code (ex: `H123A4B5`, not UUID, not int)"
+        },
+        {
+          "name": "due_day",
+          "description": "Novo dia de vencimento (1-31)"
+        }
+      ],
+      "module": "subscriptions"
+    },
+    {
+      "name": "hotmart_event_info_get",
+      "description": "Event Info. Example: hotmart_event_info_get(event_id=12345).",
+      "params": [
+        {
+          "name": "event_id",
+          "description": "Event ID"
+        },
+        {
+          "name": "select",
+          "description": "Custom field selection in response"
+        }
+      ],
+      "module": "tickets"
+    },
+    {
+      "name": "hotmart_event_participants_list",
+      "description": "Event Participants. Example: hotmart_event_participants_list(event_id=12345, max_results=10).",
+      "params": [
+        {
+          "name": "event_id",
+          "description": "Event ID"
+        },
+        {
+          "name": "max_results",
+          "description": "Max results per page"
+        },
+        {
+          "name": "page_token",
+          "description": "Pagination token for the next page"
+        },
+        {
+          "name": "buyer_email",
+          "description": "Buyer email"
+        },
+        {
+          "name": "participant_email",
+          "description": "Email do participante"
+        },
+        {
+          "name": "last_update",
+          "description": "Última atualização. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+        },
+        {
+          "name": "id_lot",
+          "description": "ID do lote"
+        },
+        {
+          "name": "ticket_status",
+          "description": "Status do ingresso.\nAllowed values (case-sensitive, pass EXACTLY as listed):\n- `SOLD`\n- `INVITE`\n- `INVITE_CANCELED`\n- `REFUNDED`\n- `CHARGEBACK`\n- `EXCLUDED`\n- `AVAILABLE`\n- `RESERVED`"
+        },
+        {
+          "name": "ticket_type",
+          "description": "Tipo do ingresso. Allowed values: 'PAID', 'FREE', 'ALL'"
+        },
+        {
+          "name": "checkin_status",
+          "description": "Status do check-in.\nAllowed values (case-sensitive, pass EXACTLY as listed):\n- `PENDING`\n- `PARTIAL`\n- `CONCLUDED`\n- `ALL`"
+        },
+        {
+          "name": "id_eticket",
+          "description": "ID do e-ticket"
+        },
+        {
+          "name": "ticket_qr_code",
+          "description": "QR code do ingresso. Format: alphanumeric Hotmart code (ex: `H123A4B5`, not UUID, not int)"
+        },
+        {
+          "name": "select",
+          "description": "Custom field selection in response"
+        }
+      ],
+      "module": "tickets"
+    }
+  ],
+  "cases": [
+    {
+      "id": 1,
+      "prompt_pt": "me mostra as vendas do último mês pra eu ver transação por transação",
+      "expected_tool": "hotmart_sales_history_list",
+      "ambiguous_alt": "hotmart_sales_summary_list"
+    },
+    {
+      "id": 2,
+      "prompt_pt": "quanto faturei esse ano? quero o total agregado, não o detalhe",
+      "expected_tool": "hotmart_sales_summary_list",
+      "ambiguous_alt": "hotmart_sales_history_list"
+    },
+    {
+      "id": 3,
+      "prompt_pt": "lista os compradores das minhas vendas recentes",
+      "expected_tool": "hotmart_sales_participants_list",
+      "ambiguous_alt": null
+    },
+    {
+      "id": 4,
+      "prompt_pt": "quero ver as comissões que recebi como afiliado",
+      "expected_tool": "hotmart_sales_commissions_list",
+      "ambiguous_alt": null
+    },
+    {
+      "id": 5,
+      "prompt_pt": "detalhe de preço (impostos, taxas) das últimas vendas",
+      "expected_tool": "hotmart_sales_price_details_list",
+      "ambiguous_alt": null
+    },
+    {
+      "id": 6,
+      "prompt_pt": "preciso estornar a venda com código HP2890253164",
+      "expected_tool": "hotmart_sale_refund",
+      "ambiguous_alt": null
+    },
+    {
+      "id": 7,
+      "prompt_pt": "me lista todas as assinaturas ativas dos meus produtos",
+      "expected_tool": "hotmart_subscriptions_list",
+      "ambiguous_alt": "hotmart_subscriptions_summary_list"
+    },
+    {
+      "id": 8,
+      "prompt_pt": "quantas assinaturas ativas eu tenho no total por status?",
+      "expected_tool": "hotmart_subscriptions_summary_list",
+      "ambiguous_alt": "hotmart_subscriptions_list"
+    },
+    {
+      "id": 9,
+      "prompt_pt": "histórico de cobranças/pagamentos de assinatura — quero ver as transações",
+      "expected_tool": "hotmart_subscription_transactions_list",
+      "ambiguous_alt": "hotmart_subscriptions_list"
+    },
+    {
+      "id": 10,
+      "prompt_pt": "as compras de um assinante específico — código VRWIQQRG",
+      "expected_tool": "hotmart_subscriber_purchases_list",
+      "ambiguous_alt": null
+    },
+    {
+      "id": 11,
+      "prompt_pt": "cancela a assinatura VRWIQQRG agora",
+      "expected_tool": "hotmart_subscription_cancel",
+      "ambiguous_alt": "hotmart_batch_subscriptions_cancel"
+    },
+    {
+      "id": 12,
+      "prompt_pt": "cancela essas 50 assinaturas em lote: ABC, DEF, GHI...",
+      "expected_tool": "hotmart_batch_subscriptions_cancel",
+      "ambiguous_alt": "hotmart_subscription_cancel"
+    },
+    {
+      "id": 13,
+      "prompt_pt": "reativa a assinatura VRWIQQRG",
+      "expected_tool": "hotmart_subscription_reactivate",
+      "ambiguous_alt": "hotmart_batch_subscriptions_reactivate"
+    },
+    {
+      "id": 14,
+      "prompt_pt": "reativa essas 30 assinaturas todas de uma vez",
+      "expected_tool": "hotmart_batch_subscriptions_reactivate",
+      "ambiguous_alt": "hotmart_subscription_reactivate"
+    },
+    {
+      "id": 15,
+      "prompt_pt": "muda o dia de vencimento da assinatura VRWIQQRG pra dia 10",
+      "expected_tool": "hotmart_subscription_due_day_update",
+      "ambiguous_alt": null
+    },
+    {
+      "id": 16,
+      "prompt_pt": "quais módulos eu tenho na minha área de membros? subdomínio é afantasticafabricadasautomacoe",
+      "expected_tool": "hotmart_modules_list",
+      "ambiguous_alt": "hotmart_module_pages_list"
+    },
+    {
+      "id": 17,
+      "prompt_pt": "dentro do módulo 12345, me lista todas as páginas/aulas",
+      "expected_tool": "hotmart_module_pages_list",
+      "ambiguous_alt": "hotmart_modules_list"
+    },
+    {
+      "id": 18,
+      "prompt_pt": "quais alunos tenho cadastrados na área de membros?",
+      "expected_tool": "hotmart_students_list",
+      "ambiguous_alt": null
+    },
+    {
+      "id": 19,
+      "prompt_pt": "o aluno V7yQbq3z7J completou quais aulas?",
+      "expected_tool": "hotmart_student_progress_get",
+      "ambiguous_alt": null
+    },
+    {
+      "id": 20,
+      "prompt_pt": "me lista todos os produtos cadastrados na minha conta Hotmart",
+      "expected_tool": "hotmart_products_list",
+      "ambiguous_alt": null
+    },
+    {
+      "id": 21,
+      "prompt_pt": "quais ofertas (preços/condições) tem o produto 4168346?",
+      "expected_tool": "hotmart_product_offers_list",
+      "ambiguous_alt": "hotmart_product_plans_list"
+    },
+    {
+      "id": 22,
+      "prompt_pt": "quais planos de assinatura existem pro produto 4168346?",
+      "expected_tool": "hotmart_product_plans_list",
+      "ambiguous_alt": "hotmart_product_offers_list"
+    },
+    {
+      "id": 23,
+      "prompt_pt": "cria um cupom de 10% pro produto 4168346 com código BLACKFRIDAY",
+      "expected_tool": "hotmart_coupon_create",
+      "ambiguous_alt": null
+    },
+    {
+      "id": 24,
+      "prompt_pt": "lista os cupons ativos do produto 4168346",
+      "expected_tool": "hotmart_coupons_list",
+      "ambiguous_alt": null
+    },
+    {
+      "id": 25,
+      "prompt_pt": "apaga o cupom de id 99999",
+      "expected_tool": "hotmart_coupon_delete",
+      "ambiguous_alt": null
+    },
+    {
+      "id": 26,
+      "prompt_pt": "informações do evento 5655136 — datas, lotes, etc",
+      "expected_tool": "hotmart_event_info_get",
+      "ambiguous_alt": "hotmart_event_participants_list"
+    },
+    {
+      "id": 27,
+      "prompt_pt": "quem comprou ingresso pro evento 5655136?",
+      "expected_tool": "hotmart_event_participants_list",
+      "ambiguous_alt": "hotmart_event_info_get"
+    },
+    {
+      "id": 28,
+      "prompt_pt": "o aluno tá inadimplente — gera uma negociação parcelada pra ele",
+      "expected_tool": "hotmart_negotiation_generate",
+      "ambiguous_alt": null
+    }
+  ]
+}
