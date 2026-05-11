@@ -5,10 +5,10 @@ from typing import Optional
 
 from hotmart_mcp._shared import get_client
 
-__all__ = ["list_products", "get_product_offers", "get_product_plans"]
+__all__ = ["hotmart_products_list", "hotmart_product_offers_list", "hotmart_product_plans_list"]
 
 
-async def list_products(
+async def hotmart_products_list(
     max_results: Optional[int] = None,
     page_token: Optional[str] = None,
     id_: Optional[int] = None,
@@ -16,16 +16,14 @@ async def list_products(
     format_: Optional[str] = None,
     select: Optional[str] = None,
 ) -> str:
-    """List Products
-    
-    Retorna a lista de produtos.
+    """List Products. Example: hotmart_products_list(max_results=10).
     
     Args:
-        max_results: Número máximo de resultados por página
-        page_token: Token de paginação para a próxima página
-        id_: ID do produto
+        max_results: Max results per page
+        page_token: Pagination token for the next page
+        id_: Product ID
         status: Status do produto.
-        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+        Allowed values (case-sensitive, pass EXACTLY as listed):
           - `DRAFT`
           - `ACTIVE`
           - `PAUSED`
@@ -34,7 +32,7 @@ async def list_products(
           - `DELETED`
           - `CHANGES_PENDING_ON_PRODUCT`
         format_: Formato do produto.
-        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+        Allowed values (case-sensitive, pass EXACTLY as listed):
           - `EBOOK`
           - `SOFTWARE`
           - `MOBILE_APPS`
@@ -49,7 +47,7 @@ async def list_products(
           - `ONLINE_EVENT`
           - `BUNDLE`
           - `COMMUNITY`
-        select: Seleção de campos customizados na resposta"""
+        select: Custom field selection in response"""
     endpoint = "/products/api/v1/products"
     params = {}
     if max_results is not None:
@@ -68,23 +66,21 @@ async def list_products(
     return json.dumps(result, indent=2)
 
 
-async def get_product_offers(
+async def hotmart_product_offers_list(
     product_id: int,
     max_results: Optional[int] = None,
     page_token: Optional[str] = None,
     offer_key: Optional[str] = None,
     select: Optional[str] = None,
 ) -> str:
-    """Get Product Offers
-    
-    Retorna as ofertas de um produto.
+    """Get Product Offers. Example: hotmart_product_offers_list(product_id=12345, max_results=10).
     
     Args:
-        product_id: ID do produto
-        max_results: Número máximo de resultados por página
-        page_token: Token de paginação para a próxima página
-        offer_key: Chave da oferta
-        select: Seleção de campos customizados na resposta"""
+        product_id: Product ID
+        max_results: Max results per page
+        page_token: Pagination token for the next page
+        offer_key: Offer key
+        select: Custom field selection in response"""
     endpoint = f"/products/api/v1/product/{product_id}/offers"
     params = {}
     if max_results is not None:
@@ -99,23 +95,21 @@ async def get_product_offers(
     return json.dumps(result, indent=2)
 
 
-async def get_product_plans(
+async def hotmart_product_plans_list(
     product_id: int,
     max_results: Optional[int] = None,
     page_token: Optional[str] = None,
     id_: Optional[int] = None,
     select: Optional[str] = None,
 ) -> str:
-    """Get Product Plans
-    
-    Retorna os planos de assinatura de um produto.
+    """Get Product Plans. Example: hotmart_product_plans_list(product_id=12345, max_results=10).
     
     Args:
-        product_id: ID do produto
-        max_results: Número máximo de resultados por página
-        page_token: Token de paginação para a próxima página
+        product_id: Product ID
+        max_results: Max results per page
+        page_token: Pagination token for the next page
         id_: ID do plano
-        select: Seleção de campos customizados na resposta"""
+        select: Custom field selection in response"""
     endpoint = f"/products/api/v1/product/{product_id}/plans"
     params = {}
     if max_results is not None:

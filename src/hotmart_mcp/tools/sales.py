@@ -5,10 +5,10 @@ from typing import Optional
 
 from hotmart_mcp._shared import get_client
 
-__all__ = ["get_sales_history", "get_sales_summary", "get_sales_participants", "get_sales_commissions", "get_sales_price_details", "refund_sale"]
+__all__ = ["hotmart_sales_history_list", "hotmart_sales_summary_list", "hotmart_sales_participants_list", "hotmart_sales_commissions_list", "hotmart_sales_price_details_list", "hotmart_sale_refund"]
 
 
-async def get_sales_history(
+async def hotmart_sales_history_list(
     max_results: Optional[int] = None,
     page_token: Optional[str] = None,
     product_id: Optional[int] = None,
@@ -24,25 +24,23 @@ async def get_sales_history(
     transaction_status: Optional[str] = None,
     payment_type: Optional[str] = None,
 ) -> str:
-    """Sales History
-    
-    Retorna o histórico de vendas. Sem os filtros transaction ou transaction_status, apenas vendas com status APPROVED e COMPLETE são retornadas.
+    """Sales History. Example: hotmart_sales_history_list(max_results=10). Don't use this for aggregated metrics — use `hotmart_sales_summary_list` for totals/counts.
     
     Args:
-        max_results: Número máximo de resultados por página
-        page_token: Token de paginação para a próxima página
-        product_id: ID do produto
-        start_date: Data inicial (timestamp em milissegundos desde epoch). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
-        end_date: Data final (timestamp em milissegundos desde epoch). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
-        sales_source: Origem da venda
-        transaction: Código da transação
-        select: Seleção de campos customizados na resposta
-        buyer_name: Nome do comprador
-        buyer_email: E-mail do comprador
-        offer_code: Código da oferta. Formato: código alfanumérico Hotmart (ex: `H123A4B5`, não é UUID nem int)
-        commission_as: Papel de comissão do usuário autenticado. Valores aceitos: 'PRODUCER', 'COPRODUCER', 'AFFILIATE'
-        transaction_status: Status da transação.
-        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+        max_results: Max results per page
+        page_token: Pagination token for the next page
+        product_id: Product ID
+        start_date: Start date. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        end_date: End date. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        sales_source: Sale source
+        transaction: Transaction code
+        select: Custom field selection in response
+        buyer_name: Buyer name
+        buyer_email: Buyer email
+        offer_code: Offer code. Format: alphanumeric Hotmart code (ex: `H123A4B5`, not UUID, not int)
+        commission_as: Authenticated user's commission role. Allowed values: 'PRODUCER', 'COPRODUCER', 'AFFILIATE'
+        transaction_status: Transaction status.
+        Allowed values (case-sensitive, pass EXACTLY as listed):
           - `APPROVED`
           - `BLOCKED`
           - `CANCELLED`
@@ -60,8 +58,8 @@ async def get_sales_history(
           - `STARTED`
           - `UNDER_ANALISYS`
           - `WAITING_PAYMENT`
-        payment_type: Tipo de pagamento.
-        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+        payment_type: Payment type.
+        Allowed values (case-sensitive, pass EXACTLY as listed):
           - `BILLET`
           - `CASH_PAYMENT`
           - `CREDIT_CARD`
@@ -113,7 +111,7 @@ async def get_sales_history(
     return json.dumps(result, indent=2)
 
 
-async def get_sales_summary(
+async def hotmart_sales_summary_list(
     transaction: Optional[str] = None,
     transaction_status: Optional[str] = None,
     max_results: Optional[int] = None,
@@ -127,14 +125,12 @@ async def get_sales_summary(
     offer_code: Optional[str] = None,
     select: Optional[str] = None,
 ) -> str:
-    """Sales Summary
-    
-    Retorna o resumo das vendas.
+    """Sales Summary. Example: hotmart_sales_summary_list(transaction_status='APPROVED'). Don't use this for per-transaction details — use `hotmart_sales_history_list` for the raw list.
     
     Args:
-        transaction: Código da transação
-        transaction_status: Status da transação.
-        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+        transaction: Transaction code
+        transaction_status: Transaction status.
+        Allowed values (case-sensitive, pass EXACTLY as listed):
           - `APPROVED`
           - `BLOCKED`
           - `CANCELLED`
@@ -152,15 +148,15 @@ async def get_sales_summary(
           - `STARTED`
           - `UNDER_ANALISYS`
           - `WAITING_PAYMENT`
-        max_results: Número máximo de resultados por página
-        page_token: Token de paginação para a próxima página
-        product_id: ID do produto
-        start_date: Data inicial (timestamp em milissegundos desde epoch). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
-        end_date: Data final (timestamp em milissegundos desde epoch). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
-        sales_source: Origem da venda
+        max_results: Max results per page
+        page_token: Pagination token for the next page
+        product_id: Product ID
+        start_date: Start date. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        end_date: End date. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        sales_source: Sale source
         affiliate_name: Nome do afiliado
-        payment_type: Tipo de pagamento.
-        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+        payment_type: Payment type.
+        Allowed values (case-sensitive, pass EXACTLY as listed):
           - `BILLET`
           - `CASH_PAYMENT`
           - `CREDIT_CARD`
@@ -178,8 +174,8 @@ async def get_sales_summary(
           - `PIX`
           - `SAMSUNG_PAY`
           - `WALLET`
-        offer_code: Código da oferta. Formato: código alfanumérico Hotmart (ex: `H123A4B5`, não é UUID nem int)
-        select: Seleção de campos customizados na resposta"""
+        offer_code: Offer code. Format: alphanumeric Hotmart code (ex: `H123A4B5`, not UUID, not int)
+        select: Custom field selection in response"""
     endpoint = "/payments/api/v1/sales/summary"
     params = {}
     if transaction is not None:
@@ -210,7 +206,7 @@ async def get_sales_summary(
     return json.dumps(result, indent=2)
 
 
-async def get_sales_participants(
+async def hotmart_sales_participants_list(
     transaction: Optional[str] = None,
     transaction_status: Optional[str] = None,
     max_results: Optional[int] = None,
@@ -225,14 +221,12 @@ async def get_sales_participants(
     commission_as: Optional[str] = None,
     select: Optional[str] = None,
 ) -> str:
-    """Sales Participants
-    
-    Retorna os participantes de uma venda (produtor, afiliado, coprodutor).
+    """Sales Participants. Example: hotmart_sales_participants_list(transaction_status='APPROVED').
     
     Args:
-        transaction: Código da transação
-        transaction_status: Status da transação.
-        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+        transaction: Transaction code
+        transaction_status: Transaction status.
+        Allowed values (case-sensitive, pass EXACTLY as listed):
           - `APPROVED`
           - `BLOCKED`
           - `CANCELLED`
@@ -250,17 +244,17 @@ async def get_sales_participants(
           - `STARTED`
           - `UNDER_ANALISYS`
           - `WAITING_PAYMENT`
-        max_results: Número máximo de resultados por página
-        page_token: Token de paginação para a próxima página
-        product_id: ID do produto
-        start_date: Data inicial (timestamp em milissegundos desde epoch). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
-        end_date: Data final (timestamp em milissegundos desde epoch). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
-        buyer_email: E-mail do comprador
-        sales_source: Origem da venda
-        buyer_name: Nome do comprador
+        max_results: Max results per page
+        page_token: Pagination token for the next page
+        product_id: Product ID
+        start_date: Start date. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        end_date: End date. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        buyer_email: Buyer email
+        sales_source: Sale source
+        buyer_name: Buyer name
         affiliate_name: Nome do afiliado
-        commission_as: Papel de comissão do usuário autenticado. Valores aceitos: 'PRODUCER', 'COPRODUCER', 'AFFILIATE'
-        select: Seleção de campos customizados na resposta"""
+        commission_as: Authenticated user's commission role. Allowed values: 'PRODUCER', 'COPRODUCER', 'AFFILIATE'
+        select: Custom field selection in response"""
     endpoint = "/payments/api/v1/sales/users"
     params = {}
     if transaction is not None:
@@ -293,7 +287,7 @@ async def get_sales_participants(
     return json.dumps(result, indent=2)
 
 
-async def get_sales_commissions(
+async def hotmart_sales_commissions_list(
     max_results: Optional[int] = None,
     page_token: Optional[str] = None,
     product_id: Optional[int] = None,
@@ -304,20 +298,18 @@ async def get_sales_commissions(
     transaction_status: Optional[str] = None,
     select: Optional[str] = None,
 ) -> str:
-    """Sales Commissions
-    
-    Retorna as comissões de vendas.
+    """Sales Commissions. Example: hotmart_sales_commissions_list(max_results=10).
     
     Args:
-        max_results: Número máximo de resultados por página
-        page_token: Token de paginação para a próxima página
-        product_id: ID do produto
-        start_date: Data inicial (timestamp em milissegundos desde epoch). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
-        end_date: Data final (timestamp em milissegundos desde epoch). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
-        transaction: Código da transação
-        commission_as: Papel de comissão do usuário autenticado. Valores aceitos: 'PRODUCER', 'COPRODUCER', 'AFFILIATE'
-        transaction_status: Status da transação.
-        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+        max_results: Max results per page
+        page_token: Pagination token for the next page
+        product_id: Product ID
+        start_date: Start date. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        end_date: End date. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        transaction: Transaction code
+        commission_as: Authenticated user's commission role. Allowed values: 'PRODUCER', 'COPRODUCER', 'AFFILIATE'
+        transaction_status: Transaction status.
+        Allowed values (case-sensitive, pass EXACTLY as listed):
           - `APPROVED`
           - `BLOCKED`
           - `CANCELLED`
@@ -335,7 +327,7 @@ async def get_sales_commissions(
           - `STARTED`
           - `UNDER_ANALISYS`
           - `WAITING_PAYMENT`
-        select: Seleção de campos customizados na resposta"""
+        select: Custom field selection in response"""
     endpoint = "/payments/api/v1/sales/commissions"
     params = {}
     if max_results is not None:
@@ -360,7 +352,7 @@ async def get_sales_commissions(
     return json.dumps(result, indent=2)
 
 
-async def get_sales_price_details(
+async def hotmart_sales_price_details_list(
     transaction: Optional[str] = None,
     transaction_status: Optional[str] = None,
     max_results: Optional[int] = None,
@@ -371,14 +363,12 @@ async def get_sales_price_details(
     payment_type: Optional[str] = None,
     select: Optional[str] = None,
 ) -> str:
-    """Sales Price Details
-    
-    Retorna os detalhes de preço das vendas. Sem os filtros transaction ou transaction_status, apenas vendas com status APPROVED e COMPLETE são retornadas.
+    """Sales Price Details. Example: hotmart_sales_price_details_list(transaction_status='APPROVED').
     
     Args:
-        transaction: Código da transação
-        transaction_status: Status da transação.
-        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+        transaction: Transaction code
+        transaction_status: Transaction status.
+        Allowed values (case-sensitive, pass EXACTLY as listed):
           - `APPROVED`
           - `BLOCKED`
           - `CANCELLED`
@@ -396,13 +386,13 @@ async def get_sales_price_details(
           - `STARTED`
           - `UNDER_ANALISYS`
           - `WAITING_PAYMENT`
-        max_results: Número máximo de resultados por página
-        page_token: Token de paginação para a próxima página
-        product_id: ID do produto
-        start_date: Data inicial (timestamp em milissegundos desde epoch). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
-        end_date: Data final (timestamp em milissegundos desde epoch). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
-        payment_type: Tipo de pagamento.
-        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+        max_results: Max results per page
+        page_token: Pagination token for the next page
+        product_id: Product ID
+        start_date: Start date. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        end_date: End date. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        payment_type: Payment type.
+        Allowed values (case-sensitive, pass EXACTLY as listed):
           - `BILLET`
           - `CASH_PAYMENT`
           - `CREDIT_CARD`
@@ -420,7 +410,7 @@ async def get_sales_price_details(
           - `PIX`
           - `SAMSUNG_PAY`
           - `WALLET`
-        select: Seleção de campos customizados na resposta"""
+        select: Custom field selection in response"""
     endpoint = "/payments/api/v1/sales/price/details"
     params = {}
     if transaction is not None:
@@ -445,15 +435,13 @@ async def get_sales_price_details(
     return json.dumps(result, indent=2)
 
 
-async def refund_sale(
+async def hotmart_sale_refund(
     transaction_code: str,
 ) -> str:
-    """Sales Refund
-    
-    Realiza o reembolso de uma venda. A venda deve estar com status APPROVED ou COMPLETE. Não disponível para trial, BACS ou SEPA. Janela de reembolso de 7 a 30 dias (máximo 60).
+    """Sales Refund. Example: hotmart_sale_refund(transaction_code='ABC123XY').
     
     Args:
-        transaction_code: Código da transação. Formato: código alfanumérico Hotmart (ex: `H123A4B5`, não é UUID nem int)"""
+        transaction_code: Transaction code. Format: alphanumeric Hotmart code (ex: `H123A4B5`, not UUID, not int)"""
     endpoint = f"/payments/api/v1/sales/{transaction_code}/refund"
     result = await get_client().put(endpoint)
     return json.dumps(result, indent=2)

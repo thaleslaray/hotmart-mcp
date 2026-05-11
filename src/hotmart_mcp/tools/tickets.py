@@ -5,20 +5,18 @@ from typing import Optional
 
 from hotmart_mcp._shared import get_client
 
-__all__ = ["get_event_info", "get_event_participants"]
+__all__ = ["hotmart_event_info_get", "hotmart_event_participants_list"]
 
 
-async def get_event_info(
+async def hotmart_event_info_get(
     event_id: int,
     select: Optional[str] = None,
 ) -> str:
-    """Event Info
-    
-    Retorna informações de um evento.
+    """Event Info. Example: hotmart_event_info_get(event_id=12345).
     
     Args:
-        event_id: ID do evento
-        select: Seleção de campos customizados na resposta"""
+        event_id: Event ID
+        select: Custom field selection in response"""
     endpoint = f"/events/api/v1/{event_id}/info"
     params = {}
     if select is not None:
@@ -27,7 +25,7 @@ async def get_event_info(
     return json.dumps(result, indent=2)
 
 
-async def get_event_participants(
+async def hotmart_event_participants_list(
     event_id: int,
     max_results: Optional[int] = None,
     page_token: Optional[str] = None,
@@ -42,20 +40,18 @@ async def get_event_participants(
     ticket_qr_code: Optional[str] = None,
     select: Optional[str] = None,
 ) -> str:
-    """Event Participants
-    
-    Retorna os participantes de um evento.
+    """Event Participants. Example: hotmart_event_participants_list(event_id=12345, max_results=10).
     
     Args:
-        event_id: ID do evento
-        max_results: Número máximo de resultados por página
-        page_token: Token de paginação para a próxima página
-        buyer_email: E-mail do comprador
-        participant_email: E-mail do participante
-        last_update: Última atualização (timestamp em milissegundos). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        event_id: Event ID
+        max_results: Max results per page
+        page_token: Pagination token for the next page
+        buyer_email: Buyer email
+        participant_email: Email do participante
+        last_update: Última atualização. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
         id_lot: ID do lote
         ticket_status: Status do ingresso.
-        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+        Allowed values (case-sensitive, pass EXACTLY as listed):
           - `SOLD`
           - `INVITE`
           - `INVITE_CANCELED`
@@ -64,16 +60,16 @@ async def get_event_participants(
           - `EXCLUDED`
           - `AVAILABLE`
           - `RESERVED`
-        ticket_type: Tipo do ingresso. Valores aceitos: 'PAID', 'FREE', 'ALL'
+        ticket_type: Tipo do ingresso. Allowed values: 'PAID', 'FREE', 'ALL'
         checkin_status: Status do check-in.
-        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+        Allowed values (case-sensitive, pass EXACTLY as listed):
           - `PENDING`
           - `PARTIAL`
           - `CONCLUDED`
           - `ALL`
         id_eticket: ID do e-ticket
-        ticket_qr_code: QR code do ingresso. Formato: código alfanumérico Hotmart (ex: `H123A4B5`, não é UUID nem int)
-        select: Seleção de campos customizados na resposta"""
+        ticket_qr_code: QR code do ingresso. Format: alphanumeric Hotmart code (ex: `H123A4B5`, not UUID, not int)
+        select: Custom field selection in response"""
     endpoint = f"/events/api/v1/{event_id}/participants"
     params = {}
     if max_results is not None:

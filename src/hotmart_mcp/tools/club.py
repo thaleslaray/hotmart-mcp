@@ -5,22 +5,20 @@ from typing import Optional
 
 from hotmart_mcp._shared import get_client
 
-__all__ = ["get_modules", "get_module_pages", "get_students", "get_student_progress"]
+__all__ = ["hotmart_modules_list", "hotmart_module_pages_list", "hotmart_students_list", "hotmart_student_progress_get"]
 
 
-async def get_modules(
+async def hotmart_modules_list(
     subdomain: str,
     is_extra: Optional[bool] = None,
     select: Optional[str] = None,
 ) -> str:
-    """Get Modules
-    
-    Retorna os módulos da área de membros.
+    """Get Modules. Lists module containers only. To get pages inside a module, use `hotmart_module_pages_list` with the module_id.
     
     Args:
-        subdomain: Subdomínio da área de membros
+        subdomain: Members area subdomain (the slug from `hotmart.com/club/<slug>` URL)
         is_extra: Filtrar módulos extras
-        select: Seleção de campos customizados na resposta"""
+        select: Custom field selection in response"""
     endpoint = "/club/api/v1/modules"
     params = {}
     if subdomain is not None:
@@ -33,19 +31,17 @@ async def get_modules(
     return json.dumps(result, indent=2)
 
 
-async def get_module_pages(
+async def hotmart_module_pages_list(
     module_id: str,
     subdomain: str,
     select: Optional[str] = None,
 ) -> str:
-    """Get Pages
-    
-    Retorna as páginas (aulas) de um módulo.
+    """Get Pages. Example: hotmart_module_pages_list(module_id='…'). Requires module_id from `hotmart_modules_list` first.
     
     Args:
-        module_id: ID do módulo
-        subdomain: Subdomínio da área de membros
-        select: Seleção de campos customizados na resposta"""
+        module_id: Module ID
+        subdomain: Members area subdomain (the slug from `hotmart.com/club/<slug>` URL)
+        select: Custom field selection in response"""
     endpoint = f"/club/api/v1/modules/{module_id}/pages"
     params = {}
     if subdomain is not None:
@@ -56,19 +52,17 @@ async def get_module_pages(
     return json.dumps(result, indent=2)
 
 
-async def get_students(
+async def hotmart_students_list(
     subdomain: str,
     email: Optional[str] = None,
     select: Optional[str] = None,
 ) -> str:
-    """Get Students
-    
-    Retorna os alunos da área de membros.
+    """Get Students.
     
     Args:
-        subdomain: Subdomínio da área de membros
-        email: E-mail do aluno
-        select: Seleção de campos customizados na resposta"""
+        subdomain: Members area subdomain (the slug from `hotmart.com/club/<slug>` URL)
+        email: Email do aluno
+        select: Custom field selection in response"""
     endpoint = "/club/api/v1/users"
     params = {}
     if subdomain is not None:
@@ -81,19 +75,17 @@ async def get_students(
     return json.dumps(result, indent=2)
 
 
-async def get_student_progress(
+async def hotmart_student_progress_get(
     user_id: str,
     subdomain: str,
     select: Optional[str] = None,
 ) -> str:
-    """Get Student Progress
-    
-    Retorna o progresso de um aluno nas aulas.
+    """Get Student Progress. Example: hotmart_student_progress_get(user_id='…').
     
     Args:
         user_id: ID do aluno
-        subdomain: Subdomínio da área de membros
-        select: Seleção de campos customizados na resposta"""
+        subdomain: Members area subdomain (the slug from `hotmart.com/club/<slug>` URL)
+        select: Custom field selection in response"""
     endpoint = f"/club/api/v1/users/{user_id}/lessons"
     params = {}
     if subdomain is not None:

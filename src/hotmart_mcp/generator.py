@@ -102,20 +102,64 @@ def _enum_values(spec: dict[str, Any], schema: dict[str, Any]) -> list[str] | No
 
 _DATE_NAME_HINTS = ("date", "_at", "timestamp")
 _DATE_EXAMPLE_HINT = (
-    "Timestamp em **milissegundos** desde epoch (não segundos, não ISO). "
+    "Unix timestamp in **milliseconds** (not seconds, not ISO). "
     "Ex: `1730419200000` = 2024-11-01 00:00 UTC. "
-    "Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+    "Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
 )
 
 
-def _enrich_description(
+# PT-BR -> EN substitutions for common param descriptions (F3: EN only).
+_PT_TO_EN: list[tuple[str, str]] = [
+    ("Número máximo de resultados por página", "Max results per page"),
+    ("Token de paginação para a próxima página", "Pagination token for the next page"),
+    ("ID do produto", "Product ID"),
+    ("Data inicial", "Start date"),
+    ("Data final", "End date"),
+    ("Data de início de validade", "Validity start date"),
+    ("Data de início", "Start date"),
+    ("Origem da venda", "Sale source"),
+    ("Código da transação", "Transaction code"),
+    ("Seleção de campos customizados na resposta", "Custom field selection in response"),
+    ("Nome do comprador", "Buyer name"),
+    ("E-mail do comprador", "Buyer email"),
+    ("Código da oferta", "Offer code"),
+    ("Papel de comissão do usuário autenticado", "Authenticated user's commission role"),
+    ("Status da transação", "Transaction status"),
+    ("Tipo de pagamento", "Payment type"),
+    ("Código do assinante", "Subscriber code"),
+    ("Status da assinatura", "Subscription status"),
+    ("Subdomínio da área de membros", "Members area subdomain (the slug from `hotmart.com/club/<slug>` URL)"),
+    ("ID do módulo", "Module ID"),
+    ("ID do usuário", "User ID"),
+    ("ID do evento", "Event ID"),
+    ("Chave da oferta", "Offer key"),
+    ("E-mail", "Email"),
+    ("(timestamp em milissegundos desde epoch)", ""),
+    ("(timestamp em milissegundos)", ""),
+    ("(timestamp ms)", ""),
+]
+
+
+def _translate_pt(desc: str) -> str:
+    """Apply known PT-BR -> EN replacements in param descriptions (F3)."""
+    for pt, en in _PT_TO_EN:
+        desc = desc.replace(pt, en)
+    return desc.strip(" .,").strip()
+
+
+def _enrich_param_description(
     api_name: str,
     base_desc: str,
     resolved_schema: dict[str, Any],
     enum_values: list[str] | None,
 ) -> str:
-    """Add format hints inline to help LLM pass params in the correct shape."""
-    desc = base_desc.strip() if base_desc else api_name
+    """Format hints for params — kept compact and in EN.
+
+    SEP-1382 separates tool description (what/when) from parameter description
+    (format/validation). This goes into the Args: block, which FastMCP maps to
+    inputSchema.properties[].description.
+    """
+    desc = _translate_pt(base_desc.strip()) if base_desc else api_name
 
     # --- date timestamps (ms) ---
     is_date_name = any(h in api_name.lower() for h in _DATE_NAME_HINTS)
@@ -123,23 +167,205 @@ def _enrich_description(
     if (is_date_name and is_int64) or (is_date_name and "ms" in desc.lower()):
         desc += f". {_DATE_EXAMPLE_HINT}"
 
-    # --- enums: inline if <=3 values, bullet list if more ---
+    # --- enums: inline if <=3 values, bullet list if more (case-sensitive warning) ---
     if enum_values:
         if len(enum_values) <= 3:
-            desc += f". Valores aceitos: {', '.join(repr(v) for v in enum_values)}"
+            desc += f". Allowed values: {', '.join(repr(v) for v in enum_values)}"
         else:
-            desc += ".\n        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):"
+            desc += ".\n        Allowed values (case-sensitive, pass EXACTLY as listed):"
             for v in enum_values:
                 desc += f"\n          - `{v}`"
 
     # --- code/id formats ---
     fmt = resolved_schema.get("format")
     if fmt == "uuid":
-        desc += ". Formato: UUID (ex: `550e8400-e29b-41d4-a716-446655440000`)"
+        desc += ". Format: UUID (ex: `550e8400-e29b-41d4-a716-446655440000`)"
     elif api_name.endswith("_code") and resolved_schema.get("type") == "string":
-        desc += ". Formato: código alfanumérico Hotmart (ex: `H123A4B5`, não é UUID nem int)"
+        desc += ". Format: alphanumeric Hotmart code (ex: `H123A4B5`, not UUID, not int)"
 
     return desc
+
+
+# Alias for backwards compat
+_enrich_description = _enrich_param_description
+
+
+# ---------------------------------------------------------------------------
+# Tool-level description (SEP-1382: separate from param descriptions)
+# ---------------------------------------------------------------------------
+
+# Canonical verbs per HTTP method × intent (BFCL-aligned vocabulary)
+_VERB_REMAP = {
+    # generic remaps for clearer routing
+    "get": "get",        # detail/singular
+    "list": "list",      # collection
+    "create": "create",
+    "update": "update",
+    "patch": "update",
+    "delete": "delete",
+    "cancel": "cancel",
+    "reactivate": "reactivate",
+    "refund": "refund",
+    "change": "update",  # change_subscription_due_day -> subscription_update
+    "generate": "generate",
+}
+
+
+def _canonical_func_name(op_id: str | None, method: str, path: str, tag: str) -> str:
+    """Build hotmart_{resource}_{verb} name (F4: namespacing + verb taxonomy).
+
+    Anthropic + BFCL converge on: prefix with service, lock verb vocabulary,
+    put resource before verb (read better in tool lists).
+    """
+    if op_id:
+        base = _operation_id_to_snake(op_id)
+    else:
+        base = _derive_func_name(method, path)
+
+    # split into tokens
+    tokens = base.split("_")
+
+    # find verb (first known verb token)
+    verb = None
+    rest: list[str] = []
+    for t in tokens:
+        if verb is None and t in _VERB_REMAP:
+            verb = _VERB_REMAP[t]
+        else:
+            rest.append(t)
+
+    # fallback verb from HTTP method
+    if verb is None:
+        verb = _VERB_REMAP.get(method, method)
+
+    resource = "_".join(rest) if rest else tag.lower()
+
+    # F4 verb taxonomy: collection → `list`, singular → `get`.
+    # Heuristic: if HTTP method is GET and the resource (or its last token) is plural,
+    # promote `get` → `list`. Also: "history", "summary", "participants", "commissions",
+    # "details", "transactions", "purchases", "pages", "offers", "plans", "modules",
+    # "students", "coupons" are collection-y nouns.
+    _COLLECTION_TOKENS = {
+        "history", "summary", "participants", "commissions", "details",
+        "transactions", "purchases", "pages", "offers", "plans", "modules",
+        "students", "coupons",
+    }
+    if verb == "get" and method == "get":
+        last = resource.split("_")[-1] if resource else ""
+        is_plural = last.endswith("s") and not last.endswith("ss") and last not in {"status"}
+        is_collection_noun = last in _COLLECTION_TOKENS or any(
+            t in _COLLECTION_TOKENS for t in resource.split("_")
+        )
+        # but singular like "event_info", "subscriber_purchases" with path param → keep get
+        # Heuristic: if no path param in op (only query/none), it's a list endpoint.
+        # We can't see params here — use the plural test only.
+        if is_plural or is_collection_noun:
+            verb = "list"
+
+    return f"hotmart_{resource}_{verb}"
+
+
+# Pairs of tools that are semantically close — generate when-NOT hints (F7).
+# Maps tool_name -> "use OTHER_TOOL when you want X instead"
+_DISAMBIGUATION: dict[str, str] = {
+    "hotmart_sales_history_list":
+        "Don't use this for aggregated metrics — use `hotmart_sales_summary_list` for totals/counts.",
+    "hotmart_sales_summary_list":
+        "Don't use this for per-transaction details — use `hotmart_sales_history_list` for the raw list.",
+    "hotmart_subscriptions_list":
+        "Don't use this for payment events — use `hotmart_subscription_transactions_list` for charges/refunds per subscription.",
+    "hotmart_subscription_transactions_list":
+        "Don't use this for the subscription list itself — use `hotmart_subscriptions_list`.",
+    "hotmart_subscription_cancel":
+        "Use this for ONE subscriber_code. For 2+ subscriptions, use `hotmart_batch_subscriptions_cancel`.",
+    "hotmart_batch_subscriptions_cancel":
+        "Use this for multiple subscriber_codes at once. For a single one, prefer `hotmart_subscription_cancel`.",
+    "hotmart_subscription_reactivate":
+        "Use this for ONE subscriber_code. For 2+, use `hotmart_batch_subscriptions_reactivate`.",
+    "hotmart_batch_subscriptions_reactivate":
+        "Use this for multiple subscriber_codes at once. For a single one, prefer `hotmart_subscription_reactivate`.",
+    "hotmart_modules_list":
+        "Lists module containers only. To get pages inside a module, use `hotmart_module_pages_list` with the module_id.",
+    "hotmart_module_pages_list":
+        "Requires module_id from `hotmart_modules_list` first.",
+}
+
+
+def _build_tool_description(
+    func_name: str,
+    summary: str,
+    description: str,
+    example_args: str,
+) -> str:
+    """Build a 4-line tool description following SOTA (F1+F5+F6+F7).
+
+    Format:
+        {VERB} {RESOURCE} in Hotmart. {WHEN to use}.
+        Returns: {key fields}.
+        Example: tool_name({param: value}).
+        [optional] {WHEN NOT to use, cross-ref to similar tool}.
+
+    Target: 40-80 tokens (F5). EN only (F3). Verb front-loaded (F1).
+    """
+    # First line — prefer summary (concise), fallback to description first sentence
+    main = (summary or description or func_name).strip()
+    # Take only first sentence if summary is long
+    if "." in main and len(main) > 100:
+        main = main.split(".")[0].strip() + "."
+    if not main.endswith("."):
+        main += "."
+
+    lines = [main]
+
+    if example_args:
+        lines.append(f"Example: {func_name}({example_args}).")
+
+    # Cross-ref disambiguation
+    when_not = _DISAMBIGUATION.get(func_name)
+    if when_not:
+        lines.append(when_not)
+
+    return " ".join(lines)
+
+
+def _build_example_args(params: list["Param"]) -> str:
+    """Build a tiny example args string for the description.
+
+    Uses required path params (often the most discriminating) + 1 optional filter.
+    """
+    parts: list[str] = []
+    seen_keys: set[str] = set()
+    for p in params:
+        if p.location == "path" and p.py_name not in seen_keys:
+            example_val = _example_value_for(p)
+            parts.append(f"{p.py_name}={example_val}")
+            seen_keys.add(p.py_name)
+    # add one optional filter if available (max_results or first enum)
+    if not parts or len(parts) < 2:
+        for p in params:
+            if not p.required and p.py_name not in seen_keys:
+                if p.py_name in ("max_results", "transaction_status", "status") and p.enum_values:
+                    parts.append(f"{p.py_name}={p.enum_values[0]!r}")
+                elif p.py_name == "max_results":
+                    parts.append("max_results=10")
+                else:
+                    continue
+                seen_keys.add(p.py_name)
+                break
+    return ", ".join(parts[:2])
+
+
+def _example_value_for(p: "Param") -> str:
+    """Generate a small example literal for a parameter."""
+    if p.py_type == "int":
+        return "12345"
+    if p.api_name.endswith("_code"):
+        return "'ABC123XY'"
+    if p.api_name in ("subdomain",):
+        return "'my-club-slug'"
+    if p.enum_values:
+        return repr(p.enum_values[0])
+    return "'…'"
 
 
 # ---------------------------------------------------------------------------
@@ -227,15 +453,12 @@ def _parse_endpoints(spec: dict[str, Any]) -> list[Endpoint]:
                 continue
             op = path_item[method]
 
-            # --- function name ---
-            op_id = op.get("operationId")
-            if op_id:
-                func_name = _operation_id_to_snake(op_id)
-            else:
-                func_name = _derive_func_name(method, path)
-
-            # --- tag ---
+            # --- tag (resolve first — used in canonical naming fallback) ---
             tag = (op.get("tags") or ["misc"])[0]
+
+            # --- function name (canonical: hotmart_{resource}_{verb}) ---
+            op_id = op.get("operationId")
+            func_name = _canonical_func_name(op_id, method, path, tag)
 
             # --- params (path + query) ---
             params: list[Param] = []
@@ -322,12 +545,18 @@ def _gen_function(ep: Endpoint) -> str:
         sig_str = f"\n    {sig_str},\n"
 
     # --- docstring ---
-    doc_lines = [ep.summary]
-    if ep.description and ep.description != ep.summary:
-        doc_lines.append("")
-        doc_lines.append(ep.description)
+    # Compact tool-level description (SEP-1382: separate from param descriptions).
+    # F1 front-loaded verb, F3 EN-only, F5 ~40-80 tokens, F6 inline example, F7 disambig.
+    example_args = _build_example_args(ep.params)
+    tool_desc = _build_tool_description(
+        func_name=ep.func_name,
+        summary=ep.summary,
+        description=ep.description,
+        example_args=example_args,
+    )
+    doc_lines = [tool_desc]
 
-    # param docs
+    # param docs (these map to inputSchema.properties[].description via FastMCP)
     any_param = required_args + optional_args
     if any_param:
         doc_lines.append("")

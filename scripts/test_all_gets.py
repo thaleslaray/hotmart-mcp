@@ -120,15 +120,15 @@ async def main():
     # ── Wave 1: root tools (no path params) ──
     print("═══ WAVE 1 — root tools ═══")
     root_calls = [
-        ("get_sales_history", sales.get_sales_history(max_results=5)),
-        ("get_sales_summary", sales.get_sales_summary(max_results=5)),
-        ("get_sales_participants", sales.get_sales_participants(max_results=5)),
-        ("get_sales_commissions", sales.get_sales_commissions(max_results=5)),
-        ("get_sales_price_details", sales.get_sales_price_details(max_results=5)),
-        ("get_subscriptions", subscriptions.get_subscriptions(max_results=5)),
-        ("get_subscriptions_summary", subscriptions.get_subscriptions_summary(max_results=5)),
-        ("get_subscription_transactions", subscriptions.get_subscription_transactions(max_results=5)),
-        ("list_products", products.list_products(max_results=5)),
+        ("get_sales_history", sales.hotmart_sales_history_list(max_results=5)),
+        ("get_sales_summary", sales.hotmart_sales_summary_list(max_results=5)),
+        ("get_sales_participants", sales.hotmart_sales_participants_list(max_results=5)),
+        ("get_sales_commissions", sales.hotmart_sales_commissions_list(max_results=5)),
+        ("get_sales_price_details", sales.hotmart_sales_price_details_list(max_results=5)),
+        ("get_subscriptions", subscriptions.hotmart_subscriptions_list(max_results=5)),
+        ("get_subscriptions_summary", subscriptions.hotmart_subscriptions_summary_list(max_results=5)),
+        ("get_subscription_transactions", subscriptions.hotmart_subscription_transactions_list(max_results=5)),
+        ("list_products", products.hotmart_products_list(max_results=5)),
     ]
     for name, coro in root_calls:
         r = await safe_call(name, coro)
@@ -193,19 +193,19 @@ async def main():
 
     # Club tools (if subdomain found)
     if subdomain:
-        leaf_calls.append(("get_modules", club.get_modules(subdomain=subdomain)))
-        leaf_calls.append(("get_students", club.get_students(subdomain=subdomain)))
+        leaf_calls.append(("get_modules", club.hotmart_modules_list(subdomain=subdomain)))
+        leaf_calls.append(("get_students", club.hotmart_students_list(subdomain=subdomain)))
 
     if sub_code:
         leaf_calls.append(("get_subscriber_purchases",
-                           subscriptions.get_subscriber_purchases(subscriber_code=str(sub_code))))
+                           subscriptions.hotmart_subscriber_purchases_list(subscriber_code=str(sub_code))))
     if prod_id:
         leaf_calls.append(("get_product_offers",
-                           products.get_product_offers(product_id=int(prod_id) if str(prod_id).isdigit() else prod_id)))
+                           products.hotmart_product_offers_list(product_id=int(prod_id) if str(prod_id).isdigit() else prod_id)))
         leaf_calls.append(("get_product_plans",
-                           products.get_product_plans(product_id=int(prod_id) if str(prod_id).isdigit() else prod_id)))
+                           products.hotmart_product_plans_list(product_id=int(prod_id) if str(prod_id).isdigit() else prod_id)))
         leaf_calls.append(("get_coupons",
-                           coupons.get_coupons(product_id=int(prod_id) if str(prod_id).isdigit() else prod_id)))
+                           coupons.hotmart_coupons_list(product_id=int(prod_id) if str(prod_id).isdigit() else prod_id)))
 
     # Events: no good ID source — skip, document as untested
     # (event_id is int; passing placeholder would give misleading 400/404)
@@ -228,7 +228,7 @@ async def main():
     print("═══ WAVE 3 — club leaves ═══")
     if subdomain and ids.get("module_id"):
         r = await safe_call("get_module_pages",
-                            club.get_module_pages(module_id=str(ids["module_id"]), subdomain=subdomain))
+                            club.hotmart_module_pages_list(module_id=str(ids["module_id"]), subdomain=subdomain))
         results.append(r)
         flag = "✅" if r["ok"] else "❌"
         print(f"  {flag} get_module_pages                     {r['duration_ms']:>5}ms  {r.get('error_msg', r.get('shape',''))[:80]}")
@@ -236,7 +236,7 @@ async def main():
         print("  ⏭️  get_module_pages skipped (no subdomain or module_id)")
     if subdomain and ids.get("user_id"):
         r = await safe_call("get_student_progress",
-                            club.get_student_progress(user_id=str(ids["user_id"]), subdomain=subdomain))
+                            club.hotmart_student_progress_get(user_id=str(ids["user_id"]), subdomain=subdomain))
         results.append(r)
         flag = "✅" if r["ok"] else "❌"
         print(f"  {flag} get_student_progress                 {r['duration_ms']:>5}ms  {r.get('error_msg', r.get('shape',''))[:80]}")

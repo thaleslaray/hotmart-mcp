@@ -5,10 +5,10 @@ from typing import Optional
 
 from hotmart_mcp._shared import get_client
 
-__all__ = ["create_coupon", "get_coupons", "delete_coupon"]
+__all__ = ["hotmart_coupon_create", "hotmart_coupons_list", "hotmart_coupon_delete"]
 
 
-async def create_coupon(
+async def hotmart_coupon_create(
     product_id: int,
     code: str,
     discount: float,
@@ -17,16 +17,14 @@ async def create_coupon(
     affiliate: Optional[int] = None,
     offer_ids: Optional[list[int]] = None,
 ) -> str:
-    """Create Coupon
-    
-    Cria um cupom de desconto para um produto.
+    """Create Coupon. Example: hotmart_coupon_create(product_id=12345).
     
     Args:
-        product_id: ID do produto
+        product_id: Product ID
         code: Código do cupom (máximo 25 caracteres)
         discount: Percentual de desconto (entre 0 e 0.99, exclusivo)
-        start_date: Data de início de validade (timestamp em milissegundos). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
-        end_date: Data de fim de validade (timestamp em milissegundos). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        start_date: Validity start date. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        end_date: Data de fim de validade. Unix timestamp in **milliseconds** (not seconds, not ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
         affiliate: ID do afiliado
         offer_ids: IDs das ofertas aplicáveis"""
     endpoint = f"/products/api/v1/product/{product_id}/coupon"
@@ -45,21 +43,19 @@ async def create_coupon(
     return json.dumps(result, indent=2)
 
 
-async def get_coupons(
+async def hotmart_coupons_list(
     product_id: int,
     code: Optional[str] = None,
     page_token: Optional[str] = None,
     select: Optional[str] = None,
 ) -> str:
-    """Get Coupons
-    
-    Retorna os cupons de um produto.
+    """Get Coupons. Example: hotmart_coupons_list(product_id=12345).
     
     Args:
-        product_id: ID do produto
+        product_id: Product ID
         code: Código do cupom
-        page_token: Token de paginação para a próxima página
-        select: Seleção de campos customizados na resposta"""
+        page_token: Pagination token for the next page
+        select: Custom field selection in response"""
     endpoint = f"/products/api/v1/coupon/product/{product_id}"
     params = {}
     if code is not None:
@@ -72,12 +68,10 @@ async def get_coupons(
     return json.dumps(result, indent=2)
 
 
-async def delete_coupon(
+async def hotmart_coupon_delete(
     coupon_id: int,
 ) -> str:
-    """Delete Coupon
-    
-    Exclui um cupom de desconto.
+    """Delete Coupon. Example: hotmart_coupon_delete(coupon_id=12345).
     
     Args:
         coupon_id: ID do cupom"""

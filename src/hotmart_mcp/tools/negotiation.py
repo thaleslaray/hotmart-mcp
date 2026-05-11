@@ -5,24 +5,22 @@ from typing import Optional
 
 from hotmart_mcp._shared import get_client
 
-__all__ = ["generate_negotiation"]
+__all__ = ["hotmart_negotiation_generate"]
 
 
-async def generate_negotiation(
+async def hotmart_negotiation_generate(
     subscription_id: int,
     recurrences: list[int],
     payment_type: str,
     discount: Optional[dict] = None,
     document: Optional[str] = None,
 ) -> str:
-    """Generate Negotiation
-    
-    Gera boleto ou PIX para parcelas de assinatura em atraso.
+    """Generate Negotiation.
     
     Args:
         subscription_id: ID da assinatura
         recurrences: Números das recorrências em atraso (1 a 5 valores)
-        payment_type: Tipo de pagamento para a negociação. Valores aceitos: 'BOLETO', 'PIX'
+        payment_type: Payment type para a negociação. Allowed values: 'BOLETO', 'PIX'
         discount: discount
         document: CPF ou CNPJ do assinante (obrigatório para BOLETO)"""
     endpoint = "/payments/api/v1/installments/negotiate"
