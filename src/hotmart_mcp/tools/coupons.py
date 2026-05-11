@@ -25,8 +25,8 @@ async def create_coupon(
         product_id: ID do produto
         code: Código do cupom (máximo 25 caracteres)
         discount: Percentual de desconto (entre 0 e 0.99, exclusivo)
-        start_date: Data de início de validade (timestamp em milissegundos)
-        end_date: Data de fim de validade (timestamp em milissegundos)
+        start_date: Data de início de validade (timestamp em milissegundos). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        end_date: Data de fim de validade (timestamp em milissegundos). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
         affiliate: ID do afiliado
         offer_ids: IDs das ofertas aplicáveis"""
     endpoint = f"/products/api/v1/product/{product_id}/coupon"

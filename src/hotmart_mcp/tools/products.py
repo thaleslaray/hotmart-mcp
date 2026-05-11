@@ -24,8 +24,31 @@ async def list_products(
         max_results: Número máximo de resultados por página
         page_token: Token de paginação para a próxima página
         id_: ID do produto
-        status: Status do produto. Values: DRAFT, ACTIVE, PAUSED, NOT_APPROVED, IN_REVIEW, DELETED, CHANGES_PENDING_ON_PRODUCT
-        format_: Formato do produto. Values: EBOOK, SOFTWARE, MOBILE_APPS, VIDEOS, AUDIOS, TEMPLATES, IMAGES, ONLINE_COURSE, SERIAL_CODES, ETICKET, ONLINE_SERVICE, ONLINE_EVENT, BUNDLE, COMMUNITY
+        status: Status do produto.
+        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+          - `DRAFT`
+          - `ACTIVE`
+          - `PAUSED`
+          - `NOT_APPROVED`
+          - `IN_REVIEW`
+          - `DELETED`
+          - `CHANGES_PENDING_ON_PRODUCT`
+        format_: Formato do produto.
+        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+          - `EBOOK`
+          - `SOFTWARE`
+          - `MOBILE_APPS`
+          - `VIDEOS`
+          - `AUDIOS`
+          - `TEMPLATES`
+          - `IMAGES`
+          - `ONLINE_COURSE`
+          - `SERIAL_CODES`
+          - `ETICKET`
+          - `ONLINE_SERVICE`
+          - `ONLINE_EVENT`
+          - `BUNDLE`
+          - `COMMUNITY`
         select: Seleção de campos customizados na resposta"""
     endpoint = "/products/api/v1/products"
     params = {}
@@ -62,7 +85,7 @@ async def get_product_offers(
         page_token: Token de paginação para a próxima página
         offer_key: Chave da oferta
         select: Seleção de campos customizados na resposta"""
-    endpoint = f"/products/api/v1/products/{product_id}/offers"
+    endpoint = f"/products/api/v1/product/{product_id}/offers"
     params = {}
     if max_results is not None:
         params["max_results"] = max_results
@@ -93,7 +116,7 @@ async def get_product_plans(
         page_token: Token de paginação para a próxima página
         id_: ID do plano
         select: Seleção de campos customizados na resposta"""
-    endpoint = f"/products/api/v1/products/{product_id}/plans"
+    endpoint = f"/products/api/v1/product/{product_id}/plans"
     params = {}
     if max_results is not None:
         params["max_results"] = max_results

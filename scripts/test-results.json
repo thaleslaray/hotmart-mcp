@@ -1,0 +1,310 @@
+{
+  "discovered_ids": {
+    "subscriber_code": "VRWIQQRG",
+    "product_id": 4168346,
+    "module_id": null,
+    "user_id": null,
+    "transaction": "HP2890253164"
+  },
+  "results": [
+    {
+      "tool": "get_sales_history",
+      "ok": true,
+      "duration_ms": 1460,
+      "shape": "dict(keys=['items', 'page_info'], items_count=5)",
+      "sample": {
+        "buyer": {
+          "name": "Francisco Marcus Eduardo Macedo Lima",
+          "ucode": "52adb45e-ec5a-478b-86aa-019e2208579d",
+          "email": "eduardo.752@hotmail.com"
+        },
+        "product": {
+          "name": "Operação Claude Code",
+          "id": 4062912
+        },
+        "producer": {
+          "name": "ESCOLA DE AUTOMAÇÃO",
+          "ucode": "b2228221-4bf0-4700-88ee-05c7cbb86c90"
+        },
+        "purchase": {
+          "warranty_expire_date": 1776384000000,
+          "transaction": "HP2890253164",
+          "commission_as": "PRODUCER",
+          "is_subscription": false,
+          "price": {
+            "currency_code": "BRL",
+            "value": 49
+          },
+          "payment": {
+            "installments_number": 1,
+            "type": "PIX",
+            "method": "FINANCED_INSTALLMENT_ADYEN_ONEY_12X"
+          },
+          "hotmart_fee": {
+            "currency_code": "BRL",
+            "fixed": 1,
+            "total": 3.89,
+            "base": 49,
+            "percentage": 5.9
+          },
+          "offer": {
+            "payment_mode": "UNIQUE_PAYMENT",
+            "code": "dr8tteuo"
+          },
+          "tracking": {
+            "source_sck": "ig|Meta+-+Vendas+-+OCC+04-26+-+CBO+-+Escala+-+02+-+02-04-2026|paid|Adv+-+CJ+01+-+AD2+++AD6|ADS2_Estático_OCC_04_26",
+            "external_code": "1775731397543_17757315054853",
+            "source": "operacao-claude-code"
+          },
+          "approved_date": 1775865935000,
+          "order_date": 1775865891000,
+          "status": "COMPLETE"
+        }
+      }
+    },
+    {
+      "tool": "get_sales_summary",
+      "ok": true,
+      "duration_ms": 318,
+      "shape": "dict(keys=['items', 'page_info'], items_count=2)",
+      "sample": {
+        "total_value": {
+          "currency_code": "BRL",
+          "value": 582447.96
+        },
+        "total_items": 2512
+      }
+    },
+    {
+      "tool": "get_sales_participants",
+      "ok": true,
+      "duration_ms": 226,
+      "shape": "dict(keys=['items', 'page_info'], items_count=5)",
+      "sample": {
+        "product": {
+          "name": "Operação Claude Code",
+          "id": 4062912
+        },
+        "users": [
+          {
+            "role": "PRODUCER",
+            "user": {
+              "locale": "PT_BR",
+              "name": "AUTOMATIZE NEGOCIOS DIGITAIS LTDA",
+              "ucode": "b2228221-4bf0-4700-88ee-05c7cbb86c90",
+              "cellphone": "21982219966",
+              "phone": "21982219966",
+              "address": {
+                "city": "Rio de Janeiro",
+                "number": "4344",
+                "address": "Avenida Epitácio Pessoa",
+                "country": "Brasil",
+                "neighborhood": "Lagoa",
+                "zip_code": "22471-004",
+                "state": "RJ",
+                "complement": "1303 - Bloco 1"
+              },
+              "documents": [
+                {
+                  "type": "CNPJ",
+                  "value": "49853639000109"
+                },
+                {
+                  "type": "CPF",
+                  "value": "32158958898"
+                }
+              ],
+              "trade_name": "ESCOLA DE AUTOMAÇÃO",
+              "email": "thales@laray.com.br"
+            }
+          },
+          {
+            "role": "BUYER",
+            "user": {
+              "documents": [
+                {
+                  "type": "DOCUMENT",
+                  "value": "04341556169"
+                }
+              ],
+              "phone": "63992116412",
+              "address": {
+                "country": "Brasil"
+              },
+              "locale": "PT_BR",
+              "name": "Francisco Marcus Eduardo Macedo Lima ",
+              "ucode": "52adb45e-ec5a-478b-86aa-019e2208579d",
+              "email": "eduardo.752@hotmail.com",
+              "cellphone": ""
+            }
+          }
+        ],
+        "transaction": "HP2890253164"
+      }
+    },
+    {
+      "tool": "get_sales_commissions",
+      "ok": true,
+      "duration_ms": 405,
+      "shape": "dict(keys=['items', 'page_info'], items_count=5)",
+      "sample": {
+        "commissions": [
+          {
+            "commission": {
+              "value": 45.11,
+              "currency_code": "BRL"
+            },
+            "user": {
+              "email": "thales@laray.com.br",
+              "ucode": "b2228221-4bf0-4700-88ee-05c7cbb86c90",
+              "name": "AUTOMATIZE NEGOCIOS DIGITAIS LTDA"
+            },
+            "source": "PRODUCER"
+          }
+        ],
+        "exchange_rate_currency_payout": 1,
+        "product": {
+          "id": 4062912,
+          "name": "Operação Claude Code"
+        },
+        "transaction": "HP2890253164"
+      }
+    },
+    {
+      "tool": "get_sales_price_details",
+      "ok": true,
+      "duration_ms": 207,
+      "shape": "dict(keys=['page_info', 'items'], items_count=5)",
+      "sample": {
+        "real_conversion_rate": 1,
+        "product": {
+          "name": "Operação Claude Code",
+          "id": 4062912
+        },
+        "base": {
+          "value": 49,
+          "currency_code": "BRL"
+        },
+        "total": {
+          "value": 49,
+          "currency_code": "BRL"
+        },
+        "transaction": "HP2890253164"
+      }
+    },
+    {
+      "tool": "get_subscriptions",
+      "ok": true,
+      "duration_ms": 435,
+      "shape": "dict(keys=['items', 'page_info'], items_count=5)",
+      "sample": {
+        "subscriber_code": "VRWIQQRG",
+        "subscription_id": 43263226,
+        "status": "ACTIVE",
+        "accession_date": 1776097374000,
+        "request_date": 1776097371000
+      }
+    },
+    {
+      "tool": "get_subscriptions_summary",
+      "ok": true,
+      "duration_ms": 556,
+      "shape": "dict(keys=['items', 'page_info'], items_count=5)",
+      "sample": {
+        "subscriber_code": "HEFL3UXM",
+        "subscription_id": 43121533,
+        "status": "INACTIVE",
+        "lifetime": 0,
+        "accession_date": 1775496182000
+      }
+    },
+    {
+      "tool": "get_subscription_transactions",
+      "ok": true,
+      "duration_ms": 1196,
+      "shape": "dict(keys=['items', 'page_info'], items_count=5)",
+      "sample": {
+        "subscriber_code": "XLRP1D0W",
+        "status": "ACTIVE",
+        "adoption_date": 1619906043000,
+        "product": {
+          "id": 1355458,
+          "name": "ESCOLA DE AUTOMAÇÃO E I.A."
+        },
+        "plan": {
+          "name": "ASSINATURA ANUAL",
+          "recurrency_period": 360,
+          "recurrency_type": "ANNUAL",
+          "offer": {
+            "key": "kdm48q1t"
+          }
+        }
+      }
+    },
+    {
+      "tool": "list_products",
+      "ok": true,
+      "duration_ms": 562,
+      "shape": "dict(keys=['page_info', 'items'], items_count=5)",
+      "sample": {
+        "is_subscription": false,
+        "id": 4168346,
+        "warranty_period": 7,
+        "status": "PAUSED",
+        "ucode": "b287b19e-37e6-432f-9bee-d784e8ff9893"
+      }
+    },
+    {
+      "tool": "get_subscriber_purchases",
+      "ok": true,
+      "duration_ms": 662,
+      "shape": "list(len=1)",
+      "sample": {
+        "transaction": "HP2121270929",
+        "payment_method": "MASTERCARD_CREDIT_CARD",
+        "payment_engine": "HotPay",
+        "under_warranty": false,
+        "payment_type": "CREDIT_CARD",
+        "status": "COMPLETE",
+        "recurrency_number": 1,
+        "price": {
+          "currency_code": "BRL",
+          "value": 1997.02
+        },
+        "approved_date": 1776097373000
+      }
+    },
+    {
+      "tool": "get_product_offers",
+      "ok": true,
+      "duration_ms": 141,
+      "shape": "dict(keys=[])",
+      "sample": {}
+    },
+    {
+      "tool": "get_product_plans",
+      "ok": true,
+      "duration_ms": 496,
+      "shape": "dict(keys=[])",
+      "sample": {}
+    },
+    {
+      "tool": "get_coupons",
+      "ok": true,
+      "duration_ms": 341,
+      "shape": "dict(keys=['items', 'page_info'], items_count=8)",
+      "sample": {
+        "coupon_code": "VIP2025",
+        "id": 3070916,
+        "discount": 0.4,
+        "status": "overdue",
+        "start_date": 1749926226000
+      }
+    }
+  ],
+  "summary": {
+    "total": 13,
+    "ok": 13,
+    "fail": 0
+  }
+}

@@ -100,6 +100,48 @@ def _enum_values(spec: dict[str, Any], schema: dict[str, Any]) -> list[str] | No
     return resolved.get("enum")
 
 
+_DATE_NAME_HINTS = ("date", "_at", "timestamp")
+_DATE_EXAMPLE_HINT = (
+    "Timestamp em **milissegundos** desde epoch (não segundos, não ISO). "
+    "Ex: `1730419200000` = 2024-11-01 00:00 UTC. "
+    "Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`."
+)
+
+
+def _enrich_description(
+    api_name: str,
+    base_desc: str,
+    resolved_schema: dict[str, Any],
+    enum_values: list[str] | None,
+) -> str:
+    """Add format hints inline to help LLM pass params in the correct shape."""
+    desc = base_desc.strip() if base_desc else api_name
+
+    # --- date timestamps (ms) ---
+    is_date_name = any(h in api_name.lower() for h in _DATE_NAME_HINTS)
+    is_int64 = resolved_schema.get("type") == "integer" and resolved_schema.get("format") == "int64"
+    if (is_date_name and is_int64) or (is_date_name and "ms" in desc.lower()):
+        desc += f". {_DATE_EXAMPLE_HINT}"
+
+    # --- enums: inline if <=3 values, bullet list if more ---
+    if enum_values:
+        if len(enum_values) <= 3:
+            desc += f". Valores aceitos: {', '.join(repr(v) for v in enum_values)}"
+        else:
+            desc += ".\n        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):"
+            for v in enum_values:
+                desc += f"\n          - `{v}`"
+
+    # --- code/id formats ---
+    fmt = resolved_schema.get("format")
+    if fmt == "uuid":
+        desc += ". Formato: UUID (ex: `550e8400-e29b-41d4-a716-446655440000`)"
+    elif api_name.endswith("_code") and resolved_schema.get("type") == "string":
+        desc += ". Formato: código alfanumérico Hotmart (ex: `H123A4B5`, não é UUID nem int)"
+
+    return desc
+
+
 # ---------------------------------------------------------------------------
 # Naming helpers
 # ---------------------------------------------------------------------------
@@ -203,9 +245,7 @@ def _parse_endpoints(spec: dict[str, Any]) -> list[Endpoint]:
                 resolved_schema = _resolve_schema(spec, schema)
                 py_type = _python_type(resolved_schema)
                 enums = _enum_values(spec, schema)
-                desc = p.get("description", "")
-                if enums:
-                    desc += f". Values: {', '.join(str(v) for v in enums)}"
+                desc = _enrich_description(p["name"], p.get("description", ""), resolved_schema, enums)
                 params.append(Param(
                     api_name=p["name"],
                     py_name=_safe_py_name(p["name"]),
@@ -227,9 +267,8 @@ def _parse_endpoints(spec: dict[str, Any]) -> list[Endpoint]:
                     resolved_prop = _resolve_schema(spec, prop_schema)
                     py_type = _python_type(resolved_prop)
                     enums = _enum_values(spec, prop_schema)
-                    desc = resolved_prop.get("description", prop_schema.get("description", ""))
-                    if enums:
-                        desc += f". Values: {', '.join(str(v) for v in enums)}"
+                    raw_desc = resolved_prop.get("description", prop_schema.get("description", ""))
+                    desc = _enrich_description(prop_name, raw_desc, resolved_prop, enums)
                     params.append(Param(
                         api_name=prop_name,
                         py_name=_safe_py_name(prop_name),

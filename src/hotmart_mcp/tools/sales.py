@@ -32,17 +32,53 @@ async def get_sales_history(
         max_results: Número máximo de resultados por página
         page_token: Token de paginação para a próxima página
         product_id: ID do produto
-        start_date: Data inicial (timestamp em milissegundos desde epoch)
-        end_date: Data final (timestamp em milissegundos desde epoch)
+        start_date: Data inicial (timestamp em milissegundos desde epoch). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        end_date: Data final (timestamp em milissegundos desde epoch). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
         sales_source: Origem da venda
         transaction: Código da transação
         select: Seleção de campos customizados na resposta
         buyer_name: Nome do comprador
         buyer_email: E-mail do comprador
-        offer_code: Código da oferta
-        commission_as: Papel de comissão do usuário autenticado. Values: PRODUCER, COPRODUCER, AFFILIATE
-        transaction_status: Status da transação. Values: APPROVED, BLOCKED, CANCELLED, CHARGEBACK, COMPLETE, EXPIRED, NO_FUNDS, OVERDUE, PARTIALLY_REFUNDED, PRE_ORDER, PRINTED_BILLET, PROCESSING_TRANSACTION, PROTESTED, REFUNDED, STARTED, UNDER_ANALISYS, WAITING_PAYMENT
-        payment_type: Tipo de pagamento. Values: BILLET, CASH_PAYMENT, CREDIT_CARD, DIRECT_BANK_TRANSFER, DIRECT_DEBIT, FINANCED_BILLET, FINANCED_INSTALLMENT, GOOGLE_PAY, HOTCARD, HYBRID, MANUAL_TRANSFER, PAYPAL, PAYPAL_INTERNACIONAL, PICPAY, PIX, SAMSUNG_PAY, WALLET"""
+        offer_code: Código da oferta. Formato: código alfanumérico Hotmart (ex: `H123A4B5`, não é UUID nem int)
+        commission_as: Papel de comissão do usuário autenticado. Valores aceitos: 'PRODUCER', 'COPRODUCER', 'AFFILIATE'
+        transaction_status: Status da transação.
+        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+          - `APPROVED`
+          - `BLOCKED`
+          - `CANCELLED`
+          - `CHARGEBACK`
+          - `COMPLETE`
+          - `EXPIRED`
+          - `NO_FUNDS`
+          - `OVERDUE`
+          - `PARTIALLY_REFUNDED`
+          - `PRE_ORDER`
+          - `PRINTED_BILLET`
+          - `PROCESSING_TRANSACTION`
+          - `PROTESTED`
+          - `REFUNDED`
+          - `STARTED`
+          - `UNDER_ANALISYS`
+          - `WAITING_PAYMENT`
+        payment_type: Tipo de pagamento.
+        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+          - `BILLET`
+          - `CASH_PAYMENT`
+          - `CREDIT_CARD`
+          - `DIRECT_BANK_TRANSFER`
+          - `DIRECT_DEBIT`
+          - `FINANCED_BILLET`
+          - `FINANCED_INSTALLMENT`
+          - `GOOGLE_PAY`
+          - `HOTCARD`
+          - `HYBRID`
+          - `MANUAL_TRANSFER`
+          - `PAYPAL`
+          - `PAYPAL_INTERNACIONAL`
+          - `PICPAY`
+          - `PIX`
+          - `SAMSUNG_PAY`
+          - `WALLET`"""
     endpoint = "/payments/api/v1/sales/history"
     params = {}
     if max_results is not None:
@@ -97,16 +133,52 @@ async def get_sales_summary(
     
     Args:
         transaction: Código da transação
-        transaction_status: Status da transação. Values: APPROVED, BLOCKED, CANCELLED, CHARGEBACK, COMPLETE, EXPIRED, NO_FUNDS, OVERDUE, PARTIALLY_REFUNDED, PRE_ORDER, PRINTED_BILLET, PROCESSING_TRANSACTION, PROTESTED, REFUNDED, STARTED, UNDER_ANALISYS, WAITING_PAYMENT
+        transaction_status: Status da transação.
+        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+          - `APPROVED`
+          - `BLOCKED`
+          - `CANCELLED`
+          - `CHARGEBACK`
+          - `COMPLETE`
+          - `EXPIRED`
+          - `NO_FUNDS`
+          - `OVERDUE`
+          - `PARTIALLY_REFUNDED`
+          - `PRE_ORDER`
+          - `PRINTED_BILLET`
+          - `PROCESSING_TRANSACTION`
+          - `PROTESTED`
+          - `REFUNDED`
+          - `STARTED`
+          - `UNDER_ANALISYS`
+          - `WAITING_PAYMENT`
         max_results: Número máximo de resultados por página
         page_token: Token de paginação para a próxima página
         product_id: ID do produto
-        start_date: Data inicial (timestamp em milissegundos desde epoch)
-        end_date: Data final (timestamp em milissegundos desde epoch)
+        start_date: Data inicial (timestamp em milissegundos desde epoch). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        end_date: Data final (timestamp em milissegundos desde epoch). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
         sales_source: Origem da venda
         affiliate_name: Nome do afiliado
-        payment_type: Tipo de pagamento. Values: BILLET, CASH_PAYMENT, CREDIT_CARD, DIRECT_BANK_TRANSFER, DIRECT_DEBIT, FINANCED_BILLET, FINANCED_INSTALLMENT, GOOGLE_PAY, HOTCARD, HYBRID, MANUAL_TRANSFER, PAYPAL, PAYPAL_INTERNACIONAL, PICPAY, PIX, SAMSUNG_PAY, WALLET
-        offer_code: Código da oferta
+        payment_type: Tipo de pagamento.
+        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+          - `BILLET`
+          - `CASH_PAYMENT`
+          - `CREDIT_CARD`
+          - `DIRECT_BANK_TRANSFER`
+          - `DIRECT_DEBIT`
+          - `FINANCED_BILLET`
+          - `FINANCED_INSTALLMENT`
+          - `GOOGLE_PAY`
+          - `HOTCARD`
+          - `HYBRID`
+          - `MANUAL_TRANSFER`
+          - `PAYPAL`
+          - `PAYPAL_INTERNACIONAL`
+          - `PICPAY`
+          - `PIX`
+          - `SAMSUNG_PAY`
+          - `WALLET`
+        offer_code: Código da oferta. Formato: código alfanumérico Hotmart (ex: `H123A4B5`, não é UUID nem int)
         select: Seleção de campos customizados na resposta"""
     endpoint = "/payments/api/v1/sales/summary"
     params = {}
@@ -159,17 +231,35 @@ async def get_sales_participants(
     
     Args:
         transaction: Código da transação
-        transaction_status: Status da transação. Values: APPROVED, BLOCKED, CANCELLED, CHARGEBACK, COMPLETE, EXPIRED, NO_FUNDS, OVERDUE, PARTIALLY_REFUNDED, PRE_ORDER, PRINTED_BILLET, PROCESSING_TRANSACTION, PROTESTED, REFUNDED, STARTED, UNDER_ANALISYS, WAITING_PAYMENT
+        transaction_status: Status da transação.
+        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+          - `APPROVED`
+          - `BLOCKED`
+          - `CANCELLED`
+          - `CHARGEBACK`
+          - `COMPLETE`
+          - `EXPIRED`
+          - `NO_FUNDS`
+          - `OVERDUE`
+          - `PARTIALLY_REFUNDED`
+          - `PRE_ORDER`
+          - `PRINTED_BILLET`
+          - `PROCESSING_TRANSACTION`
+          - `PROTESTED`
+          - `REFUNDED`
+          - `STARTED`
+          - `UNDER_ANALISYS`
+          - `WAITING_PAYMENT`
         max_results: Número máximo de resultados por página
         page_token: Token de paginação para a próxima página
         product_id: ID do produto
-        start_date: Data inicial (timestamp em milissegundos desde epoch)
-        end_date: Data final (timestamp em milissegundos desde epoch)
+        start_date: Data inicial (timestamp em milissegundos desde epoch). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        end_date: Data final (timestamp em milissegundos desde epoch). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
         buyer_email: E-mail do comprador
         sales_source: Origem da venda
         buyer_name: Nome do comprador
         affiliate_name: Nome do afiliado
-        commission_as: Papel de comissão do usuário autenticado. Values: PRODUCER, COPRODUCER, AFFILIATE
+        commission_as: Papel de comissão do usuário autenticado. Valores aceitos: 'PRODUCER', 'COPRODUCER', 'AFFILIATE'
         select: Seleção de campos customizados na resposta"""
     endpoint = "/payments/api/v1/sales/users"
     params = {}
@@ -222,11 +312,29 @@ async def get_sales_commissions(
         max_results: Número máximo de resultados por página
         page_token: Token de paginação para a próxima página
         product_id: ID do produto
-        start_date: Data inicial (timestamp em milissegundos desde epoch)
-        end_date: Data final (timestamp em milissegundos desde epoch)
+        start_date: Data inicial (timestamp em milissegundos desde epoch). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        end_date: Data final (timestamp em milissegundos desde epoch). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
         transaction: Código da transação
-        commission_as: Papel de comissão do usuário autenticado. Values: PRODUCER, COPRODUCER, AFFILIATE
-        transaction_status: Status da transação. Values: APPROVED, BLOCKED, CANCELLED, CHARGEBACK, COMPLETE, EXPIRED, NO_FUNDS, OVERDUE, PARTIALLY_REFUNDED, PRE_ORDER, PRINTED_BILLET, PROCESSING_TRANSACTION, PROTESTED, REFUNDED, STARTED, UNDER_ANALISYS, WAITING_PAYMENT
+        commission_as: Papel de comissão do usuário autenticado. Valores aceitos: 'PRODUCER', 'COPRODUCER', 'AFFILIATE'
+        transaction_status: Status da transação.
+        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+          - `APPROVED`
+          - `BLOCKED`
+          - `CANCELLED`
+          - `CHARGEBACK`
+          - `COMPLETE`
+          - `EXPIRED`
+          - `NO_FUNDS`
+          - `OVERDUE`
+          - `PARTIALLY_REFUNDED`
+          - `PRE_ORDER`
+          - `PRINTED_BILLET`
+          - `PROCESSING_TRANSACTION`
+          - `PROTESTED`
+          - `REFUNDED`
+          - `STARTED`
+          - `UNDER_ANALISYS`
+          - `WAITING_PAYMENT`
         select: Seleção de campos customizados na resposta"""
     endpoint = "/payments/api/v1/sales/commissions"
     params = {}
@@ -269,13 +377,49 @@ async def get_sales_price_details(
     
     Args:
         transaction: Código da transação
-        transaction_status: Status da transação. Values: APPROVED, BLOCKED, CANCELLED, CHARGEBACK, COMPLETE, EXPIRED, NO_FUNDS, OVERDUE, PARTIALLY_REFUNDED, PRE_ORDER, PRINTED_BILLET, PROCESSING_TRANSACTION, PROTESTED, REFUNDED, STARTED, UNDER_ANALISYS, WAITING_PAYMENT
+        transaction_status: Status da transação.
+        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+          - `APPROVED`
+          - `BLOCKED`
+          - `CANCELLED`
+          - `CHARGEBACK`
+          - `COMPLETE`
+          - `EXPIRED`
+          - `NO_FUNDS`
+          - `OVERDUE`
+          - `PARTIALLY_REFUNDED`
+          - `PRE_ORDER`
+          - `PRINTED_BILLET`
+          - `PROCESSING_TRANSACTION`
+          - `PROTESTED`
+          - `REFUNDED`
+          - `STARTED`
+          - `UNDER_ANALISYS`
+          - `WAITING_PAYMENT`
         max_results: Número máximo de resultados por página
         page_token: Token de paginação para a próxima página
         product_id: ID do produto
-        start_date: Data inicial (timestamp em milissegundos desde epoch)
-        end_date: Data final (timestamp em milissegundos desde epoch)
-        payment_type: Tipo de pagamento. Values: BILLET, CASH_PAYMENT, CREDIT_CARD, DIRECT_BANK_TRANSFER, DIRECT_DEBIT, FINANCED_BILLET, FINANCED_INSTALLMENT, GOOGLE_PAY, HOTCARD, HYBRID, MANUAL_TRANSFER, PAYPAL, PAYPAL_INTERNACIONAL, PICPAY, PIX, SAMSUNG_PAY, WALLET
+        start_date: Data inicial (timestamp em milissegundos desde epoch). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        end_date: Data final (timestamp em milissegundos desde epoch). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        payment_type: Tipo de pagamento.
+        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+          - `BILLET`
+          - `CASH_PAYMENT`
+          - `CREDIT_CARD`
+          - `DIRECT_BANK_TRANSFER`
+          - `DIRECT_DEBIT`
+          - `FINANCED_BILLET`
+          - `FINANCED_INSTALLMENT`
+          - `GOOGLE_PAY`
+          - `HOTCARD`
+          - `HYBRID`
+          - `MANUAL_TRANSFER`
+          - `PAYPAL`
+          - `PAYPAL_INTERNACIONAL`
+          - `PICPAY`
+          - `PIX`
+          - `SAMSUNG_PAY`
+          - `WALLET`
         select: Seleção de campos customizados na resposta"""
     endpoint = "/payments/api/v1/sales/price/details"
     params = {}
@@ -309,7 +453,7 @@ async def refund_sale(
     Realiza o reembolso de uma venda. A venda deve estar com status APPROVED ou COMPLETE. Não disponível para trial, BACS ou SEPA. Janela de reembolso de 7 a 30 dias (máximo 60).
     
     Args:
-        transaction_code: Código da transação"""
+        transaction_code: Código da transação. Formato: código alfanumérico Hotmart (ex: `H123A4B5`, não é UUID nem int)"""
     endpoint = f"/payments/api/v1/sales/{transaction_code}/refund"
     result = await get_client().put(endpoint)
     return json.dumps(result, indent=2)

@@ -1553,7 +1553,7 @@
         }
       }
     },
-    "/products/api/v1/products/{product_id}/offers": {
+    "/products/api/v1/product/{product_id}/offers": {
       "get": {
         "tags": [
           "Products"
@@ -1616,7 +1616,7 @@
         }
       }
     },
-    "/products/api/v1/products/{product_id}/plans": {
+    "/products/api/v1/product/{product_id}/plans": {
       "get": {
         "tags": [
           "Products"

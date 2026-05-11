@@ -22,7 +22,7 @@ async def generate_negotiation(
     Args:
         subscription_id: ID da assinatura
         recurrences: Números das recorrências em atraso (1 a 5 valores)
-        payment_type: Tipo de pagamento para a negociação. Values: BOLETO, PIX
+        payment_type: Tipo de pagamento para a negociação. Valores aceitos: 'BOLETO', 'PIX'
         discount: discount
         document: CPF ou CNPJ do assinante (obrigatório para BOLETO)"""
     endpoint = "/payments/api/v1/installments/negotiate"

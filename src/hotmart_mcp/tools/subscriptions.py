@@ -37,17 +37,26 @@ async def get_subscriptions(
         product_id: ID do produto
         plan: Nomes dos planos
         plan_id: ID do plano
-        accession_date: Data de adesão inicial (timestamp em milissegundos)
-        end_accession_date: Data de adesão final (timestamp em milissegundos)
-        status: Status da assinatura. Values: ACTIVE, INACTIVE, DELAYED, CANCELLED_BY_CUSTOMER, CANCELLED_BY_SELLER, CANCELLED_BY_ADMIN, STARTED, OVERDUE
-        subscriber_code: Código do assinante
+        accession_date: Data de adesão inicial (timestamp em milissegundos). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        end_accession_date: Data de adesão final (timestamp em milissegundos). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        status: Status da assinatura.
+        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+          - `ACTIVE`
+          - `INACTIVE`
+          - `DELAYED`
+          - `CANCELLED_BY_CUSTOMER`
+          - `CANCELLED_BY_SELLER`
+          - `CANCELLED_BY_ADMIN`
+          - `STARTED`
+          - `OVERDUE`
+        subscriber_code: Código do assinante. Formato: código alfanumérico Hotmart (ex: `H123A4B5`, não é UUID nem int)
         subscriber_email: E-mail do assinante
         transaction: Código da transação
         trial: Filtrar por trial
-        cancelation_date: Data de cancelamento inicial (timestamp em milissegundos)
-        end_cancelation_date: Data de cancelamento final (timestamp em milissegundos)
-        date_next_charge: Data da próxima cobrança inicial (timestamp em milissegundos)
-        end_date_next_charge: Data da próxima cobrança final (timestamp em milissegundos)
+        cancelation_date: Data de cancelamento inicial (timestamp em milissegundos). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        end_cancelation_date: Data de cancelamento final (timestamp em milissegundos). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        date_next_charge: Data da próxima cobrança inicial (timestamp em milissegundos). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        end_date_next_charge: Data da próxima cobrança final (timestamp em milissegundos). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
         select: Seleção de campos customizados na resposta"""
     endpoint = "/payments/api/v1/subscriptions"
     params = {}
@@ -110,7 +119,7 @@ async def get_subscriptions_summary(
         subscriber_code: Código do assinante
         accession_date: Data de adesão inicial (timestamp em milissegundos)
         end_accession_date: Data de adesão final (timestamp em milissegundos)
-        date_next_charge: Data da próxima cobrança (timestamp em milissegundos)
+        date_next_charge: Data da próxima cobrança (timestamp em milissegundos). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
         select: Seleção de campos customizados na resposta"""
     endpoint = "/payments/api/v1/subscriptions/summary"
     params = {}
@@ -163,15 +172,49 @@ async def get_subscription_transactions(
         transaction: Código da transação
         subscriber_name: Nome do assinante
         subscriber_email: E-mail do assinante
-        billing_type: Tipo de cobrança. Values: SUBSCRIPTION, SMART_INSTALLMENT, SMART_RECOVERY
-        subscription_status: Status da assinatura. Values: STARTED, INACTIVE, ACTIVE, DELAYED, CANCELLED, CANCELLED_BY_ADMIN, CANCELLED_BY_CUSTOMER, CANCELLED_BY_SELLER, OVERDUE
-        recurrency_status: Status da recorrência. Values: PAID, NOT_PAID, CLAIMED, REFUNDED, CHARGEBACK
+        billing_type: Tipo de cobrança. Valores aceitos: 'SUBSCRIPTION', 'SMART_INSTALLMENT', 'SMART_RECOVERY'
+        subscription_status: Status da assinatura.
+        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+          - `STARTED`
+          - `INACTIVE`
+          - `ACTIVE`
+          - `DELAYED`
+          - `CANCELLED`
+          - `CANCELLED_BY_ADMIN`
+          - `CANCELLED_BY_CUSTOMER`
+          - `CANCELLED_BY_SELLER`
+          - `OVERDUE`
+        recurrency_status: Status da recorrência.
+        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+          - `PAID`
+          - `NOT_PAID`
+          - `CLAIMED`
+          - `REFUNDED`
+          - `CHARGEBACK`
         purchase_status: Status da compra
-        transaction_date: Data da transação inicial (timestamp em milissegundos)
-        end_transaction_date: Data da transação final (timestamp em milissegundos)
-        offer_code: Código da oferta
-        purchase_payment_type: Tipo de pagamento da compra. Values: BILLET, CASH_PAYMENT, CREDIT_CARD, DIRECT_BANK_TRANSFER, DIRECT_DEBIT, FINANCED_BILLET, FINANCED_INSTALLMENT, GOOGLE_PAY, HOTCARD, HYBRID, MANUAL_TRANSFER, PAYPAL, PAYPAL_INTERNACIONAL, PICPAY, PIX, SAMSUNG_PAY, WALLET
-        subscriber_code: Código do assinante
+        transaction_date: Data da transação inicial (timestamp em milissegundos). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        end_transaction_date: Data da transação final (timestamp em milissegundos). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
+        offer_code: Código da oferta. Formato: código alfanumérico Hotmart (ex: `H123A4B5`, não é UUID nem int)
+        purchase_payment_type: Tipo de pagamento da compra.
+        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+          - `BILLET`
+          - `CASH_PAYMENT`
+          - `CREDIT_CARD`
+          - `DIRECT_BANK_TRANSFER`
+          - `DIRECT_DEBIT`
+          - `FINANCED_BILLET`
+          - `FINANCED_INSTALLMENT`
+          - `GOOGLE_PAY`
+          - `HOTCARD`
+          - `HYBRID`
+          - `MANUAL_TRANSFER`
+          - `PAYPAL`
+          - `PAYPAL_INTERNACIONAL`
+          - `PICPAY`
+          - `PIX`
+          - `SAMSUNG_PAY`
+          - `WALLET`
+        subscriber_code: Código do assinante. Formato: código alfanumérico Hotmart (ex: `H123A4B5`, não é UUID nem int)
         select: Seleção de campos customizados na resposta"""
     endpoint = "/payments/api/v1/subscriptions/transactions"
     params = {}
@@ -219,7 +262,7 @@ async def get_subscriber_purchases(
     Retorna as compras de um assinante.
     
     Args:
-        subscriber_code: Código do assinante"""
+        subscriber_code: Código do assinante. Formato: código alfanumérico Hotmart (ex: `H123A4B5`, não é UUID nem int)"""
     endpoint = f"/payments/api/v1/subscriptions/{subscriber_code}/purchases"
     result = await get_client().get(endpoint)
     return json.dumps(result, indent=2)
@@ -234,7 +277,7 @@ async def cancel_subscription(
     Cancela uma assinatura.
     
     Args:
-        subscriber_code: Código do assinante
+        subscriber_code: Código do assinante. Formato: código alfanumérico Hotmart (ex: `H123A4B5`, não é UUID nem int)
         send_mail: Enviar e-mail de notificação ao assinante"""
     endpoint = f"/payments/api/v1/subscriptions/{subscriber_code}/cancel"
     body = {}
@@ -273,7 +316,7 @@ async def reactivate_subscription(
     Reativa uma assinatura. O assinante deve aceitar via link por e-mail (validade de 3 dias).
     
     Args:
-        subscriber_code: Código do assinante
+        subscriber_code: Código do assinante. Formato: código alfanumérico Hotmart (ex: `H123A4B5`, não é UUID nem int)
         charge: Cobrar imediatamente"""
     endpoint = f"/payments/api/v1/subscriptions/{subscriber_code}/reactivate"
     body = {}
@@ -312,7 +355,7 @@ async def change_subscription_due_day(
     Altera o dia de vencimento de uma assinatura. Somente para assinaturas ACTIVE ou DELAYED. Não disponível para trial. O dia 31 será ajustado para 30 em meses mais curtos.
     
     Args:
-        subscriber_code: Código do assinante
+        subscriber_code: Código do assinante. Formato: código alfanumérico Hotmart (ex: `H123A4B5`, não é UUID nem int)
         due_day: Novo dia de vencimento (1-31)"""
     endpoint = f"/payments/api/v1/subscriptions/{subscriber_code}"
     body = {}

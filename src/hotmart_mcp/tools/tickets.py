@@ -52,13 +52,27 @@ async def get_event_participants(
         page_token: Token de paginação para a próxima página
         buyer_email: E-mail do comprador
         participant_email: E-mail do participante
-        last_update: Última atualização (timestamp em milissegundos)
+        last_update: Última atualização (timestamp em milissegundos). Timestamp em **milissegundos** desde epoch (não segundos, não ISO). Ex: `1730419200000` = 2024-11-01 00:00 UTC. Em Python: `int(datetime(2024,11,1).timestamp() * 1000)`.
         id_lot: ID do lote
-        ticket_status: Status do ingresso. Values: SOLD, INVITE, INVITE_CANCELED, REFUNDED, CHARGEBACK, EXCLUDED, AVAILABLE, RESERVED
-        ticket_type: Tipo do ingresso. Values: PAID, FREE, ALL
-        checkin_status: Status do check-in. Values: PENDING, PARTIAL, CONCLUDED, ALL
+        ticket_status: Status do ingresso.
+        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+          - `SOLD`
+          - `INVITE`
+          - `INVITE_CANCELED`
+          - `REFUNDED`
+          - `CHARGEBACK`
+          - `EXCLUDED`
+          - `AVAILABLE`
+          - `RESERVED`
+        ticket_type: Tipo do ingresso. Valores aceitos: 'PAID', 'FREE', 'ALL'
+        checkin_status: Status do check-in.
+        Valores aceitos (case-sensitive, passe EXATAMENTE como abaixo):
+          - `PENDING`
+          - `PARTIAL`
+          - `CONCLUDED`
+          - `ALL`
         id_eticket: ID do e-ticket
-        ticket_qr_code: QR code do ingresso
+        ticket_qr_code: QR code do ingresso. Formato: código alfanumérico Hotmart (ex: `H123A4B5`, não é UUID nem int)
         select: Seleção de campos customizados na resposta"""
     endpoint = f"/events/api/v1/{event_id}/participants"
     params = {}
