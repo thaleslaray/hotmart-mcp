@@ -134,28 +134,15 @@ Pode ser que aquele produto/conta não tem dado cadastrado pra aquilo. Exemplo: 
 
 **Claude Code:**
 
-Tem 2 caminhos. Recomendado: ligar auto-update uma vez, daí pra frente atualiza sozinho.
-
-**Caminho 1 — Auto-update (configura 1x, esquece pra sempre):**
-
-1. Roda `/plugin` (abre menu)
-2. Aba **Marketplaces** → seleciona `thales-plugins`
-3. Clica **Enable auto-update**
-
-Pronto. Toda vez que abrir o Claude Code, ele checa versão nova automaticamente e te avisa pra rodar `/reload-plugins`.
-
-**Caminho 2 — Manual (pra atualizar agora):**
-
 ```
 /plugin marketplace update thales-plugins
-/plugin uninstall hotmart@thales-plugins
-/plugin install hotmart@thales-plugins
+/plugin update hotmart
 /reload-plugins
 ```
 
 E reinicia o Claude Code.
 
-> 💡 **`/plugin update <plugin>` não existe** como comando do Claude Code (apesar do que algumas docs de terceiros sugerem). A atualização manual é via uninstall+install, ou habilitando auto-update pela UI. Fonte: [doc oficial Anthropic](https://code.claude.com/docs/en/discover-plugins).
+> 💡 **Opcional — habilita auto-update:** `/plugin` → aba **Marketplaces** → `thales-plugins` → **Enable auto-update**. Daí pra frente atualiza sozinho no startup, sem precisar dos comandos manuais.
 
 ---
 
