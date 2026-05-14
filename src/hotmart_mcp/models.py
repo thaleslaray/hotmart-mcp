@@ -4,10 +4,30 @@
 
 from __future__ import annotations
 
-from enum import IntEnum, StrEnum
+from enum import IntEnum, StrEnum as _StdStrEnum
 from typing import Any
 
 from pydantic import BaseModel as _PydanticBase, ConfigDict, Field, confloat, constr
+from pydantic_core import core_schema
+
+
+class StrEnum(_StdStrEnum):
+    """Permissive StrEnum — unknown API values pass through as raw strings
+    instead of raising ValidationError.
+
+    Hotmart's spec lags behind production (e.g. PaymentType ships APPLE_PAY
+    before the OpenAPI doc lists it). Strict enum validation would crash the
+    whole dashboard for one unknown value. This Pydantic schema tries the
+    enum first, falls back to a raw str so downstream code keeps working.
+    Access via `str(value)` either way since StrEnum members ARE strings.
+    """
+    @classmethod
+    def __get_pydantic_core_schema__(cls, source_type, handler):
+        def coerce(v):
+            if v is None or isinstance(v, cls): return v
+            try: return cls(v)
+            except (ValueError, KeyError): return v
+        return core_schema.no_info_plain_validator_function(coerce)
 
 
 class BaseModel(_PydanticBase):

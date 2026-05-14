@@ -62,7 +62,7 @@ async def hotmart_sales_dashboard_app(
         day = epoch_ms_to_date(p.order_date or p.approved_date)
         if day:
             by_day[day] += _value(it)
-        pt = (p.payment.type.value if p.payment and p.payment.type else None) or "UNKNOWN"
+        pt = (p.payment.type if p.payment and p.payment.type else None) or "UNKNOWN"
         by_payment[pt] += 1
 
     daily_series = [{"date": d, "revenue": v} for d, v in sorted(by_day.items())]
@@ -77,8 +77,8 @@ async def hotmart_sales_dashboard_app(
             "buyer": (it.buyer.name if it.buyer else None) or "?",
             "product": (it.product.name if it.product else None) or "?",
             "value": format_brl(_value(it)),
-            "status": (p.status.value if p and p.status else None) or "?",
-            "payment": (p.payment.type.value if p and p.payment and p.payment.type else None) or "?",
+            "status": (p.status if p and p.status else None) or "?",
+            "payment": (p.payment.type if p and p.payment and p.payment.type else None) or "?",
         })
 
     sanity_warning = total_qty > 0 and total_revenue == 0
@@ -273,7 +273,7 @@ async def hotmart_commissions_dashboard_app(
                 rows.append({
                     "user": user_name,
                     "ucode": (c.user.ucode if c.user else None) or "",
-                    "role": (c.source.value if c.source else None) or "?",
+                    "role": (c.source if c.source else None) or "?",
                     "transaction": s.transaction or "?",
                     "product": (s.product.name if s.product else None) or "?",
                     "value": format_brl(value),

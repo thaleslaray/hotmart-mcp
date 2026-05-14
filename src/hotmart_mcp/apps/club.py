@@ -38,13 +38,13 @@ async def hotmart_students_overview_app(subdomain: str) -> PrefabApp:
         pct = (s.progress.completed_percentage if s.progress else None) or 0
         completed = (s.progress.completed if s.progress else None) or 0
         progress_total = (s.progress.total if s.progress else None) or 0
-        by_status[(s.status.value if s.status else None) or "?"] += 1
-        by_engagement[(s.engagement.value if s.engagement else None) or "?"] += 1
+        by_status[(s.status if s.status else None) or "?"] += 1
+        by_engagement[(s.engagement if s.engagement else None) or "?"] += 1
         rows.append({
             "name": s.name or "?",
             "email": s.email or "",
-            "status": (s.status.value if s.status else None) or "?",
-            "engagement": (s.engagement.value if s.engagement else None) or "?",
+            "status": (s.status if s.status else None) or "?",
+            "engagement": (s.engagement if s.engagement else None) or "?",
             "progress_pct": f"{pct:.0f}%",
             "completed": f"{completed}/{progress_total}",
             "_pct": pct,

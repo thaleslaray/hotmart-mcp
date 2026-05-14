@@ -39,7 +39,7 @@ async def hotmart_subscriptions_health_app(
 
     by_status: Counter[str] = Counter()
     for it in items:
-        by_status[it.status.value if it.status else "?"] += 1
+        by_status[it.status if it.status else "?"] += 1
 
     pie_data = [{"name": k, "value": v} for k, v in by_status.most_common()]
 
@@ -51,7 +51,7 @@ async def hotmart_subscriptions_health_app(
             "email": (it.subscriber.email if it.subscriber else None) or "",
             "product": (it.product.name if it.product else None) or "?",
             "plan": (it.plan.name if it.plan else None) or "?",
-            "status": (it.status.value if it.status else None) or "?",
+            "status": (it.status if it.status else None) or "?",
             "accession": epoch_ms_to_date(it.accession_date),
         })
 
@@ -112,7 +112,7 @@ async def hotmart_churn_analyzer_app(
     items: list[Subscription] = parse_items(raw, Subscription)
 
     def _status_str(s: Subscription) -> str:
-        return s.status.value if s.status else ""
+        return s.status if s.status else ""
 
     cancelled = [i for i in items if _status_str(i).startswith("CANCELLED")]
     active = [i for i in items if _status_str(i) == "ACTIVE"]
@@ -216,8 +216,8 @@ async def hotmart_subscriber_360_app(subscriber_code: str) -> PrefabApp:
             "date": epoch_ms_to_date(p.approved_date),
             "recurrence": str(p.recurrency_number) if p.recurrency_number else "—",
             "value": format_brl(_value(p)),
-            "status": (p.status.value if p.status else None) or "?",
-            "payment": (p.payment_type.value if p.payment_type else None) or "—",
+            "status": (p.status if p.status else None) or "?",
+            "payment": (p.payment_type if p.payment_type else None) or "—",
         })
 
     with PrefabApp() as app:

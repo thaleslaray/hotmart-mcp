@@ -49,7 +49,7 @@ async def hotmart_event_dashboard_app(event_id: int) -> PrefabApp:
             "buyer": (p.buyer.name if p.buyer else None) or "?",
             "product": (p.product.name if p.product else None) or "?",
             "lot": lot_name,
-            "status": (p.eticket.ticket_status.value if p.eticket and p.eticket.ticket_status else "—"),
+            "status": (p.eticket.ticket_status if p.eticket and p.eticket.ticket_status else "—"),
         })
 
     lot_data = [{"name": k, "value": v} for k, v in by_lot.most_common()]
