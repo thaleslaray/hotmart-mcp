@@ -1,0 +1,9 @@
+{
+  "_comment": "Env vars que /publicar injeta no .mcp.json do plugin marketplace (Claude Code). NÃO afeta o .mcpb do Desktop (que mantém default sem essas envs). Use pra ativar features client-specific.",
+  "env": {
+    "HOTMART_MCP_CODE_MODE": "1"
+  },
+  "_why": {
+    "HOTMART_MCP_CODE_MODE": "Claude Code (CLI) não renderiza Prefab UI, então collapse das 40 entries em 3 meta-tools (search/get_schema/execute) economiza ~2600 tokens de context. No Desktop (via .mcpb sem essa env) os 12 apps Prefab renderizam nativos."
+  }
+}
