@@ -135,7 +135,6 @@ Pode ser que aquele produto/conta não tem dado cadastrado pra aquilo. Exemplo: 
 **Claude Code:**
 ```
 /plugin update hotmart
-rm -rf ~/.cache/uv/git-v0/checkouts/*hotmart*
 /reload-plugins
 ```
 E reinicia o Claude Code.
