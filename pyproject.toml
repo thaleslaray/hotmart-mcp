@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "hotmart-mcp"
-version = "0.3.1"
+version = "0.3.2"
 description = "Hotmart API MCP server — sales, subscriptions, club, products, coupons, tickets, and negotiation, auto-generated from the official OpenAPI spec"
 readme = "README.md"
 license = "MIT"
