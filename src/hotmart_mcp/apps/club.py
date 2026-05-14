@@ -1,53 +1,57 @@
-"""Club (members area) dashboards — Prefab UI apps."""
+"""Club (members area) dashboards — Prefab UI apps (schema-validated)."""
 from __future__ import annotations
 
 from collections import Counter
-from typing import Optional
 
 from prefab_ui import PrefabApp
 from prefab_ui.components import (
     Card, CardContent, CardHeader, CardTitle, Column, DataTable,
-    DataTableColumn, Grid, Heading, Metric, Progress,
+    DataTableColumn, Grid, Heading, Metric,
 )
 from prefab_ui.components.charts import BarChart, ChartSeries, PieChart
 
 from hotmart_mcp._shared import get_client
+from hotmart_mcp.models import Module, Student
+from hotmart_mcp.apps._helpers import parse_items
 
 
 async def hotmart_students_overview_app(subdomain: str) -> PrefabApp:
-    """Visão geral dos alunos na área de membros — counts + ranking de progresso.
+    """Visão geral dos alunos na área de membros — counts + progresso.
 
-    Cards de metrics (total, ativos, completos) + PieChart engagement +
-    DataTable com progresso. Use pra 'lista de alunos', 'progresso médio',
-    'quantos alunos completaram'.
+    Cards (total, ativos, bloqueados) + PieChart engajamento + DataTable
+    ranking. Use pra 'lista de alunos', 'progresso médio', 'quantos
+    alunos completaram'.
 
     Args:
-        subdomain: Members area subdomain (the slug from `hotmart.com/club/<slug>`).
+        subdomain: Members area subdomain (slug de `hotmart.com/club/<slug>`).
     """
     client = get_client()
-    res = await client.get("/club/api/v1/users", params={"subdomain": subdomain})
-    items = res.get("items", []) if isinstance(res, dict) else []
+    raw = await client.get("/club/api/v1/users", params={"subdomain": subdomain})
+    students: list[Student] = parse_items(raw, Student)
 
-    total = len(items)
+    total = len(students)
     by_status: Counter[str] = Counter()
     by_engagement: Counter[str] = Counter()
 
     rows = []
-    for u in items[:200]:
-        progress = u.get("progress", {}) or {}
-        pct = progress.get("completed_percentage") or 0
-        by_status[u.get("status") or "?"] += 1
-        by_engagement[u.get("engagement") or "?"] += 1
+    for s in students[:200]:
+        pct = (s.progress.completed_percentage if s.progress else None) or 0
+        completed = (s.progress.completed if s.progress else None) or 0
+        progress_total = (s.progress.total if s.progress else None) or 0
+        by_status[(s.status.value if s.status else None) or "?"] += 1
+        by_engagement[(s.engagement.value if s.engagement else None) or "?"] += 1
         rows.append({
-            "name": u.get("name") or "?",
-            "email": u.get("email") or "",
-            "status": u.get("status") or "?",
-            "engagement": u.get("engagement") or "?",
-            "progress_pct": f"{pct}%",
-            "completed": f"{progress.get('completed', 0)}/{progress.get('total', 0)}",
+            "name": s.name or "?",
+            "email": s.email or "",
+            "status": (s.status.value if s.status else None) or "?",
+            "engagement": (s.engagement.value if s.engagement else None) or "?",
+            "progress_pct": f"{pct:.0f}%",
+            "completed": f"{completed}/{progress_total}",
+            "_pct": pct,
         })
 
-    rows.sort(key=lambda r: int(r["progress_pct"].rstrip("%")), reverse=True)
+    rows.sort(key=lambda r: r["_pct"], reverse=True)
+    for r in rows: r.pop("_pct", None)
 
     engagement_data = [{"name": k, "value": v} for k, v in by_engagement.most_common()]
 
@@ -98,39 +102,27 @@ async def hotmart_students_overview_app(subdomain: str) -> PrefabApp:
 
 
 async def hotmart_module_analytics_app(subdomain: str) -> PrefabApp:
-    """Análise por módulo da área de membros — qty aulas + drill-down possível.
+    """Análise por módulo da área de membros — qty aulas por módulo.
 
-    BarChart de aulas por módulo + DataTable. Use pra 'estrutura da área
-    de membros', 'quantas aulas por módulo'.
+    BarChart aulas/módulo + DataTable. Use pra 'estrutura da área de
+    membros', 'quantas aulas por módulo'.
 
     Args:
         subdomain: Members area subdomain.
     """
     client = get_client()
-    res = await client.get("/club/api/v1/modules", params={"subdomain": subdomain})
-    modules = res.get("items", []) if isinstance(res, dict) else []
+    raw = await client.get("/club/api/v1/modules", params={"subdomain": subdomain})
+    modules: list[Module] = parse_items(raw, Module)
 
-    # Pra cada módulo, busca pages (limitado pra não bater rate-limit)
-    enriched = []
-    for m in modules[:50]:
-        mid = m.get("id")
-        page_count = 0
-        if mid:
-            try:
-                pages_res = await client.get(
-                    f"/club/api/v1/modules/{mid}/pages",
-                    params={"subdomain": subdomain},
-                )
-                pages = pages_res.get("items", []) if isinstance(pages_res, dict) else []
-                page_count = len(pages)
-            except Exception:
-                pass
-        enriched.append({
-            "id": mid,
-            "name": m.get("name") or "?",
-            "is_extra": "Sim" if m.get("is_extra") else "Não",
-            "pages": page_count,
-        })
+    enriched = [
+        {
+            "id": m.module_id or "?",
+            "name": m.name or "?",
+            "is_extra": "Sim" if m.is_extra else "Não",
+            "pages": m.total_pages or 0,
+        }
+        for m in modules
+    ]
 
     chart_data = sorted(enriched, key=lambda x: x["pages"], reverse=True)[:15]
 

@@ -1,8 +1,7 @@
-"""Sales dashboards — Prefab UI apps."""
+"""Sales dashboards — Prefab UI apps (schema-validated via Pydantic)."""
 from __future__ import annotations
 
 from collections import Counter, defaultdict
-from datetime import datetime
 from typing import Optional
 
 from prefab_ui import PrefabApp
@@ -13,16 +12,10 @@ from prefab_ui.components import (
 from prefab_ui.components.charts import BarChart, ChartSeries, LineChart, PieChart
 
 from hotmart_mcp._shared import get_client
-
-
-def _format_brl(value: float | int) -> str:
-    return f"R$ {value:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-
-
-def _epoch_ms_to_date(ms: int | None) -> str:
-    if not ms:
-        return ""
-    return datetime.fromtimestamp(ms / 1000).strftime("%Y-%m-%d")
+from hotmart_mcp.models import SaleCommission, SaleHistory
+from hotmart_mcp.apps._helpers import (
+    epoch_ms_to_date, format_brl, parse_items,
+)
 
 
 async def hotmart_sales_dashboard_app(
@@ -32,10 +25,10 @@ async def hotmart_sales_dashboard_app(
 ) -> PrefabApp:
     """Painel visual de vendas Hotmart no período.
 
-    Renderiza cards de métricas (receita total, ticket médio, qtd vendas)
-    + LineChart de vendas por dia + PieChart por payment_type + DataTable.
-    Use quando o usuário pedir 'dashboard de vendas', 'painel de vendas',
-    'visão geral das vendas do mês'.
+    Cards de métricas (receita total, ticket médio, qtd) + LineChart
+    vendas/dia + PieChart por payment_type + DataTable. Use quando o
+    usuário pedir 'dashboard de vendas', 'painel de vendas', 'visão
+    geral das vendas do mês'.
 
     Args:
         start_date: Start date. Unix timestamp in milliseconds.
@@ -43,26 +36,33 @@ async def hotmart_sales_dashboard_app(
         product_id: Optional product_id filter.
     """
     client = get_client()
-    params = {"max_results": 100}
+    params: dict = {"max_results": 100}
     if start_date is not None: params["start_date"] = start_date
     if end_date is not None: params["end_date"] = end_date
     if product_id is not None: params["product_id"] = product_id
 
-    history = await client.get("/payments/api/v1/sales/history", params=params)
-    items = history.get("items", []) if isinstance(history, dict) else []
+    raw = await client.get("/payments/api/v1/sales/history", params=params)
+    items: list[SaleHistory] = parse_items(raw, SaleHistory)
+
+    def _value(item: SaleHistory) -> float:
+        p = item.purchase
+        if p and p.price and p.price.value is not None:
+            return p.price.value
+        return 0.0
 
     total_qty = len(items)
-    total_revenue = sum(((i.get("purchase", {}) or {}).get("price", {}) or {}).get("value", 0) or 0 for i in items)
+    total_revenue = sum(_value(i) for i in items)
     avg_ticket = (total_revenue / total_qty) if total_qty else 0
 
     by_day: dict[str, float] = defaultdict(float)
     by_payment: Counter[str] = Counter()
     for it in items:
-        purchase = it.get("purchase", {}) or {}
-        day = _epoch_ms_to_date(purchase.get("order_date") or purchase.get("approved_date"))
+        p = it.purchase
+        if not p: continue
+        day = epoch_ms_to_date(p.order_date or p.approved_date)
         if day:
-            by_day[day] += (purchase.get("price", {}) or {}).get("value", 0) or 0
-        pt = (purchase.get("payment", {}) or {}).get("type") or "UNKNOWN"
+            by_day[day] += _value(it)
+        pt = (p.payment.type.value if p.payment and p.payment.type else None) or "UNKNOWN"
         by_payment[pt] += 1
 
     daily_series = [{"date": d, "revenue": v} for d, v in sorted(by_day.items())]
@@ -70,28 +70,32 @@ async def hotmart_sales_dashboard_app(
 
     rows = []
     for it in items[:50]:
-        purchase = it.get("purchase", {}) or {}
-        buyer = it.get("buyer", {}) or {}
+        p = it.purchase
         rows.append({
-            "transaction": purchase.get("transaction") or "?",
-            "date": _epoch_ms_to_date(purchase.get("order_date") or purchase.get("approved_date")),
-            "buyer": buyer.get("name") or "?",
-            "product": (it.get("product", {}) or {}).get("name") or "?",
-            "value": _format_brl((purchase.get("price", {}) or {}).get("value", 0) or 0),
-            "status": purchase.get("status") or "?",
-            "payment": (purchase.get("payment", {}) or {}).get("type") or "?",
+            "transaction": (p.transaction if p else None) or "?",
+            "date": epoch_ms_to_date(p.order_date or p.approved_date) if p else "",
+            "buyer": (it.buyer.name if it.buyer else None) or "?",
+            "product": (it.product.name if it.product else None) or "?",
+            "value": format_brl(_value(it)),
+            "status": (p.status.value if p and p.status else None) or "?",
+            "payment": (p.payment.type.value if p and p.payment and p.payment.type else None) or "?",
         })
+
+    sanity_warning = total_qty > 0 and total_revenue == 0
 
     with PrefabApp() as app:
         with Column(gap=4, css_class="p-6"):
             Heading(content="Painel de Vendas Hotmart")
+
+            if sanity_warning:
+                Heading(content="⚠️ Receita zerada com vendas no período — possível schema drift", level=3)
 
             with Grid(columns=[1, 1, 1], gap=4):
                 with Card():
                     with CardHeader():
                         CardTitle(content="Receita total")
                     with CardContent():
-                        Metric(label="Receita", value=_format_brl(total_revenue))
+                        Metric(label="Receita", value=format_brl(total_revenue))
                 with Card():
                     with CardHeader():
                         CardTitle(content="Vendas")
@@ -101,7 +105,7 @@ async def hotmart_sales_dashboard_app(
                     with CardHeader():
                         CardTitle(content="Ticket médio")
                     with CardContent():
-                        Metric(label="Média", value=_format_brl(avg_ticket))
+                        Metric(label="Média", value=format_brl(avg_ticket))
 
             with Grid(columns=[2, 1], gap=4):
                 with Card():
@@ -148,38 +152,41 @@ async def hotmart_sales_breakdown_app(
     start_date: Optional[int] = None,
     end_date: Optional[int] = None,
 ) -> PrefabApp:
-    """Vendas detalhadas por produto + top compradores.
+    """Breakdown de vendas — top produtos + top compradores.
 
-    BarChart com vendas por produto + DataTable rankeada dos top buyers.
-    Use quando o usuário pedir 'breakdown de vendas', 'top produtos',
-    'meus melhores compradores'.
+    BarChart de produtos por receita + DataTable de compradores únicos.
+    Use pra 'quais produtos vendem mais', 'top compradores', 'analise de
+    quem está comprando'.
 
     Args:
         start_date: Start date. Unix timestamp in milliseconds.
         end_date: End date. Unix timestamp in milliseconds.
     """
     client = get_client()
-    params = {"max_results": 100}
+    params: dict = {"max_results": 100}
     if start_date is not None: params["start_date"] = start_date
     if end_date is not None: params["end_date"] = end_date
 
-    history = await client.get("/payments/api/v1/sales/history", params=params)
-    items = history.get("items", []) if isinstance(history, dict) else []
+    raw = await client.get("/payments/api/v1/sales/history", params=params)
+    items: list[SaleHistory] = parse_items(raw, SaleHistory)
 
     by_product: dict[str, dict] = defaultdict(lambda: {"qty": 0, "revenue": 0.0})
     by_buyer: dict[str, dict] = defaultdict(lambda: {"qty": 0, "spent": 0.0, "name": ""})
 
     for it in items:
-        prod = (it.get("product", {}) or {}).get("name") or "?"
-        buyer = it.get("buyer", {}) or {}
-        buyer_key = buyer.get("email") or buyer.get("name") or "?"
-        value = ((it.get("purchase", {}) or {}).get("price", {}) or {}).get("value", 0) or 0
+        prod = (it.product.name if it.product else None) or "?"
+        buyer_email = (it.buyer.email if it.buyer else None)
+        buyer_name = (it.buyer.name if it.buyer else None)
+        buyer_key = buyer_email or buyer_name or "?"
+        value = 0.0
+        if it.purchase and it.purchase.price and it.purchase.price.value is not None:
+            value = it.purchase.price.value
 
         by_product[prod]["qty"] += 1
         by_product[prod]["revenue"] += value
         by_buyer[buyer_key]["qty"] += 1
         by_buyer[buyer_key]["spent"] += value
-        by_buyer[buyer_key]["name"] = buyer.get("name") or buyer_key
+        by_buyer[buyer_key]["name"] = buyer_name or buyer_key
 
     products_data = sorted(
         [{"product": k, "qty": v["qty"], "revenue": v["revenue"]} for k, v in by_product.items()],
@@ -188,7 +195,7 @@ async def hotmart_sales_breakdown_app(
     )[:15]
 
     buyers_rows = sorted(
-        [{"name": v["name"], "email": k, "qty": v["qty"], "spent": _format_brl(v["spent"])}
+        [{"name": v["name"], "email": k, "qty": v["qty"], "spent": format_brl(v["spent"])}
          for k, v in by_buyer.items()],
         key=lambda x: x["qty"],
         reverse=True,
@@ -245,65 +252,77 @@ async def hotmart_commissions_dashboard_app(
         commission_as: PRODUCER | COPRODUCER | AFFILIATE.
     """
     client = get_client()
-    params = {"max_results": 100}
+    params: dict = {"max_results": 100}
     if start_date is not None: params["start_date"] = start_date
     if end_date is not None: params["end_date"] = end_date
     if commission_as: params["commission_as"] = commission_as
 
-    res = await client.get("/payments/api/v1/sales/commissions", params=params)
-    items = res.get("items", []) if isinstance(res, dict) else []
-
-    total = sum((i.get("commission_value", 0) or 0) for i in items)
-    by_user: dict[str, float] = defaultdict(float)
+    raw = await client.get("/payments/api/v1/sales/commissions", params=params)
+    sales: list[SaleCommission] = parse_items(raw, SaleCommission)
 
     rows = []
-    for it in items[:100]:
-        user = it.get("user", {}) or {}
-        commission_value = it.get("commission_value", 0) or 0
-        by_user[user.get("name") or user.get("email") or "?"] += commission_value
-        rows.append({
-            "user": user.get("name") or "?",
-            "email": user.get("email") or "",
-            "role": it.get("commission_as") or "?",
-            "transaction": (it.get("purchase", {}) or {}).get("transaction") or "?",
-            "product": (it.get("product", {}) or {}).get("name") or "?",
-            "value": _format_brl(commission_value),
-        })
+    by_user: dict[str, float] = defaultdict(float)
+    total = 0.0
+    for s in sales:
+        for c in (s.commissions or []):
+            value = (c.commission.value if c.commission and c.commission.value is not None else 0.0)
+            total += value
+            user_name = (c.user.name if c.user else None) or "?"
+            by_user[user_name] += value
+            if len(rows) < 100:
+                rows.append({
+                    "user": user_name,
+                    "ucode": (c.user.ucode if c.user else None) or "",
+                    "role": (c.source.value if c.source else None) or "?",
+                    "transaction": s.transaction or "?",
+                    "product": (s.product.name if s.product else None) or "?",
+                    "value": format_brl(value),
+                })
 
-    by_user_data = [{"user": k, "value": v} for k, v in sorted(by_user.items(), key=lambda x: x[1], reverse=True)[:10]]
+    user_data = sorted(
+        [{"user": k, "total": v} for k, v in by_user.items()],
+        key=lambda x: x["total"],
+        reverse=True,
+    )[:20]
 
     with PrefabApp() as app:
         with Column(gap=4, css_class="p-6"):
-            Heading(content="Comissões")
+            Heading(content="Painel de Comissões")
 
             with Grid(columns=[1, 1], gap=4):
                 with Card():
                     with CardHeader():
                         CardTitle(content="Total no período")
                     with CardContent():
-                        Metric(label="Comissões", value=_format_brl(total))
+                        Metric(label="Comissões", value=format_brl(total))
                 with Card():
                     with CardHeader():
-                        CardTitle(content="Top afiliados")
+                        CardTitle(content="Itens")
                     with CardContent():
-                        BarChart(
-                            data=by_user_data,
-                            series=[ChartSeries(data_key="value", label="Comissão R$")],
-                            x_axis="user",
-                        )
+                        Metric(label="Quantidade", value=str(len(sales)))
 
             with Card():
                 with CardHeader():
-                    CardTitle(content=f"Detalhes ({len(items)} comissões)")
+                    CardTitle(content="Top 20 por afiliado")
+                with CardContent():
+                    BarChart(
+                        data=user_data,
+                        series=[ChartSeries(data_key="total", label="Comissão R$")],
+                        x_axis="user",
+                    )
+
+            with Card():
+                with CardHeader():
+                    CardTitle(content=f"Detalhe ({len(rows)} itens)")
                 with CardContent():
                     DataTable(
                         columns=[
                             DataTableColumn(key="user", header="Afiliado", sortable=True),
-                            DataTableColumn(key="email", header="Email"),
+                            DataTableColumn(key="ucode", header="UCode"),
                             DataTableColumn(key="role", header="Papel", sortable=True),
+                            DataTableColumn(key="transaction", header="Transação", sortable=True),
                             DataTableColumn(key="product", header="Produto", sortable=True),
-                            DataTableColumn(key="transaction", header="Transação"),
-                            DataTableColumn(key="value", header="Valor"),
+                            DataTableColumn(key="value", header="Comissão"),
                         ],
                         rows=rows,
                         search=True,

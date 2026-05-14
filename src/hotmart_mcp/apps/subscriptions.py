@@ -1,8 +1,7 @@
-"""Subscriptions dashboards — Prefab UI apps."""
+"""Subscriptions dashboards — Prefab UI apps (schema-validated)."""
 from __future__ import annotations
 
 from collections import Counter, defaultdict
-from datetime import datetime
 from typing import Optional
 
 from prefab_ui import PrefabApp
@@ -10,63 +9,50 @@ from prefab_ui.components import (
     Card, CardContent, CardHeader, CardTitle, Column, DataTable,
     DataTableColumn, Grid, Heading, Metric,
 )
-from prefab_ui.components.charts import BarChart, ChartSeries, LineChart, PieChart
+from prefab_ui.components.charts import ChartSeries, LineChart, PieChart
 
 from hotmart_mcp._shared import get_client
-
-
-def _format_brl(value: float | int) -> str:
-    return f"R$ {value:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-
-
-def _epoch_ms_to_date(ms: int | None) -> str:
-    if not ms:
-        return ""
-    return datetime.fromtimestamp(ms / 1000).strftime("%Y-%m-%d")
+from hotmart_mcp.models import Subscription, SubscriberPurchase
+from hotmart_mcp.apps._helpers import (
+    epoch_ms_to_date, format_brl, parse_items,
+)
 
 
 async def hotmart_subscriptions_health_app(
     product_id: Optional[int] = None,
 ) -> PrefabApp:
-    """Painel de saúde das assinaturas — counts por status + lista filtrar.
+    """Painel de saúde das assinaturas — counts por status + lista.
 
-    Grid com cards de status (ativos, cancelados, atrasados) + PieChart
-    breakdown + DataTable. Use pra 'saúde das assinaturas', 'visão geral
-    das assinaturas', 'quantos assinantes ativos'.
+    Grid com cards (ativos, atrasados, cancelados) + PieChart breakdown
+    + DataTable. Use pra 'saúde das assinaturas', 'visão geral das
+    assinaturas', 'quantos assinantes ativos'.
 
     Args:
         product_id: Optional product_id filter.
     """
     client = get_client()
-    params = {"max_results": 100}
+    params: dict = {"max_results": 100}
     if product_id: params["product_id"] = product_id
 
-    summary = await client.get("/payments/api/v1/subscriptions/summary", params=params)
-    items_sum = summary.get("items", []) if isinstance(summary, dict) else []
-
-    list_res = await client.get("/payments/api/v1/subscriptions", params=params)
-    items_list = list_res.get("items", []) if isinstance(list_res, dict) else []
+    raw = await client.get("/payments/api/v1/subscriptions", params=params)
+    items: list[Subscription] = parse_items(raw, Subscription)
 
     by_status: Counter[str] = Counter()
-    for it in items_list:
-        s = it.get("status") or "?"
-        by_status[s] += 1
+    for it in items:
+        by_status[it.status.value if it.status else "?"] += 1
 
     pie_data = [{"name": k, "value": v} for k, v in by_status.most_common()]
 
     rows = []
-    for it in items_list[:100]:
-        subscriber = it.get("subscriber", {}) or {}
-        product = it.get("product", {}) or {}
-        plan = it.get("plan", {}) or {}
+    for it in items[:100]:
         rows.append({
-            "code": subscriber.get("code") or "?",
-            "subscriber": subscriber.get("name") or "?",
-            "email": subscriber.get("email") or "",
-            "product": product.get("name") or "?",
-            "plan": plan.get("name") or "?",
-            "status": it.get("status") or "?",
-            "accession": _epoch_ms_to_date(it.get("accession_date")),
+            "code": it.subscriber_code or "?",
+            "subscriber": (it.subscriber.name if it.subscriber else None) or "?",
+            "email": (it.subscriber.email if it.subscriber else None) or "",
+            "product": (it.product.name if it.product else None) or "?",
+            "plan": (it.plan.name if it.plan else None) or "?",
+            "status": (it.status.value if it.status else None) or "?",
+            "accession": epoch_ms_to_date(it.accession_date),
         })
 
     with PrefabApp() as app:
@@ -89,7 +75,7 @@ async def hotmart_subscriptions_health_app(
                         PieChart(data=pie_data, data_key="value", name_key="name")
                 with Card():
                     with CardHeader():
-                        CardTitle(content=f"Assinaturas ({len(items_list)} no período)")
+                        CardTitle(content=f"Assinaturas ({len(items)} no período)")
                     with CardContent():
                         DataTable(
                             columns=[
@@ -110,32 +96,31 @@ async def hotmart_subscriptions_health_app(
 async def hotmart_churn_analyzer_app(
     product_id: Optional[int] = None,
 ) -> PrefabApp:
-    """Análise de churn — cancelamentos por período + razões + tendência.
+    """Análise de churn — cancelamentos por período + tendência.
 
-    LineChart cancelamentos no tempo + DataTable de cancelamentos recentes.
-    Use pra 'análise de churn', 'cancelamentos da semana', 'taxa de cancelamento'.
+    LineChart cancelamentos no tempo + DataTable de recentes. Use pra
+    'análise de churn', 'cancelamentos da semana', 'taxa de cancelamento'.
 
     Args:
         product_id: Optional product_id filter.
     """
     client = get_client()
-    params = {"max_results": 200}
+    params: dict = {"max_results": 200}
     if product_id: params["product_id"] = product_id
 
-    list_res = await client.get("/payments/api/v1/subscriptions", params=params)
-    items = list_res.get("items", []) if isinstance(list_res, dict) else []
+    raw = await client.get("/payments/api/v1/subscriptions", params=params)
+    items: list[Subscription] = parse_items(raw, Subscription)
 
-    cancelled = [
-        i for i in items
-        if (i.get("status") or "").startswith("CANCELLED")
-    ]
-    active = [i for i in items if i.get("status") == "ACTIVE"]
+    def _status_str(s: Subscription) -> str:
+        return s.status.value if s.status else ""
 
+    cancelled = [i for i in items if _status_str(i).startswith("CANCELLED")]
+    active = [i for i in items if _status_str(i) == "ACTIVE"]
     rate = (len(cancelled) / len(items) * 100) if items else 0
 
     by_day: dict[str, int] = defaultdict(int)
     for c in cancelled:
-        d = _epoch_ms_to_date(c.get("date_next_charge") or c.get("accession_date"))
+        d = epoch_ms_to_date(c.date_next_charge or c.accession_date)
         if d:
             by_day[d] += 1
 
@@ -143,14 +128,12 @@ async def hotmart_churn_analyzer_app(
 
     rows = []
     for c in cancelled[:100]:
-        subscriber = c.get("subscriber", {}) or {}
-        product = c.get("product", {}) or {}
         rows.append({
-            "code": subscriber.get("code") or "?",
-            "subscriber": subscriber.get("name") or "?",
-            "product": product.get("name") or "?",
-            "status": c.get("status") or "?",
-            "since": _epoch_ms_to_date(c.get("accession_date")),
+            "code": c.subscriber_code or "?",
+            "subscriber": (c.subscriber.name if c.subscriber else None) or "?",
+            "product": (c.product.name if c.product else None) or "?",
+            "status": _status_str(c) or "?",
+            "since": epoch_ms_to_date(c.accession_date),
         })
 
     with PrefabApp() as app:
@@ -203,58 +186,65 @@ async def hotmart_churn_analyzer_app(
 
 
 async def hotmart_subscriber_360_app(subscriber_code: str) -> PrefabApp:
-    """Visão 360 de um assinante específico — perfil + histórico de compras.
+    """Visão 360 de um assinante — perfil + histórico de compras.
 
-    Card com perfil + DataTable com purchases. Use pra 'ver dados do
-    assinante X', 'histórico completo do código Y'.
+    Cards de LTV/qty/ticket + DataTable com purchases. Use pra 'ver
+    dados do assinante X', 'histórico completo do código Y'.
 
     Args:
         subscriber_code: Subscriber code (Hotmart alphanumeric, ex: 'VRWIQQRG').
     """
     client = get_client()
-    res = await client.get(
+    raw = await client.get(
         f"/payments/api/v1/subscriptions/{subscriber_code}/purchases"
     )
-    items = res if isinstance(res, list) else (res.get("items", []) if isinstance(res, dict) else [])
+    purchases: list[SubscriberPurchase] = parse_items(raw, SubscriberPurchase)
 
-    total_spent = sum(
-        (p.get("price", {}) or {}).get("value", 0) or 0
-        for p in items
-    )
+    def _value(p: SubscriberPurchase) -> float:
+        if p.price and p.price.value is not None:
+            return p.price.value
+        return 0.0
+
+    total_spent = sum(_value(p) for p in purchases)
+    qty = len(purchases)
+    sanity_warning = qty > 0 and total_spent == 0
 
     rows = []
-    for p in items[:100]:
-        product = p.get("product", {}) or {}
+    for p in purchases[:100]:
         rows.append({
-            "transaction": p.get("transaction") or "?",
-            "date": _epoch_ms_to_date(p.get("approved_date")),
-            "product": product.get("name") or "?",
-            "value": _format_brl((p.get("price", {}) or {}).get("value", 0) or 0),
-            "status": p.get("status") or "?",
+            "transaction": p.transaction or "?",
+            "date": epoch_ms_to_date(p.approved_date),
+            "recurrence": str(p.recurrency_number) if p.recurrency_number else "—",
+            "value": format_brl(_value(p)),
+            "status": (p.status.value if p.status else None) or "?",
+            "payment": (p.payment_type.value if p.payment_type else None) or "—",
         })
 
     with PrefabApp() as app:
         with Column(gap=4, css_class="p-6"):
             Heading(content=f"Assinante {subscriber_code}")
 
+            if sanity_warning:
+                Heading(content="⚠️ LTV zerado com compras no histórico — possível schema drift", level=3)
+
             with Grid(columns=[1, 1, 1], gap=4):
                 with Card():
                     with CardHeader():
-                        CardTitle(content="Total gasto")
+                        CardTitle(content="Total gasto (LTV)")
                     with CardContent():
-                        Metric(label="LTV", value=_format_brl(total_spent))
+                        Metric(label="LTV", value=format_brl(total_spent))
                 with Card():
                     with CardHeader():
                         CardTitle(content="Total de compras")
                     with CardContent():
-                        Metric(label="Compras", value=str(len(items)))
+                        Metric(label="Compras", value=str(qty))
                 with Card():
                     with CardHeader():
                         CardTitle(content="Ticket médio")
                     with CardContent():
                         Metric(
                             label="Médio",
-                            value=_format_brl(total_spent / len(items)) if items else "—",
+                            value=format_brl(total_spent / qty) if qty else "—",
                         )
 
             with Card():
@@ -265,9 +255,10 @@ async def hotmart_subscriber_360_app(subscriber_code: str) -> PrefabApp:
                         columns=[
                             DataTableColumn(key="transaction", header="Transação"),
                             DataTableColumn(key="date", header="Data", sortable=True),
-                            DataTableColumn(key="product", header="Produto", sortable=True),
+                            DataTableColumn(key="recurrence", header="Recorrência"),
                             DataTableColumn(key="value", header="Valor"),
                             DataTableColumn(key="status", header="Status", sortable=True),
+                            DataTableColumn(key="payment", header="Pagamento"),
                         ],
                         rows=rows,
                         search=True,

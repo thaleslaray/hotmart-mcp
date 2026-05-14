@@ -1,24 +1,25 @@
-"""Products + Coupons dashboards — Prefab UI apps."""
+"""Products + Coupons dashboards — Prefab UI apps (schema-validated)."""
 from __future__ import annotations
 
 from collections import Counter
-from datetime import datetime
-from typing import Optional
 
 from prefab_ui import PrefabApp
 from prefab_ui.components import (
     Card, CardContent, CardHeader, CardTitle, Column, DataTable,
     DataTableColumn, Grid, Heading, Metric,
 )
-from prefab_ui.components.charts import BarChart, ChartSeries, PieChart
+from prefab_ui.components.charts import PieChart
 
 from hotmart_mcp._shared import get_client
+from hotmart_mcp.models import Coupon, Product
+from hotmart_mcp.apps._helpers import epoch_ms_to_date, parse_items
 
 
-def _epoch_ms_to_date(ms: int | None) -> str:
-    if not ms:
-        return ""
-    return datetime.fromtimestamp(ms / 1000).strftime("%Y-%m-%d")
+def _extra(obj, key: str, default=None):
+    """Read a field the OpenAPI spec doesn't declare. With extra='allow'
+    Pydantic stores those in .model_extra — fall back gracefully if absent."""
+    if obj is None: return default
+    return (obj.model_extra or {}).get(key, default) if hasattr(obj, "model_extra") else default
 
 
 async def hotmart_product_catalog_app() -> PrefabApp:
@@ -28,25 +29,25 @@ async def hotmart_product_catalog_app() -> PrefabApp:
     produtos', 'catálogo', 'meus produtos ativos'.
     """
     client = get_client()
-    res = await client.get("/products/api/v1/products", params={"max_results": 100})
-    items = res.get("items", []) if isinstance(res, dict) else []
+    raw = await client.get("/products/api/v1/products", params={"max_results": 100})
+    items: list[Product] = parse_items(raw, Product)
 
     by_format: Counter[str] = Counter()
     by_status: Counter[str] = Counter()
     for it in items:
-        by_format[it.get("format") or "?"] += 1
-        by_status[it.get("status") or "?"] += 1
+        by_format[_extra(it, "format", "?")] += 1
+        by_status[_extra(it, "status", "?")] += 1
 
     fmt_data = [{"name": k, "value": v} for k, v in by_format.most_common()]
 
     rows = []
     for it in items[:200]:
         rows.append({
-            "id": it.get("id"),
-            "name": it.get("name") or "?",
-            "format": it.get("format") or "?",
-            "status": it.get("status") or "?",
-            "created": _epoch_ms_to_date(it.get("created_at")),
+            "id": it.id,
+            "name": it.name or "?",
+            "format": _extra(it, "format", "?"),
+            "status": _extra(it, "status", "?"),
+            "created": epoch_ms_to_date(_extra(it, "created_at")),
         })
 
     with PrefabApp() as app:
@@ -105,19 +106,23 @@ async def hotmart_coupon_manager_app(product_id: int) -> PrefabApp:
         product_id: Product ID.
     """
     client = get_client()
-    res = await client.get(f"/products/api/v1/coupon/product/{product_id}")
-    items = res.get("items", []) if isinstance(res, dict) else []
+    raw = await client.get(f"/products/api/v1/coupon/product/{product_id}")
+    items: list[Coupon] = parse_items(raw, Coupon)
 
     rows = []
+    total_uses = 0
     for c in items[:200]:
+        uses = _extra(c, "number_of_uses_made", 0) or 0
+        total_uses += uses
+        discount = _extra(c, "discount", 0) or 0
         rows.append({
-            "code": c.get("code") or "?",
-            "discount": f"{(c.get('discount', 0) or 0) * 100:.1f}%",
-            "start": _epoch_ms_to_date(c.get("start_date")),
-            "end": _epoch_ms_to_date(c.get("end_date")),
-            "uses": c.get("number_of_uses_made", 0),
-            "max_uses": c.get("max_number_of_uses_per_user") or "—",
-            "status": c.get("status") or "?",
+            "code": c.code or "?",
+            "discount": f"{discount * 100:.1f}%",
+            "start": epoch_ms_to_date(_extra(c, "start_date")),
+            "end": epoch_ms_to_date(_extra(c, "end_date")),
+            "uses": uses,
+            "max_uses": _extra(c, "max_number_of_uses_per_user") or "—",
+            "status": _extra(c, "status", "?"),
         })
 
     with PrefabApp() as app:
@@ -134,10 +139,7 @@ async def hotmart_coupon_manager_app(product_id: int) -> PrefabApp:
                     with CardHeader():
                         CardTitle(content="Usos totais")
                     with CardContent():
-                        Metric(
-                            label="Usos",
-                            value=str(sum(c.get("number_of_uses_made", 0) or 0 for c in items)),
-                        )
+                        Metric(label="Usos", value=str(total_uses))
 
             with Card():
                 with CardHeader():
