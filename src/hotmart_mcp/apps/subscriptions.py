@@ -224,14 +224,13 @@ async def hotmart_subscriber_360_app(subscriber_code: str) -> PrefabApp:
 
     rows = []
     for p in items[:100]:
-        purchase = p.get("purchase", {}) or {}
         product = p.get("product", {}) or {}
         rows.append({
-            "transaction": purchase.get("transaction") or "?",
-            "date": _epoch_ms_to_date(purchase.get("approved_date") or purchase.get("order_date")),
+            "transaction": p.get("transaction") or "?",
+            "date": _epoch_ms_to_date(p.get("approved_date")),
             "product": product.get("name") or "?",
             "value": _format_brl((p.get("price", {}) or {}).get("value", 0) or 0),
-            "status": purchase.get("transaction_status") or "?",
+            "status": p.get("status") or "?",
         })
 
     with PrefabApp() as app:

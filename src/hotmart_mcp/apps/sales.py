@@ -52,7 +52,7 @@ async def hotmart_sales_dashboard_app(
     items = history.get("items", []) if isinstance(history, dict) else []
 
     total_qty = len(items)
-    total_revenue = sum((i.get("price", {}) or {}).get("value", 0) or 0 for i in items)
+    total_revenue = sum(((i.get("purchase", {}) or {}).get("price", {}) or {}).get("value", 0) or 0 for i in items)
     avg_ticket = (total_revenue / total_qty) if total_qty else 0
 
     by_day: dict[str, float] = defaultdict(float)
@@ -61,7 +61,7 @@ async def hotmart_sales_dashboard_app(
         purchase = it.get("purchase", {}) or {}
         day = _epoch_ms_to_date(purchase.get("order_date") or purchase.get("approved_date"))
         if day:
-            by_day[day] += (it.get("price", {}) or {}).get("value", 0) or 0
+            by_day[day] += (purchase.get("price", {}) or {}).get("value", 0) or 0
         pt = (purchase.get("payment", {}) or {}).get("type") or "UNKNOWN"
         by_payment[pt] += 1
 
@@ -77,8 +77,8 @@ async def hotmart_sales_dashboard_app(
             "date": _epoch_ms_to_date(purchase.get("order_date") or purchase.get("approved_date")),
             "buyer": buyer.get("name") or "?",
             "product": (it.get("product", {}) or {}).get("name") or "?",
-            "value": _format_brl((it.get("price", {}) or {}).get("value", 0) or 0),
-            "status": purchase.get("transaction_status") or "?",
+            "value": _format_brl((purchase.get("price", {}) or {}).get("value", 0) or 0),
+            "status": purchase.get("status") or "?",
             "payment": (purchase.get("payment", {}) or {}).get("type") or "?",
         })
 
@@ -173,7 +173,7 @@ async def hotmart_sales_breakdown_app(
         prod = (it.get("product", {}) or {}).get("name") or "?"
         buyer = it.get("buyer", {}) or {}
         buyer_key = buyer.get("email") or buyer.get("name") or "?"
-        value = (it.get("price", {}) or {}).get("value", 0) or 0
+        value = ((it.get("purchase", {}) or {}).get("price", {}) or {}).get("value", 0) or 0
 
         by_product[prod]["qty"] += 1
         by_product[prod]["revenue"] += value
