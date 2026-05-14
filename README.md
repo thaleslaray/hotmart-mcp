@@ -133,14 +133,26 @@ Pode ser que aquele produto/conta não tem dado cadastrado pra aquilo. Exemplo: 
 4. Duplo-clique
 
 **Claude Code:**
-```
-/plugin marketplace update thales-plugins
-/plugin update hotmart@thales-plugins
-/reload-plugins
-```
-E reinicia o Claude Code.
 
-⚠️ A 1ª linha atualiza o catálogo do marketplace (sem isso o Claude não sabe que tem versão nova). A 2ª atualiza o plugin de fato — note o sufixo `@thales-plugins` que diz **qual marketplace** tem essa versão.
+1. **Atualiza o catálogo do marketplace** (pra Claude saber que tem versão nova):
+   ```
+   /plugin marketplace update thales-plugins
+   ```
+
+2. **Abre o menu de plugins** e atualiza pela UI:
+   ```
+   /plugin
+   ```
+   Vai na aba **Installed**, acha `hotmart`, clica em **Update**.
+
+3. Recarrega:
+   ```
+   /reload-plugins
+   ```
+
+4. Sai e abre o Claude Code de novo.
+
+> 💡 A UI sempre funciona. O comando direto tipo `/plugin update hotmart` tem comportamento que varia entre versões do Claude Code — alguns ignoram o argumento. Pela UI evita confusão.
 
 ---
 
