@@ -1,11 +1,47 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import os
 import time
+from pathlib import Path
 from typing import Any
 
 import httpx
+
+
+_CONFIG_PATHS = [
+    # XDG-compatible (cross-client: Cursor, Cline, Desktop, etc)
+    Path(os.environ.get("XDG_CONFIG_HOME", str(Path.home() / ".config"))) / "hotmart" / "config.json",
+    # Claude Code plugin path (what /hotmart:configure writes today)
+    Path.home() / ".claude" / "plugins" / "data" / "hotmart" / "config.json",
+    # Dev local
+    Path(__file__).resolve().parent / ".env.json",
+]
+
+
+def _load_config_file() -> dict[str, str]:
+    """Look for credentials in known JSON config paths. Returns first match found, or {}."""
+    for p in _CONFIG_PATHS:
+        try:
+            if p.is_file():
+                return json.loads(p.read_text()) or {}
+        except (OSError, json.JSONDecodeError):
+            continue
+    return {}
+
+
+def _missing(name: str) -> str:
+    """Raise a clear error pointing to where to set the credential."""
+    paths_str = "\n  - ".join(str(p) for p in _CONFIG_PATHS)
+    raise AuthError(
+        status_code=401,
+        message=(
+            f"Missing {name}. Set it via one of:\n"
+            f"  1. Environment variable {name}\n"
+            f"  2. JSON file with key {name!r}, in one of these paths:\n  - {paths_str}"
+        ),
+    )
 
 
 class ApiError(Exception):
@@ -39,9 +75,25 @@ class HotmartClient:
         basic_auth: str | None = None,
         base_url: str | None = None,
     ):
-        self._client_id = client_id or os.environ["HOTMART_CLIENT_ID"]
-        self._client_secret = client_secret or os.environ["HOTMART_CLIENT_SECRET"]
-        self._basic_auth = basic_auth or os.environ["HOTMART_BASIC_AUTH"]
+        file_cfg = _load_config_file()
+        self._client_id = (
+            client_id
+            or os.environ.get("HOTMART_CLIENT_ID")
+            or file_cfg.get("HOTMART_CLIENT_ID")
+            or _missing("HOTMART_CLIENT_ID")
+        )
+        self._client_secret = (
+            client_secret
+            or os.environ.get("HOTMART_CLIENT_SECRET")
+            or file_cfg.get("HOTMART_CLIENT_SECRET")
+            or _missing("HOTMART_CLIENT_SECRET")
+        )
+        self._basic_auth = (
+            basic_auth
+            or os.environ.get("HOTMART_BASIC_AUTH")
+            or file_cfg.get("HOTMART_BASIC_AUTH")
+            or _missing("HOTMART_BASIC_AUTH")
+        )
         self._base_url = (base_url or self.BASE_URL).rstrip("/")
 
         self._access_token: str | None = None
