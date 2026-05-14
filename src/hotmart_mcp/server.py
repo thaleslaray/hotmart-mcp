@@ -2,6 +2,7 @@
 
 import importlib
 import inspect
+import os
 import pkgutil
 from asyncio import iscoroutinefunction
 
@@ -52,10 +53,24 @@ def _discover_and_register_apps() -> int:
 
 
 def _apply_code_mode() -> None:
-    """Apply Code Mode transform to collapse tools into 3 meta-tools."""
+    """Apply Code Mode transform to collapse tools into 3 meta-tools.
+
+    OPT-IN — desabilitado por default porque o CodeMode colapsa TODAS as
+    tools (incluindo apps com app=True) em apenas `search`+`get_schema`+
+    `execute`, o que quebra a renderização Prefab UI no Claude Desktop.
+    Apps só rendererizam como UI nativa se forem expostas como tools
+    individuais ao cliente.
+
+    Ative via `HOTMART_MCP_CODE_MODE=1` se quiser collapse (útil pra
+    clientes que NÃO usam Desktop e querem economia de context window
+    com 40 entries — sacrifica os apps interativos).
+    """
+    if os.environ.get("HOTMART_MCP_CODE_MODE", "").lower() not in ("1", "true", "yes"):
+        return
     try:
-        from fastmcp.server.code_mode import CodeMode
+        from fastmcp.experimental.transforms.code_mode import CodeMode
         mcp.add_transform(CodeMode())
+        print("hotmart-mcp: CodeMode active (collapses 40 entries to 3 meta-tools — apps not rendered)")
     except ImportError:
         pass  # Code Mode not available in this fastmcp version
 
