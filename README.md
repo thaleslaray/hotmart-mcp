@@ -182,6 +182,16 @@ pip install git+https://github.com/thaleslaray/hotmart-mcp.git
 
 Configuração via env vars (`HOTMART_CLIENT_ID`, `HOTMART_CLIENT_SECRET`, `HOTMART_BASIC_AUTH`) ou JSON em `~/.config/hotmart/config.json`.
 
+### Code Mode (opt-in)
+
+Setando `HOTMART_MCP_CODE_MODE=1` o server aplica o transform `CodeMode` da FastMCP — collapsa os ~40 tools+apps em 3 meta-tools (`search` / `get_schema` / `execute`). Economiza ~2600 tokens de context, mas **quebra renderização de Prefab UI** (apps caem dentro do `execute`).
+
+Distribuição por cliente:
+- **`.mcpb` (Claude Desktop)** — sem a env. Apps Prefab renderizam nativos (cards, charts, tables).
+- **Plugin `thales-plugins/hotmart` (Claude Code)** — `.mcp.json` seta a env via [.mcp-env.json](.mcp-env.json) (auto-injetado pelo `/publicar`). Code não renderiza UI mesmo, então collapse é puro ganho.
+
+Se você rodar o server direto via `pip install`/`uvx`, default é OFF.
+
 PRs e issues bem-vindos: [issues](https://github.com/thaleslaray/hotmart-mcp/issues).
 
 ---
