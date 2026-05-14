@@ -134,10 +134,13 @@ Pode ser que aquele produto/conta não tem dado cadastrado pra aquilo. Exemplo: 
 
 **Claude Code:**
 ```
+/plugin marketplace update thales-plugins
 /plugin update hotmart
 /reload-plugins
 ```
 E reinicia o Claude Code.
+
+⚠️ A primeira linha é importante — sem ela o Claude não sabe que tem versão nova disponível (ele usa um cache local do marketplace).
 
 ---
 
