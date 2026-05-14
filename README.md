@@ -132,17 +132,18 @@ Pode ser que aquele produto/conta não tem dado cadastrado pra aquilo. Exemplo: 
 3. Baixa o `.mcpb` novo aqui: [releases mais recentes](https://github.com/thaleslaray/hotmart-mcp/releases/latest)
 4. Duplo-clique
 
-**Claude Code:**
+**Claude Code** — rode no **terminal externo** (NÃO dentro do Claude Code):
 
+```bash
+claude plugin marketplace update thales-plugins
+claude plugin install hotmart@thales-plugins
 ```
-/plugin marketplace update thales-plugins
-/plugin update hotmart
-/reload-plugins
-```
 
-E reinicia o Claude Code.
+Depois reinicia o Claude Code.
 
-> 💡 **Opcional — habilita auto-update:** `/plugin` → aba **Marketplaces** → `thales-plugins` → **Enable auto-update**. Daí pra frente atualiza sozinho no startup, sem precisar dos comandos manuais.
+> ⚠️ **Sim, parece estranho usar `install` pra atualizar** — mas `claude plugin install` em cima de instalação existente reinstala preservando config (suas credenciais ficam intactas). Esse é o caminho documentado pela comunidade no issue [#54678](https://github.com/anthropics/claude-code/issues/54678) porque o `claude plugin update` tem [bug conhecido](https://github.com/anthropics/claude-code/issues/46594) que não faz `git fetch` do marketplace e reporta "already at latest" falsamente.
+
+> 💡 **Opcional — auto-update:** dentro do Claude Code, roda `/plugin` → aba **Marketplaces** → `thales-plugins` → **Enable auto-update**. Configurado isso, todo startup Claude Code atualiza plugins desse marketplace automaticamente.
 
 ---
 
