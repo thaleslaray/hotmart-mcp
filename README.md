@@ -1,14 +1,27 @@
-# hotmart-mcp
+# Hotmart no Claude
 
-Plugue o Claude (ou qualquer cliente MCP) na sua conta Hotmart. **28 tools** auto-geradas da spec OpenAPI oficial cobrindo vendas, assinaturas, área de membros, produtos, cupons, eventos e negociação.
+Conecta o Claude direto na sua conta Hotmart. Aí você pergunta em português normal e o Claude busca, cria cupom, cancela assinatura, gera relatório — sem você abrir o painel.
 
-✅ **98.4% both-correct** medido em 840 prompts PT-BR realistas (3 personas × 28 tools × 10 variations).
+**Exemplo:**
+
+> Você: *"quanto vendi esse mês comparado ao passado?"*
+>
+> Claude: vai na Hotmart, puxa os números dos 2 meses, monta a comparação e te entrega — em segundos.
 
 ---
 
-## Instalação
+## Como instalar
 
-### Claude Code (terminal)
+### Se você usa Claude Desktop (Mac/Windows)
+
+1. **Baixa o arquivo:** [hotmart.mcpb](https://github.com/thaleslaray/hotmart-mcp/releases/latest) (vai abrir a página da release — o arquivo `.mcpb` tá no final)
+2. **Duplo-clique** no arquivo baixado
+3. O Claude Desktop abre uma janela perguntando se quer instalar — clica **Instalar**
+4. Ele vai pedir 3 dados da sua Hotmart (a gente pega eles no próximo passo)
+
+### Se você usa Claude Code (terminal)
+
+Digita esses 3 comandos no Claude Code:
 
 ```
 /plugin marketplace add thaleslaray/plugins
@@ -16,208 +29,108 @@ Plugue o Claude (ou qualquer cliente MCP) na sua conta Hotmart. **28 tools** aut
 /hotmart:configure
 ```
 
-### Claude Desktop
+---
 
-Baixa o `.mcpb` na [release mais recente](https://github.com/thaleslaray/hotmart-mcp/releases/latest) e dá duplo-clique.
+## Como pegar suas credenciais da Hotmart
 
-### Cursor / Cline / outros clientes MCP
+São 3 valores que a Hotmart te dá pra "abrir a porta" entre o Claude e sua conta.
 
-Cola no `.mcp.json` ou `claude_desktop_config.json`:
+1. **Entra em** [app-vlc.hotmart.com/tools/credentials](https://app-vlc.hotmart.com/tools/credentials) (logado na sua conta Hotmart)
 
-```json
-{
-  "mcpServers": {
-    "hotmart": {
-      "command": "uvx",
-      "args": ["--from", "git+https://github.com/thaleslaray/hotmart-mcp.git", "hotmart-mcp"],
-      "env": {
-        "HOTMART_CLIENT_ID": "...",
-        "HOTMART_CLIENT_SECRET": "...",
-        "HOTMART_BASIC_AUTH": "..."
-      }
-    }
-  }
-}
-```
+2. Clica em **Criar Credencial**
+
+3. Dá um nome qualquer (ex: "Claude") e confirma. **Deixa "Sandbox" desmarcado** se quer usar com dados reais.
+
+4. Abre a credencial criada. Você vai ver 3 campos pra copiar:
+   - `Client ID`
+   - `Client Secret`
+   - `Basic`
+
+5. Cola os 3 valores no Claude quando ele pedir.
+
+⚠️ **Nunca compartilha esses valores.** Quem tiver eles consegue mexer na sua conta Hotmart inteira — ver vendas, criar cupom, cancelar assinatura.
 
 ---
 
-## Configurar credenciais
+## O que você pode pedir pro Claude
 
-1. Acessa [app-vlc.hotmart.com/tools/credentials](https://app-vlc.hotmart.com/tools/credentials)
-2. **Criar Credencial** → dá um nome → confirma (deixa Sandbox desmarcado pra produção)
-3. Abre a credencial criada → copia `Client ID`, `Client Secret` e `Basic`
-4. Cola nos 3 campos durante `/hotmart:configure` (Claude Code) ou no `.mcpb` installer (Desktop)
+Depois de instalar e configurar, é só conversar em português normal. Alguns exemplos do que ele consegue fazer:
 
-O server lê credenciais nesta ordem de precedência:
-1. Variáveis de ambiente (`HOTMART_CLIENT_ID`, etc) — uso típico em `.mcp.json` com bloco `env`
-2. `~/.config/hotmart/config.json` — XDG, cross-client (Cursor, Cline, Desktop, Code)
-3. `~/.claude/plugins/data/hotmart/config.json` — onde o `/hotmart:configure` do Claude Code salva
-4. `src/hotmart_mcp/.env.json` — dev local
+### 💰 Sobre suas vendas
 
-Formato do JSON:
-```json
-{
-  "HOTMART_CLIENT_ID": "...",
-  "HOTMART_CLIENT_SECRET": "...",
-  "HOTMART_BASIC_AUTH": "..."
-}
-```
+- *"quanto vendi mês passado?"*
+- *"lista as vendas de outubro do produto X"*
+- *"quem comprou nas últimas 24 horas?"*
+- *"detalhe das comissões que recebi como coproducer no último trimestre"*
+- *"estorna a venda HP2890253164"* (cuidado — é destrutivo)
 
----
+### 🔁 Sobre suas assinaturas
 
-## Como usar — exemplos por área
+- *"lista as assinaturas ativas dos meus produtos"*
+- *"quantos assinantes eu tenho por status (ativos, cancelados, atrasados)?"*
+- *"histórico de pagamento do assinante VRWIQQRG"*
+- *"cancela a assinatura VRWIQQRG"* ⚠️
+- *"cancela essas 50 assinaturas em lote: ABC, DEF, GHI..."* ⚠️
+- *"muda o vencimento da assinatura VRWIQQRG pro dia 10"*
 
-Depois de configurar, pergunta em português normal. Claude escolhe a tool certa.
+### 🎓 Sobre sua área de membros (Club)
 
-### 📊 Vendas
+- *"quais módulos eu tenho na minha área de membros?"*
+- *"lista os alunos cadastrados"*
+- *"o aluno V7yQbq3z7J completou quantas aulas?"*
 
-| Pergunta | Tool chamada |
-|---|---|
-| "Quanto vendi mês passado?" | `hotmart_sales_summary_list` |
-| "Lista as vendas de outubro do produto 4168346" | `hotmart_sales_history_list` |
-| "Quem comprou nas últimas 24h?" | `hotmart_sales_participants_list` |
-| "Comissões CO_PRODUCER de Q4 2024" | `hotmart_sales_commissions_list` |
-| "Detalhe de preço (impostos, taxas) das últimas vendas" | `hotmart_sales_price_details_list` |
-| "Estorna a venda HP2890253164" | `hotmart_sale_refund` ⚠️ destrutivo |
+### 📦 Sobre seus produtos
 
-### 🔁 Assinaturas
+- *"lista todos os meus produtos"*
+- *"quais ofertas (preços, descontos) tem o produto X?"*
+- *"quais planos de assinatura existem pro produto Y?"*
 
-| Pergunta | Tool |
-|---|---|
-| "Lista as assinaturas ativas dos meus produtos" | `hotmart_subscriptions_list` |
-| "Quantas assinaturas tenho por status?" | `hotmart_subscriptions_summary_list` |
-| "Histórico de pagamentos dos meus assinantes" | `hotmart_subscription_transactions_list` |
-| "Compras do assinante VRWIQQRG" | `hotmart_subscriber_purchases_list` |
-| "Cancela a assinatura VRWIQQRG" | `hotmart_subscription_cancel` ⚠️ |
-| "Cancela essas 50 assinaturas em lote" | `hotmart_batch_subscriptions_cancel` ⚠️ |
-| "Reativa a assinatura VRWIQQRG" | `hotmart_subscription_reactivate` |
-| "Reativa essas 30 assinaturas todas" | `hotmart_batch_subscriptions_reactivate` |
-| "Muda o vencimento de VRWIQQRG pro dia 10" | `hotmart_subscription_due_day_update` |
+### 🎟️ Sobre cupons
 
-### 🎓 Club (área de membros)
+- *"cria um cupom de 10% pro produto X com código BLACK10"*
+- *"lista os cupons ativos do produto X"*
+- *"apaga o cupom de id 99999"* ⚠️
 
-| Pergunta | Tool |
-|---|---|
-| "Quais módulos tenho no meu Club?" | `hotmart_modules_list` |
-| "Páginas/aulas do módulo X" | `hotmart_module_pages_list` |
-| "Lista os alunos cadastrados" | `hotmart_students_list` |
-| "Progresso do aluno V7yQbq3z7J" | `hotmart_student_progress_get` |
+### 🎫 Sobre eventos (com ingresso)
 
-⚠️ **Subdomain obrigatório.** É o slug que aparece na URL pública: `hotmart.com/club/<slug>`. Não é o domínio customizado.
+- *"informações do evento 5655136 — datas, lotes, etc"*
+- *"quem comprou ingresso pro evento 5655136?"*
 
-### 📦 Produtos
+### 💳 Sobre negociação de inadimplentes
 
-| Pergunta | Tool |
-|---|---|
-| "Lista todos os meus produtos" | `hotmart_products_list` |
-| "Quais ofertas tem o produto 4168346?" | `hotmart_product_offers_list` |
-| "Quais planos tem o produto 4168346?" | `hotmart_product_plans_list` |
-
-### 🎟️ Cupons
-
-| Pergunta | Tool |
-|---|---|
-| "Cria cupom de 10% pro produto 4168346 código BLACK10" | `hotmart_coupon_create` |
-| "Lista cupons do produto 4168346" | `hotmart_coupons_list` |
-| "Apaga o cupom de id 99999" | `hotmart_coupon_delete` ⚠️ |
-
-⚠️ Discount vai como **fração** (0.10 = 10%), não percentual (10 ≠ 10%).
-
-### 🎫 Eventos / Tickets
-
-| Pergunta | Tool |
-|---|---|
-| "Informações do evento 5655136" | `hotmart_event_info_get` |
-| "Quem comprou ingresso pro evento 5655136?" | `hotmart_event_participants_list` |
-
-⚠️ Funciona **apenas pra produtos formato ETICKET**, não ONLINE_EVENT (que é curso ao vivo).
-
-### 💰 Negociação
-
-| Pergunta | Tool |
-|---|---|
-| "Negocia parcelado pro inadimplente SUB11223 com 30% off" | `hotmart_negotiation_generate` |
+- *"o aluno tá inadimplente — gera uma proposta parcelada com 30% de desconto"*
 
 ---
 
-## Caveats importantes
+## Coisas pra você saber antes de usar
 
-### 1. Datas são timestamps em **milissegundos** (não segundos, não ISO)
+### 1. Pra área de membros, precisa do "subdomain"
 
-Quando você pedir "vendas de outubro 2024", Claude converte pra `1727740800000` automaticamente. Se passar manualmente:
+Quando você pergunta sobre módulos, alunos, ou aulas, o Claude precisa saber **qual** área de membros é. O "subdomain" é o nome que aparece na URL pública:
 
-```python
-import datetime
-start_date = int(datetime.datetime(2024, 10, 1).timestamp() * 1000)  # 1727740800000
-```
+> `hotmart.com/club/`**`afantasticafabricadasautomacoes`**
 
-### 2. Enums são **case-sensitive em INGLÊS**
+A parte em negrito é o subdomain. Veja em **Configurações → URL personalizada** no painel do seu Club. Quando o Claude perguntar, é isso que você cola.
 
-| ❌ Não funciona | ✅ Funciona |
-|---|---|
-| `boleto` ou `BOLETO` | `BILLET` |
-| `pix` ou `Pix` | `PIX` |
-| `aprovada` ou `Approved` | `APPROVED` |
-| `cancelada` | `CANCELLED` (2 L) |
+### 2. Eventos só funcionam pra "ETICKET"
 
-A API é em inglês — Claude faz a tradução automática, mas se errar, é por isso.
+Se seu produto é um **evento com ingresso vendido** (tipo workshop presencial, show), funciona normal. Se é um **curso ao vivo gravado** (ONLINE_EVENT), as ferramentas de evento não pegam — use as de produtos/vendas no lugar.
 
-### 3. Club exige **subdomain do path da URL**
+### 3. Vendas estornadas e assinaturas canceladas não voltam
 
-Não é o domínio customizado (`membros.seusite.com.br`). É o slug que aparece em `hotmart.com/club/<slug>`. Veja em **Configurações → URL personalizada** no painel.
+Quando você pede pro Claude estornar uma venda ou cancelar uma assinatura, **ele faz na hora**. Não tem "desfazer". Confere antes de mandar.
 
-### 4. `get_product_offers` / `get_product_plans` retornam vazio se produto não tem oferta/plano cadastrado
+### 4. Se uma pergunta sua não voltar nada
 
-Não é bug — significa que aquele produto específico não tem ofertas/planos no painel.
+Pode ser que aquele produto/conta não tem dado cadastrado pra aquilo. Exemplo: pediu "ofertas do produto X" e voltou vazio — significa que esse produto não tem ofertas configuradas no painel (e não que tá com bug).
 
-### 5. Eventos só funcionam pra formato ETICKET
+### 5. Pra atualizar pra versão nova
 
-Produtos formato `ONLINE_EVENT` (curso ao vivo) **não** são reconhecidos pela API de events/tickets. Use apenas `ETICKET` (eventos com ingressos).
-
----
-
-## 28 tools cobertas
-
-- **Sales (6):** history_list, summary_list, participants_list, commissions_list, price_details_list, sale_refund
-- **Subscriptions (9):** subscriptions_list, summary_list, transactions_list, subscriber_purchases_list, subscription_cancel, batch_subscriptions_cancel, subscription_reactivate, batch_subscriptions_reactivate, subscription_due_day_update
-- **Club (4):** modules_list, module_pages_list, students_list, student_progress_get
-- **Products (3):** products_list, product_offers_list, product_plans_list
-- **Coupons (3):** coupon_create, coupons_list, coupon_delete
-- **Tickets (2):** event_info_get, event_participants_list
-- **Negotiation (1):** negotiation_generate
-
-Todas auto-geradas a partir de [`specs/hotmart-api.json`](specs/hotmart-api.json) (OpenAPI 3.0.3 oficial Hotmart).
-
----
-
-## Troubleshooting
-
-### "Missing HOTMART_CLIENT_ID"
-
-Credenciais não encontradas. Verifica os 4 caminhos de fallback (env vars + 3 JSONs). Em Claude Code, roda `/hotmart:configure` de novo.
-
-### "[500] internal_error" em uma tool
-
-Pode ser:
-- **API da Hotmart com bug naquele endpoint** (já aconteceu com `/offers` e `/plans` — corrigido na v0.1.1 com fix da spec)
-- **Produto sem dados cadastrados** (ex: sem ofertas → vazio, mas alguns retornam 500 em vez de array vazio)
-- **Auth scope insuficiente** — confere que a credencial tem acesso ao recurso (Vendas, Assinaturas, Club, etc) no painel
-
-### "[401] Authentication failed"
-
-Credenciais erradas ou expiradas. Re-cria em [app-vlc.hotmart.com/tools/credentials](https://app-vlc.hotmart.com/tools/credentials) e atualiza o config.
-
-### Tool errada chamada
-
-Abre uma [issue](https://github.com/thaleslaray/hotmart-mcp/issues) com:
-- Prompt exato que você usou
-- Tool que Claude chamou
-- Tool que deveria ter chamado
-
-Esses casos são alimentados no eval framework (3 personas × 280 prompts) pra calibrar o próximo bump.
-
-### Como atualizar pra versão nova
+**Claude Desktop:**
+1. Vai em **Configurações → Desenvolvedor → Extensões**
+2. Desinstala o Hotmart antigo
+3. Baixa o `.mcpb` novo aqui: [releases mais recentes](https://github.com/thaleslaray/hotmart-mcp/releases/latest)
+4. Duplo-clique
 
 **Claude Code:**
 ```
@@ -225,37 +138,49 @@ Esses casos são alimentados no eval framework (3 personas × 280 prompts) pra c
 rm -rf ~/.cache/uv/git-v0/checkouts/*hotmart*
 /reload-plugins
 ```
-Reinicia Claude Code.
-
-**Claude Desktop:**
-1. Settings → Developer → Extensions → desinstalar versão antiga
-2. Baixa novo `.mcpb` da [release](https://github.com/thaleslaray/hotmart-mcp/releases/latest)
-3. Duplo-clique
+E reinicia o Claude Code.
 
 ---
 
-## Arquitetura
+## Algo deu errado?
 
-```
-specs/hotmart-api.json     ← OpenAPI 3.0.3 oficial (fonte da verdade)
-        ↓
-src/hotmart_mcp/generator.py    ← code-gen
-        ↓
-src/hotmart_mcp/tools/*.py      ← 28 tools auto-geradas (não editar à mão)
-        ↓
-FastMCP server (src/hotmart_mcp/server.py)
-        ↓
-Claude / Cursor / Cline / qualquer client MCP
-```
-
-Mais detalhes técnicos em [`CLAUDE.md`](CLAUDE.md).
+| Mensagem que apareceu | O que fazer |
+|---|---|
+| **"Missing HOTMART_CLIENT_ID"** ou erro de autenticação | Suas credenciais não foram salvas certo. No Claude Code, roda `/hotmart:configure` de novo. No Desktop, desinstala e reinstala. |
+| **"[401] Authentication failed"** | Credenciais erradas ou foram revogadas. Cria credencial nova em [app-vlc.hotmart.com/tools/credentials](https://app-vlc.hotmart.com/tools/credentials) e atualiza no Claude. |
+| **"[500] internal_error"** numa pergunta específica | Pode ser bug temporário da API da Hotmart, ou aquele recurso não tem dados, ou sua credencial não tem acesso àquela área. Tenta pedir outra coisa pra ver se é específico. |
+| **Claude chamou a ferramenta errada** (puxou venda quando você queria assinatura) | Reformula a pergunta sendo mais específico. Se persistir, abre uma [issue](https://github.com/thaleslaray/hotmart-mcp/issues) com a pergunta exata — eu uso isso pra melhorar. |
 
 ---
 
-## Issues / contribuições
+## Privacidade e segurança
 
-Issues, bug reports e prompts realistas em PT-BR que confundem o LLM são bem-vindos: [issues](https://github.com/thaleslaray/hotmart-mcp/issues).
+- **Suas credenciais ficam só no seu computador**, num arquivo de configuração local. Não passam por servidor meu nem da Anthropic.
+- **O Claude se conecta direto na API oficial da Hotmart** (`developers.hotmart.com`) usando suas credenciais. Não tem intermediário.
+- Se você revogar as credenciais no painel Hotmart, o Claude para de funcionar imediatamente.
+
+---
+
+## Pra quem é desenvolvedor
+
+Se você quer entender o que tá por baixo, modificar, contribuir, ou rodar em outros clientes MCP (Cursor, Cline, etc):
+
+- **Source code:** este repo
+- **Documentação técnica:** [`CLAUDE.md`](CLAUDE.md)
+- **OpenAPI spec:** [`specs/hotmart-api.json`](specs/hotmart-api.json)
+- **Eval framework:** [`scripts/build_eval.py`](scripts/build_eval.py) + [`scripts/test_all_gets.py`](scripts/test_all_gets.py) — 98.4% both-correct em 840 prompts PT-BR
+
+```bash
+pip install git+https://github.com/thaleslaray/hotmart-mcp.git
+# ou via uvx no .mcp.json
+```
+
+Configuração via env vars (`HOTMART_CLIENT_ID`, `HOTMART_CLIENT_SECRET`, `HOTMART_BASIC_AUTH`) ou JSON em `~/.config/hotmart/config.json`.
+
+PRs e issues bem-vindos: [issues](https://github.com/thaleslaray/hotmart-mcp/issues).
+
+---
 
 ## Licença
 
-MIT
+MIT — feito por [Thales Laray](https://instagram.com/thaleslaray)
