@@ -88,12 +88,15 @@ class HotmartClient:
             or file_cfg.get("HOTMART_CLIENT_SECRET")
             or _missing("HOTMART_CLIENT_SECRET")
         )
-        self._basic_auth = (
+        basic_auth = (
             basic_auth
             or os.environ.get("HOTMART_BASIC_AUTH")
             or file_cfg.get("HOTMART_BASIC_AUTH")
             or _missing("HOTMART_BASIC_AUTH")
         )
+        if basic_auth.lower().startswith("basic "):
+            basic_auth = basic_auth[6:].strip()
+        self._basic_auth = basic_auth
         self._base_url = (base_url or self.BASE_URL).rstrip("/")
 
         self._access_token: str | None = None
